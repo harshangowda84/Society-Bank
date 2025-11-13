@@ -67,7 +67,7 @@ def get_db():
     finally:
         db.close()
 
-# Home page
+
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request, db: Session = Depends(get_db)):
     announcements = db.query(models.Announcement).all()
