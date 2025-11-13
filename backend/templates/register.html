@@ -3,262 +3,261 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Membership Application Form - Bangalore University Employees Co-operative Credit Society</title>
+    <title>Membership Application - Page 1 (Modern)</title>
     <style>
+        /* Base Styling */
         body {
-            font-family: 'Times New Roman', Times, serif;
-            margin: 40px;
-            line-height: 1.6;
-            color: #000;
-            background-color: #fff;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 40px 0;
+            background-color: #f0f2f5; /* Light background */
+            color: #333;
         }
-        h1, h2 {
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 10px;
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
+
+        /* Header & Titles */
         .header {
             text-align: center;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-        .greeting {
-            text-align: left;
-            margin-bottom: 20px;
-            font-style: italic;
-        }
-        .request-paragraph {
-            text-align: justify;
             margin-bottom: 30px;
-            font-size: 12px;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 15px;
         }
-        .form-group {
+        .header h1 {
+            color: #007bff; /* Primary blue */
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+        .header p {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .address-block {
+            text-align: right;
+            font-style: italic;
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        /* Form Structure & Elements */
+        .section-title {
+            font-size: 1.3em;
+            color: #333;
+            border-left: 5px solid #007bff;
+            padding-left: 10px;
+            margin-top: 25px;
             margin-bottom: 15px;
+            font-weight: 600;
+        }
+        .form-row {
             display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
             align-items: center;
         }
-        .form-group label {
-            width: 300px;
-            font-weight: bold;
-            display: inline-block;
-            margin-right: 10px;
-            font-size: 12px;
+        .form-row label {
+            flex: 0 0 35%; /* Labels take 35% width */
+            padding-right: 15px;
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 5px;
         }
-        .form-group input, .form-group textarea, .form-group select {
-            width: 400px;
-            padding: 5px;
-            border: 1px solid #000;
-            font-size: 12px;
-            font-family: 'Times New Roman', Times, serif;
+        .form-row input[type="text"],
+        .form-row input[type="date"],
+        .form-row textarea {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+            min-width: 0; /* Allows flex item to shrink */
         }
-        .form-group textarea {
-            height: 60px;
+        .form-row input:focus,
+        .form-row textarea:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        textarea {
             resize: vertical;
+            min-height: 80px;
         }
-        .nominee-group {
-            margin-left: 310px;
+        .declaration {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #e9f7ff; /* Light blue background for declaration */
+            border-left: 4px solid #007bff;
+            font-style: italic;
+            font-size: 0.9em;
+            color: #444;
+            border-radius: 4px;
         }
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        .checkbox-group label {
-            width: auto;
-            margin-right: 10px;
-        }
-        .date-signature {
+
+        /* Footer & Signature */
+        .signature-block {
             margin-top: 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: end;
+            text-align: right;
+            padding-top: 15px;
+            border-top: 1px dashed #ccc;
+            margin-bottom: 30px; /* Added space before button */
         }
-        .date-field {
-            width: 200px;
-        }
-        .signature {
-            width: 200px;
-            height: 50px;
-            border-top: 1px solid #000;
-            text-align: center;
-            margin-top: 20px;
-        }
-        .submit-group {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .submit-group button {
-            padding: 10px 20px;
-            font-size: 12px;
-            font-family: 'Times New Roman', Times, serif;
-            border: 1px solid #000;
-            background-color: #fff;
-            cursor: pointer;
-        }
-        .footer {
+        .signature-line {
+            height: 1px;
+            border-bottom: 1px solid #333;
+            width: 250px;
+            margin-left: auto;
             margin-top: 30px;
-            text-align: center;
-            font-size: 10px;
-            border-top: 1px solid #ccc;
-            padding-top: 10px;
         }
+        
+        /* Download Button Styling (Hidden on Print) */
+        .download-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .download-button {
+            background-color: #28a745; /* Green for download/action */
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s;
+            width: 80%; /* Make it prominent */
+        }
+        .download-button:hover {
+            background-color: #218838;
+        }
+        
+        /* Print Styles (to hide the button and clean up output) */
         @media print {
+            .download-container {
+                display: none;
+            }
             body {
-                margin: 0;
-                font-size: 12px;
+                padding: 0;
+                background-color: #fff;
             }
-            .form-group input, .form-group textarea {
-                border: none;
-                background: transparent;
-            }
-            .submit-group {
-                display: none; /* Hide submit button on print */
+            .container {
+                box-shadow: none;
+                border-radius: 0;
             }
         }
     </style>
-    <!-- Include jsPDF library via CDN for PDF generation -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
-    <div class="header">
-        <h1>Bangalore University Employees Co-operative Credit Society (Regd.)</h1>
-        <p>Jnanabharathi, Bengaluru - 560 056</p>
-        <h2>(Regular)</h2>
-        <h2>Application for Membership</h2>
-        <p>Bangalore University Employees Co-operative Credit Society (Regd.), Jnanabharathi, Bengaluru - 560 056.</p>
-    </div>
-
-    <p class="greeting">Respected Sir/Madam,</p>
-
-    <p class="request-paragraph">
-        I request you to kindly admit me as a member of the above-mentioned Co-operative Credit Society and issue me a share certificate. I agree to abide by the rules and bylaws of the society. I am providing the following information.
-    </p>
-
-    <form id="membershipForm">
-        <div class="form-group">
-            <label for="applicantName">Applicant's Name:</label>
-            <input type="text" id="applicantName" name="applicantName" required>
+    
+    <div class="container">
+        <div class="address-block">
+            <p><strong>The Secretary,</strong></p>
+            <p>Bangalore University Employees' Credit Co-operative Society (Regd.),</p>
+            <p>Jnanabharathi, Bengaluru-560 056.</p>
         </div>
 
-        <div class="form-group">
-            <label for="dateOfBirth">Date of Birth:</label>
-            <input type="date" id="dateOfBirth" name="dateOfBirth" required>
+        <div class="header">
+            <h1>Membership Application Form</h1>
+            <p>Bangalore University Employees' Credit Co-operative Society (Regd.)</p>
         </div>
 
-        <div class="form-group">
-            <label for="designation">Designation and Office Address:</label>
-            <textarea id="designation" name="designation" required></textarea>
-        </div>
+        <p><strong>To, The Secretary, Jnanabharathi, Bengaluru-560 056.</strong></p>
+        
+        <p class="declaration">
+            I request you to kindly enroll me as a member of the above-mentioned Credit Co-operative Society and issue the Share Confirmation Certificate. I shall be bound by the Society's Rules and By-laws. I am providing the following information:
+        </p>
 
-        <div class="form-group">
-            <label for="officeTel">Office Telephone Number:</label>
-            <input type="tel" id="officeTel" name="officeTel">
-        </div>
-
-        <div class="form-group">
-            <label for="mobile">Mobile Number:</label>
-            <input type="tel" id="mobile" name="mobile" required>
-        </div>
-
-        <div class="form-group">
-            <label for="bankAccount">Bank Savings Account Number:</label>
-            <input type="text" id="bankAccount" name="bankAccount" required>
-        </div>
-
-        <div class="form-group">
-            <label for="aadhaar">Aadhaar Number:</label>
-            <input type="text" id="aadhaar" name="aadhaar" required>
-        </div>
-
-        <div class="form-group">
-            <label for="pan">PAN Number:</label>
-            <input type="text" id="pan" name="pan" required>
-        </div>
-
-        <div class="form-group">
-            <label>Nominee Details:</label>
-        </div>
-
-        <div class="form-group nominee-group">
-            <label for="nomineeName">(a) Nominee's Name:</label>
-            <input type="text" id="nomineeName" name="nomineeName">
-        </div>
-
-        <div class="form-group nominee-group">
-            <label for="nomineeAge">(b) Age:</label>
-            <input type="number" id="nomineeAge" name="nomineeAge" min="0">
-        </div>
-
-        <div class="form-group nominee-group">
-            <label for="relationship">(c) Relationship with the Applicant:</label>
-            <input type="text" id="relationship" name="relationship">
-        </div>
-
-        <div class="form-group">
-            <label>Are you a member of any other Co-operative Society? If yes, details:</label>
-            <textarea id="otherSociety" name="otherSociety"></textarea>
-        </div>
-
-        <div class="form-group">
-            <label>Is the application fee paid? Receipt Number:</label>
-            <input type="text" id="feeReceipt" name="feeReceipt">
-        </div>
-
-        <div class="form-group">
-            <label for="otherDetails">Any other details if any:</label>
-            <textarea id="otherDetails" name="otherDetails"></textarea>
-        </div>
-
-        <div class="date-signature">
-            <div class="date-field">
-                <label>Date:</label>
-                <input type="date" id="applicationDate" name="applicationDate">
+        <div class="section-title">Applicant's Details</div>
+        <form>
+            <div class="form-row">
+                <label for="name">1. Applicant's Name:</label>
+                <input type="text" id="name" name="applicant_name">
             </div>
-            <div class="signature">
-                <label>Applicant's Signature</label>
+            <div class="form-row">
+                <label for="dob">2. Date of Birth:</label>
+                <input type="date" id="dob" name="date_of_birth">
             </div>
+            <div class="form-row">
+                <label for="designation">3. Designation and Office Address:</label>
+                <textarea id="designation" name="designation_address"></textarea>
+            </div>
+            <div class="form-row">
+                <label for="home_address">4. Home Address:</label>
+                <textarea id="home_address" name="home_address"></textarea>
+            </div>
+            <div class="form-row">
+                <label for="mobile">5. Mobile Number:</label>
+                <input type="text" id="mobile" name="mobile_number">
+            </div>
+            <div class="form-row">
+                <label for="bank_account">6. Bank Savings Account Number:</label>
+                <input type="text" id="bank_account" name="bank_account_number">
+            </div>
+            <div class="form-row">
+                <label for="aadhaar">7. Aadhaar Number:</label>
+                <input type="text" id="aadhaar" name="aadhaar_number">
+            </div>
+            <div class="form-row">
+                <label for="pan">8. PAN Number:</label>
+                <input type="text" id="pan" name="pan_number">
+            </div>
+
+            <div class="section-title">Nominee Details</div>
+            <div class="form-row">
+                <label for="nominee_name">7(a). Nominee's Name:</label>
+                <input type="text" id="nominee_name" name="nominee_name">
+            </div>
+            <div class="form-row">
+                <label for="nominee_age">7(b). Age:</label>
+                <input type="text" id="nominee_age" name="nominee_age">
+            </div>
+            <div class="form-row">
+                <label for="nominee_relation">7(c). Relationship with the Applicant:</label>
+                <input type="text" id="nominee_relation" name="nominee_relationship">
+            </div>
+
+            <div class="section-title">Other Information</div>
+            <div class="form-row">
+                <label for="other_society">8. Are you a member of any other Co-operative Society? (If yes, state details below):</label>
+                <input type="text" id="other_society" name="other_society">
+            </div>
+            <div class="form-row">
+                <label>9. Application Fee Payment (Receipt No. and Date):</label>
+                <div style="flex: 1; display: flex; gap: 10px;">
+                    <input type="text" name="receipt_number" placeholder="Receipt Number" style="width: 50%;">
+                    <input type="date" name="fee_date" style="width: 50%;">
+                </div>
+            </div>
+            <div class="form-row">
+                <label for="other_matters">10. Other matters the applicant wishes to state:</label>
+                <textarea id="other_matters" name="other_matters"></textarea>
+            </div>
+        </form>
+
+        <div class="signature-block">
+            <div class="form-row" style="justify-content: flex-end;">
+                <label style="width: auto; font-weight: bold; color: #333;">Date:</label>
+                <input type="date" name="application_date" style="width: 150px; flex: unset; text-align: center; border: none; border-bottom: 1px solid #333; padding: 5px 0;">
+            </div>
+            <p style="margin-top: 30px;"><strong>Applicant's Signature</strong></p>
+            <div class="signature-line"></div>
         </div>
 
-        <div class="submit-group">
-            <button type="submit">Submit Application</button>
+        <div class="download-container">
+            <button class="download-button" onclick="window.print()">
+                ⬇️ Download/Print Completed Application Form
+            </button>
         </div>
-    </form>
-
-    <div class="footer">
-        <p>Note: Please print and sign this form before submission. Ensure all required fields are filled. Upon submission, data will be stored locally (simulating database) and a PDF will be generated for download.</p>
     </div>
-
-    <script>
-        // Auto-fill current date
-        document.getElementById('applicationDate').valueAsDate = new Date();
-
-        // Handle form submission
-        document.getElementById('membershipForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            const formData = new FormData(this);
-            const data = {};
-            for (let [key, value] of formData.entries()) {
-                data[key] = value;
-            }
-
-            // Send data to FastAPI backend
-            const response = await fetch('/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-
-            if (response.ok) {
-                alert('Application submitted successfully!');
-                window.location.href = '/login';
-            } else {
-                alert('Submission failed. Please try again.');
-            }
-        });
-    </script>
 </body>
 </html>

@@ -3,100 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Bangalore University</title>
+    <title>Login - Bangalore University Society Bank</title>
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 0;
+            font-family: 'Inter', Arial, sans-serif;
+            background: linear-gradient(135deg, #0a52b9 0%, #2563eb 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .container {
             max-width: 400px;
-            margin: 50px auto;
-            padding: 20px;
+            width: 100%;
             background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 40px;
         }
         h1 {
+            color: #0a52b9;
             text-align: center;
-            color: #333;
+            margin-bottom: 10px;
+            font-size: 24px;
         }
-        form {
-            margin-top: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-        input[type="text"],
-        input[type="password"],
-        select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            background-color: #007BFF;
-            color: #fff;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-        }
-        button:hover {
-            background-color: #0056b3;
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
         }
         .error {
             color: #721c24;
             background-color: #f8d7da;
             border: 1px solid #f5c6cb;
-            padding: 10px;
+            padding: 12px;
             margin-bottom: 20px;
-            border-radius: 4px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #0a52b9;
+            box-shadow: 0 0 0 3px rgba(10, 82, 185, 0.1);
+        }
+        button {
+            width: 100%;
+            background: #0a52b9;
+            color: #fff;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #2563eb;
         }
         .register-link {
             text-align: center;
-            margin-bottom: 20px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .register-link p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
         }
         .register-link a {
-            color: #007BFF;
+            color: #0a52b9;
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 600;
         }
         .register-link a:hover {
+            text-decoration: underline;
+        }
+        .back-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+        .back-link a {
+            color: #0a52b9;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .back-link a:hover {
             text-decoration: underline;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Login</h1>
+        <h1><i class="fas fa-sign-in-alt"></i> Login</h1>
+        <p class="subtitle">Member Access</p>
         
         {% if error %}
         <div class="error">
-            {{ error }}
+            <i class="fas fa-exclamation-circle"></i> {{ error }}
         </div>
         {% endif %}
         
-        <form method="POST" action="{{ url_for('login') }}">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required />
+        <form method="POST" action="/login">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required />
+            </div>
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required />
-            
-            <div class="register-link">
-                <p>New user? <a href="{{ url_for('register') }}">Register here</a></p>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required />
             </div>
             
-            <button type="submit">Login</button>
+            <button type="submit"><i class="fas fa-arrow-right"></i> Login</button>
         </form>
+
+        <div class="register-link">
+            <p>New user? <a href="/register">Register here</a></p>
+        </div>
+
+        <div class="back-link">
+            <a href="/"><i class="fas fa-arrow-left"></i> Back to Home</a>
+        </div>
     </div>
 </body>
 </html>

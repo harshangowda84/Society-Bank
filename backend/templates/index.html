@@ -8,11 +8,10 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
     <style>
-        /* Import Google Font */
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;500;600;700&display=swap');
 
         :root {
-            --main-color: #8e44ad;
+            --main-color: #0a52b9;
             --red: #e74c3c;
             --orange: #f39c12;
             --light-color: #888;
@@ -22,7 +21,6 @@
             --border: .1rem solid rgba(0,0,0,.2);
         }
 
-        /* Your existing styles */
         body {
             font-family: 'Nunito', sans-serif;
             margin: 0;
@@ -57,7 +55,7 @@
             align-items: center;
             justify-content: center;
             background-color: #333;
-            gap: 0; /* Remove gap if you want items close together */
+            gap: 0;
         }
 
         nav > a,
@@ -121,6 +119,7 @@
         main {
             padding: 20px;
             text-align: center;
+            margin-bottom: 80px;
         }
 
         section {
@@ -151,18 +150,6 @@
             background-color: #45a049;
         }
 
-        .flash-message {
-            background-color: #d1e7dd;
-            color: #0f5132;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Add these new styles for enhanced features */
         .announcement-section {
             background: var(--white);
             border-radius: 12px;
@@ -211,7 +198,7 @@
 
         window.onload = function() {
             updateCalendar();
-            setInterval(updateCalendar, 60000); // Update every minute
+            setInterval(updateCalendar, 60000);
         };
     </script>
 </head>
@@ -234,37 +221,36 @@
         <div class="dropdown">
             <a href="#" class="dropbtn">Applications</a>
             <div class="dropdown-content">
+                <a href="/register">New Member</a>
             </div>
         </div>
         <a href="#services">Services</a>
-        <a href="{{ url_for('login') }}">Log In</a> <!-- Link to login.html -->
+        <a href="/login">Log In</a>
         <a href="#help">Help</a>    
     </nav>
 
     <main>
-        
-        
-       
         <section id="announcements" style="display: flex; flex-direction: column; align-items: flex-end; margin: 40px 0;">
-      <div style="background: #f3f4f6; border-radius: 12px; box-shadow: 0 2px 8px #e5e7eb; padding: 24px 32px; max-width: 500px; width: 100%; position: relative;">
-        <h3 class="font-bold mb-2" style="font-size: 1.3rem; color: #2563eb; margin-bottom: 16px; text-align: center;">
-            <i class="fas fa-bullhorn" style="margin-right: 8px; color: #4F46E5;"></i>
-            Announcements
-        </h3>
-        <ul style="list-style: none; padding: 0; margin: 0; max-height: 220px; overflow-y: auto;">
-            {% for ann in announcements %}
-                <li style="background: #fff; border-radius: 6px; margin-bottom: 10px; padding: 10px 16px; box-shadow: 0 1px 3px #e5e7eb; color: #1e293b;">
-                    {{ ann.message }}
-                </li>
-            {% else %}
-                <li style="color: #64748b; text-align: center;">No announcements at this time.</li>
-            {% endfor %}
-        </ul>
-      </div>
-       </section>
+            <div style="background: #f3f4f6; border-radius: 12px; box-shadow: 0 2px 8px #e5e7eb; padding: 24px 32px; max-width: 500px; width: 100%; position: relative;">
+                <h3 class="font-bold mb-2" style="font-size: 1.3rem; color: #2563eb; margin-bottom: 16px; text-align: center;">
+                    <i class="fas fa-bullhorn" style="margin-right: 8px; color: #4F46E5;"></i>
+                    Announcements
+                </h3>
+                <ul style="list-style: none; padding: 0; margin: 0; max-height: 220px; overflow-y: auto;">
+                    {% for ann in announcements %}
+                        <li style="background: #fff; border-radius: 6px; margin-bottom: 10px; padding: 10px 16px; box-shadow: 0 1px 3px #e5e7eb; color: #1e293b;">
+                            {{ ann.message }}
+                        </li>
+                    {% else %}
+                        <li style="color: #64748b; text-align: center;">No announcements at this time.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
     </main>
 
     <footer>
+        <p>&copy; 2025 Bangalore University Society Bank. All rights reserved.</p>
     </footer>
 </body>
 </html>

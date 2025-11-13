@@ -2,8 +2,93 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>Loan Application Form</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f3f4f6; }
+        .container { max-width: 600px; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #e5e7eb; padding: 32px; }
+        h1, h2 { color: #0a52b9; text-align: center; }
+        label { display: block; margin-top: 18px; font-weight: bold; }
+        input, textarea, select { width: 100%; padding: 8px; margin-top: 6px; border: 1px solid #ccc; border-radius: 4px; }
+        button { background: #0a52b9; color: #fff; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; margin-top: 24px; width: 100%; font-weight: 600; }
+        button:hover { background: #2563eb; }
+        .note { color: #e53e3e; margin-top: 18px; font-size: 15px; }
+        .section-title { margin-top: 32px; margin-bottom: 8px; font-size: 18px; color: #2563eb; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bengaluru University Employees' Loan Cooperative Society (Niyamita)</h1>
+        <h2>Jnanabharathi, Bengaluru - 560 056</h2>
+        <p style="text-align:center; margin-bottom:16px;">Loan Application Form</p>
+        <p style="text-align:center; font-weight:bold;">Application Fee: ₹50/-</p>
+        <form method="POST" action="/loan-application">
+            <div class="section-title">Applicant's Details</div>
+            <label for="applicant_name">Applicant's Name:</label>
+            <input type="text" id="applicant_name" name="applicant_name" required>
+
+            <label for="membership_no">Society Membership Number:</label>
+            <input type="text" id="membership_no" name="membership_no" required>
+
+            <label for="designation">Designation and Office/Department:</label>
+            <input type="text" id="designation" name="designation" required>
+
+            <label for="home_address">Home Address:</label>
+            <textarea id="home_address" name="home_address" rows="2" required></textarea>
+
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob" name="dob" required>
+
+            <label for="service_period">Remaining Service Period at the University (years):</label>
+            <input type="number" id="service_period" name="service_period" min="0" required>
+
+            <label for="loan_amount">Desired Loan Amount (in words):</label>
+            <input type="text" id="loan_amount" name="loan_amount" required>
+
+            <label for="loan_reason">Reason for Loan:</label>
+            <textarea id="loan_reason" name="loan_reason" rows="2" required></textarea>
+
+            <label for="repayment_method">Method of Repayment:</label>
+            <input type="text" id="repayment_method" name="repayment_method" required>
+
+            <label for="salary_allowances">Salary and Allowances:</label>
+            <input type="text" id="salary_allowances" name="salary_allowances" required>
+
+            <label for="net_salary">Net Salary (as per latest salary certificate):</label>
+            <input type="number" id="net_salary" name="net_salary" min="0" required>
+
+            <div class="section-title">Guarantor's Details</div>
+            <label for="guarantor_name">Guarantor's Name:</label>
+            <input type="text" id="guarantor_name" name="guarantor_name" required>
+
+            <label for="guarantor_membership_no">Society Membership Number:</label>
+            <input type="text" id="guarantor_membership_no" name="guarantor_membership_no" required>
+
+            <label for="guarantor_designation">Designation and Office/Department:</label>
+            <input type="text" id="guarantor_designation" name="guarantor_designation" required>
+
+            <label for="guarantor_dob">Date of Birth:</label>
+            <input type="date" id="guarantor_dob" name="guarantor_dob" required>
+
+            <label for="guarantor_service_period">Remaining Service Period (years):</label>
+            <input type="number" id="guarantor_service_period" name="guarantor_service_period" min="0" required>
+
+            <label for="guarantor_net_salary">Net Salary:</label>
+            <input type="number" id="guarantor_net_salary" name="guarantor_net_salary" min="0" required>
+
+            <div class="note">
+                Note: All the details requested in the application must be filled completely. Incomplete applications will not be approved.
+            </div>
+            <button type="submit">Submit Application</button>
+        </form>
+    </div>
+</body>
+</html>@ -2,216 +2,84 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loan Application Form - Bengaluru University Employees' Loan Cooperative Society</title>
+    <title>Loan Application Form</title>
     <style>
         body {
             font-family: 'Times New Roman', Times, serif;
@@ -94,10 +179,20 @@
                 background: transparent;
             }
         }
+        body { font-family: Arial, sans-serif; background: #f3f4f6; }
+        .container { max-width: 600px; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #e5e7eb; padding: 32px; }
+        h1, h2 { color: #0a52b9; text-align: center; }
+        label { display: block; margin-top: 18px; font-weight: bold; }
+        input, textarea, select { width: 100%; padding: 8px; margin-top: 6px; border: 1px solid #ccc; border-radius: 4px; }
+        button { background: #0a52b9; color: #fff; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; margin-top: 24px; width: 100%; font-weight: 600; }
+        button:hover { background: #2563eb; }
+        .note { color: #e53e3e; margin-top: 18px; font-size: 15px; }
+        .section-title { margin-top: 32px; margin-bottom: 8px; font-size: 18px; color: #2563eb; }
     </style>
 </head>
 <body>
     <div class="header">
+    <div class="container">
         <h1>Bengaluru University Employees' Loan Cooperative Society (Niyamita)</h1>
         <p>Jnanabharathi, Bengaluru - 560 056</p>
         <h2>Loan Application Form</h2>
@@ -111,11 +206,20 @@
             <label for="applicantName">Applicant's Name:</label>
             <input type="text" id="applicantName" name="applicantName" required>
         </div>
+        <h2>Jnanabharathi, Bengaluru - 560 056</h2>
+        <p style="text-align:center; margin-bottom:16px;">Loan Application Form</p>
+        <p style="text-align:center; font-weight:bold;">Application Fee: ₹50/-</p>
+        <form method="POST" action="/loan-application">
+            <div class="section-title">Applicant's Details</div>
+            <label for="applicant_name">Applicant's Name:</label>
+            <input type="text" id="applicant_name" name="applicant_name" required>
 
         <div class="form-group">
             <label for="membershipNumber">Society Membership Number:</label>
             <input type="text" id="membershipNumber" name="membershipNumber" required>
         </div>
+            <label for="membership_no">Society Membership Number:</label>
+            <input type="text" id="membership_no" name="membership_no" required>
 
         <div class="form-group">
             <label for="designation">Designation and Office/Department:</label>
@@ -208,10 +312,58 @@
     <div class="footer">
         <p>Note: All the details requested in the application must be filled completely. Incomplete applications will not be approved. Please print and sign this form before submission. Ensure all required fields are filled.</p>
     </div>
+            <label for="home_address">Home Address:</label>
+            <textarea id="home_address" name="home_address" rows="2" required></textarea>
+
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob" name="dob" required>
+
+            <label for="service_period">Remaining Service Period at the University (years):</label>
+            <input type="number" id="service_period" name="service_period" min="0" required>
+
+            <label for="loan_amount">Desired Loan Amount (in words):</label>
+            <input type="text" id="loan_amount" name="loan_amount" required>
+
+            <label for="loan_reason">Reason for Loan:</label>
+            <textarea id="loan_reason" name="loan_reason" rows="2" required></textarea>
+
+            <label for="repayment_method">Method of Repayment:</label>
+            <input type="text" id="repayment_method" name="repayment_method" required>
 
     <script>
         // Auto-fill current date
         document.getElementById('applicationDate').valueAsDate = new Date();
     </script>
+            <label for="salary_allowances">Salary and Allowances:</label>
+            <input type="text" id="salary_allowances" name="salary_allowances" required>
+
+            <label for="net_salary">Net Salary (as per latest salary certificate):</label>
+            <input type="number" id="net_salary" name="net_salary" min="0" required>
+
+            <div class="section-title">Guarantor's Details</div>
+            <label for="guarantor_name">Guarantor's Name:</label>
+            <input type="text" id="guarantor_name" name="guarantor_name" required>
+
+            <label for="guarantor_membership_no">Society Membership Number:</label>
+            <input type="text" id="guarantor_membership_no" name="guarantor_membership_no" required>
+
+            <label for="guarantor_designation">Designation and Office/Department:</label>
+            <input type="text" id="guarantor_designation" name="guarantor_designation" required>
+
+            <label for="guarantor_dob">Date of Birth:</label>
+            <input type="date" id="guarantor_dob" name="guarantor_dob" required>
+
+            <label for="guarantor_service_period">Remaining Service Period (years):</label>
+            <input type="number" id="guarantor_service_period" name="guarantor_service_period" min="0" required>
+
+            <label for="guarantor_net_salary">Net Salary:</label>
+            <input type="number" id="guarantor_net_salary" name="guarantor_net_salary" min="0" required>
+
+            <div class="note">
+                Note: All the details requested in the application must be filled completely. Incomplete applications will not be approved.
+            </div>
+            <button type="submit">Submit Application</button>
+        </form>
+    </div>
 </body>
 </html>

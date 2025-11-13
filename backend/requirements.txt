@@ -1,4 +1,11 @@
-Flask
-Flask-SQLAlchemy
-Flask-Login
-mysqlclient    # or another database client
+fastapi
+uvicorn[standard]
+jinja2
+sqlalchemy
+alembic
+pydantic
+python-multipart
+requests
+werkzeug
+# Optional if you will connect to MySQL in production
+# mysqlclient
