@@ -3,261 +3,480 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Membership Application - Page 1 (Modern)</title>
+    <title>Membership Registration - Bangalore University Society Bank</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
     <style>
-        /* Base Styling */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        * {
             margin: 0;
-            padding: 40px 0;
-            background-color: #f0f2f5; /* Light background */
-            color: #333;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .container {
-            max-width: 850px;
+
+        :root {
+            --primary: #0f52ba;
+            --primary-dark: #063fa3;
+            --primary-light: #1560d0;
+            --secondary: #9b59b6;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --bg-light: #f8f9fa;
+            --bg-white: #ffffff;
+            --border-color: #e0e0e0;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        header .container {
+            max-width: 1000px;
             margin: 0 auto;
-            background-color: #ffffff;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Header & Titles */
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 3px solid #007bff;
-            padding-bottom: 15px;
-        }
-        .header h1 {
-            color: #007bff; /* Primary blue */
-            font-size: 2em;
-            margin-bottom: 5px;
-        }
-        .header p {
-            color: #666;
-            font-size: 0.9em;
-        }
-        .address-block {
-            text-align: right;
-            font-style: italic;
-            font-size: 0.85em;
-            color: #666;
-            margin-bottom: 20px;
-        }
-
-        /* Form Structure & Elements */
-        .section-title {
-            font-size: 1.3em;
-            color: #333;
-            border-left: 5px solid #007bff;
-            padding-left: 10px;
-            margin-top: 25px;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-        .form-row {
+            padding: 0 2rem;
             display: flex;
-            flex-wrap: wrap;
-            margin-bottom: 10px;
+            justify-content: space-between;
             align-items: center;
         }
-        .form-row label {
-            flex: 0 0 35%; /* Labels take 35% width */
-            padding-right: 15px;
-            font-weight: 500;
-            color: #555;
-            margin-bottom: 5px;
-        }
-        .form-row input[type="text"],
-        .form-row input[type="date"],
-        .form-row textarea {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            box-sizing: border-box;
-            transition: border-color 0.3s;
-            min-width: 0; /* Allows flex item to shrink */
-        }
-        .form-row input:focus,
-        .form-row textarea:focus {
-            border-color: #007bff;
-            outline: none;
-        }
-        textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-        .declaration {
-            margin: 20px 0;
-            padding: 15px;
-            background-color: #e9f7ff; /* Light blue background for declaration */
-            border-left: 4px solid #007bff;
-            font-style: italic;
-            font-size: 0.9em;
-            color: #444;
-            border-radius: 4px;
+
+        header .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
         }
 
-        /* Footer & Signature */
-        .signature-block {
-            margin-top: 40px;
-            text-align: right;
-            padding-top: 15px;
-            border-top: 1px dashed #ccc;
-            margin-bottom: 30px; /* Added space before button */
-        }
-        .signature-line {
-            height: 1px;
-            border-bottom: 1px solid #333;
-            width: 250px;
-            margin-left: auto;
-            margin-top: 30px;
-        }
-        
-        /* Download Button Styling (Hidden on Print) */
-        .download-container {
-            text-align: center;
-            margin-top: 30px;
-        }
-        .download-button {
-            background-color: #28a745; /* Green for download/action */
+        header .logo i { font-size: 2rem; }
+
+        .back-link {
             color: white;
-            border: none;
-            padding: 12px 25px;
-            text-align: center;
             text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+            transition: opacity 0.3s ease;
+        }
+
+        .back-link:hover { opacity: 0.8; }
+
+        /* Main Container */
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 1rem;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 1rem;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Form Container */
+        .form-container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .form-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .form-header h2 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .form-header p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* Form Groups */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.6rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+
+        label .required {
+            color: var(--accent);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="date"],
+        input[type="password"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 0.9rem;
+            border: 2px solid var(--border-color);
+            border-radius: 0.6rem;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        input[type="date"]:focus,
+        input[type="password"]:focus,
+        textarea:focus,
+        select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(15, 82, 186, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .section-title i {
+            font-size: 1.3rem;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: #f0f7ff;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+
+        .info-box i {
+            color: var(--primary);
+            margin-right: 0.5rem;
+        }
+
+        /* Form Buttons */
+        .form-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: space-between;
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--border-color);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.9rem 2rem;
+            background-color: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
             cursor: pointer;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            transition: background-color 0.3s;
-            width: 80%; /* Make it prominent */
+            font-size: 0.95rem;
+            font-family: 'Poppins', sans-serif;
         }
-        .download-button:hover {
-            background-color: #218838;
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
         }
-        
-        /* Print Styles (to hide the button and clean up output) */
-        @media print {
-            .download-container {
-                display: none;
-            }
-            body {
-                padding: 0;
-                background-color: #fff;
-            }
-            .container {
-                box-shadow: none;
-                border-radius: 0;
-            }
+
+        .btn-secondary {
+            background-color: var(--border-color);
+            color: var(--text-dark);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--text-light);
+            color: white;
+        }
+
+        .btn-success {
+            background-color: var(--success);
+        }
+
+        .btn-success:hover {
+            background-color: #229954;
+        }
+
+        /* Success Message */
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            main { padding: 0 1rem 3rem; }
+            .form-container { padding: 1.5rem; }
+            .form-row { grid-template-columns: 1fr; }
+            .form-header h2 { font-size: 1.3rem; }
+            .form-buttons { flex-direction: column; }
+            .btn { width: 100%; justify-content: center; }
         }
     </style>
 </head>
 <body>
-    
-    <div class="container">
-        <div class="address-block">
-            <p><strong>The Secretary,</strong></p>
-            <p>Bangalore University Employees' Credit Co-operative Society (Regd.),</p>
-            <p>Jnanabharathi, Bengaluru-560 056.</p>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-university"></i>
+                <span>Society Bank</span>
+            </div>
+            <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
+        </div>
+    </header>
+    <main>
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <div class="progress-text">
+                <strong>Registration Form</strong> - Please fill all required fields carefully
+            </div>
         </div>
 
-        <div class="header">
-            <h1>Membership Application Form</h1>
-            <p>Bangalore University Employees' Credit Co-operative Society (Regd.)</p>
+        <!-- Info Alert -->
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <div><strong>Welcome!</strong> Complete this form to apply for membership. Fields marked with * are required.</div>
         </div>
 
-        <p><strong>To, The Secretary, Jnanabharathi, Bengaluru-560 056.</strong></p>
-        
-        <p class="declaration">
-            I request you to kindly enroll me as a member of the above-mentioned Credit Co-operative Society and issue the Share Confirmation Certificate. I shall be bound by the Society's Rules and By-laws. I am providing the following information:
-        </p>
-
-        <div class="section-title">Applicant's Details</div>
-        <form>
-            <div class="form-row">
-                <label for="name">1. Applicant's Name:</label>
-                <input type="text" id="name" name="applicant_name">
-            </div>
-            <div class="form-row">
-                <label for="dob">2. Date of Birth:</label>
-                <input type="date" id="dob" name="date_of_birth">
-            </div>
-            <div class="form-row">
-                <label for="designation">3. Designation and Office Address:</label>
-                <textarea id="designation" name="designation_address"></textarea>
-            </div>
-            <div class="form-row">
-                <label for="home_address">4. Home Address:</label>
-                <textarea id="home_address" name="home_address"></textarea>
-            </div>
-            <div class="form-row">
-                <label for="mobile">5. Mobile Number:</label>
-                <input type="text" id="mobile" name="mobile_number">
-            </div>
-            <div class="form-row">
-                <label for="bank_account">6. Bank Savings Account Number:</label>
-                <input type="text" id="bank_account" name="bank_account_number">
-            </div>
-            <div class="form-row">
-                <label for="aadhaar">7. Aadhaar Number:</label>
-                <input type="text" id="aadhaar" name="aadhaar_number">
-            </div>
-            <div class="form-row">
-                <label for="pan">8. PAN Number:</label>
-                <input type="text" id="pan" name="pan_number">
+        <!-- Registration Form -->
+        <form method="POST" class="form-container">
+            <div class="form-header">
+                <h2><i class="fas fa-user-plus"></i> Membership Registration</h2>
+                <p>Bangalore University Society Bank</p>
             </div>
 
-            <div class="section-title">Nominee Details</div>
-            <div class="form-row">
-                <label for="nominee_name">7(a). Nominee's Name:</label>
-                <input type="text" id="nominee_name" name="nominee_name">
-            </div>
-            <div class="form-row">
-                <label for="nominee_age">7(b). Age:</label>
-                <input type="text" id="nominee_age" name="nominee_age">
-            </div>
-            <div class="form-row">
-                <label for="nominee_relation">7(c). Relationship with the Applicant:</label>
-                <input type="text" id="nominee_relation" name="nominee_relationship">
+            <!-- Personal Information -->
+            <div class="section-title">
+                <i class="fas fa-user"></i> Personal Information
             </div>
 
-            <div class="section-title">Other Information</div>
             <div class="form-row">
-                <label for="other_society">8. Are you a member of any other Co-operative Society? (If yes, state details below):</label>
-                <input type="text" id="other_society" name="other_society">
-            </div>
-            <div class="form-row">
-                <label>9. Application Fee Payment (Receipt No. and Date):</label>
-                <div style="flex: 1; display: flex; gap: 10px;">
-                    <input type="text" name="receipt_number" placeholder="Receipt Number" style="width: 50%;">
-                    <input type="date" name="fee_date" style="width: 50%;">
+                <div class="form-group">
+                    <label for="name">Full Name <span class="required">*</span></label>
+                    <input type="text" id="name" name="applicant_name" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="dob">Date of Birth <span class="required">*</span></label>
+                    <input type="date" id="dob" name="date_of_birth" required>
                 </div>
             </div>
+
+            <div class="form-row full">
+                <div class="form-group">
+                    <label for="designation">Designation & Office Address <span class="required">*</span></label>
+                    <textarea id="designation" name="designation_address" placeholder="Enter your designation and office address" required></textarea>
+                </div>
+            </div>
+
+            <div class="form-row full">
+                <div class="form-group">
+                    <label for="home_address">Home Address <span class="required">*</span></label>
+                    <textarea id="home_address" name="home_address" placeholder="Enter your complete home address" required></textarea>
+                </div>
+            </div>
+
             <div class="form-row">
-                <label for="other_matters">10. Other matters the applicant wishes to state:</label>
-                <textarea id="other_matters" name="other_matters"></textarea>
+                <div class="form-group">
+                    <label for="mobile">Mobile Number <span class="required">*</span></label>
+                    <input type="tel" id="mobile" name="mobile_number" placeholder="Enter 10-digit mobile number" required>
+                </div>
+                <div class="form-group">
+                    <label for="bank_account">Bank Account Number <span class="required">*</span></label>
+                    <input type="text" id="bank_account" name="bank_account_number" placeholder="Enter savings account number" required>
+                </div>
+            </div>
+
+            <!-- Identification -->
+            <div class="section-title">
+                <i class="fas fa-id-card"></i> Identification Details
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="aadhaar">Aadhaar Number <span class="required">*</span></label>
+                    <input type="text" id="aadhaar" name="aadhaar_number" placeholder="12-digit Aadhaar number" required>
+                </div>
+                <div class="form-group">
+                    <label for="pan">PAN Number <span class="required">*</span></label>
+                    <input type="text" id="pan" name="pan_number" placeholder="PAN (10 characters)" required>
+                </div>
+            </div>
+
+            <!-- Nominee Information -->
+            <div class="section-title">
+                <i class="fas fa-users"></i> Nominee Information
+            </div>
+
+            <div class="info-box">
+                <i class="fas fa-lightbulb"></i> <strong>Tip:</strong> Choose a trusted family member or friend as your nominee who will receive benefits if any mishap occurs.
+            </div>
+
+            <div class="form-row full">
+                <div class="form-group">
+                    <label for="nominee_name">Nominee Name <span class="required">*</span></label>
+                    <input type="text" id="nominee_name" name="nominee_name" placeholder="Full name of nominee" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nominee_relation">Relationship <span class="required">*</span></label>
+                    <input type="text" id="nominee_relation" name="nominee_relationship" placeholder="e.g., Spouse, Parent, Friend" required>
+                </div>
+            </div>
+
+            <!-- Authentication -->
+            <div class="section-title">
+                <i class="fas fa-lock"></i> Create Login Credentials
+            </div>
+
+            <div class="info-box">
+                <i class="fas fa-shield-alt"></i> <strong>Security:</strong> Create a strong password with letters, numbers, and special characters.
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="username">Username <span class="required">*</span></label>
+                    <input type="text" id="username" name="username" placeholder="Choose a unique username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password <span class="required">*</span></label>
+                    <input type="password" id="password" name="password" placeholder="Create a strong password" required>
+                </div>
+            </div>
+
+            <!-- Application Date -->
+            <div class="form-group">
+                <label for="app_date">Application Date <span class="required">*</span></label>
+                <input type="date" id="app_date" name="application_date" required>
+            </div>
+
+            <!-- Declaration -->
+            <div class="info-box" style="background: #fff3cd; border-left-color: var(--warning); margin-top: 2rem;">
+                <i class="fas fa-check-circle"></i>
+                <strong>Declaration:</strong> I hereby declare that the information provided above is true and correct to the best of my knowledge. I agree to abide by the Society's rules, regulations, and bylaws.
+            </div>
+
+            <!-- Form Buttons -->
+            <div class="form-buttons">
+                <a href="/" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back</a>
+                <button type="submit" class="btn btn-success"><i class="fas fa-check-circle"></i> Submit Application</button>
             </div>
         </form>
+    </main>
 
-        <div class="signature-block">
-            <div class="form-row" style="justify-content: flex-end;">
-                <label style="width: auto; font-weight: bold; color: #333;">Date:</label>
-                <input type="date" name="application_date" style="width: 150px; flex: unset; text-align: center; border: none; border-bottom: 1px solid #333; padding: 5px 0;">
-            </div>
-            <p style="margin-top: 30px;"><strong>Applicant's Signature</strong></p>
-            <div class="signature-line"></div>
-        </div>
-
-        <div class="download-container">
-            <button class="download-button" onclick="window.print()">
-                ⬇️ Download/Print Completed Application Form
-            </button>
-        </div>
-    </div>
+    <footer style="background-color: var(--text-dark); color: white; text-align: center; padding: 2rem; margin-top: 3rem;">
+        <p>&copy; 2025 Bangalore University Society Bank. All rights reserved. | Secure • Transparent • Trustworthy</p>
+    </footer>
 </body>
 </html>

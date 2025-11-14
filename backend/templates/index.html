@@ -4,253 +4,483 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bangalore University Society Bank</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;500;600;700&display=swap');
-
-        :root {
-            --main-color: #0a52b9;
-            --red: #e74c3c;
-            --orange: #f39c12;
-            --light-color: #888;
-            --light-bg: #eee;
-            --black: #2c3e50;
-            --white: #fff;
-            --border: .1rem solid rgba(0,0,0,.2);
-        }
-
-        body {
-            font-family: 'Nunito', sans-serif;
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            background-color: var(--light-bg);
         }
 
+        :root {
+            --primary: #0f52ba;
+            --primary-dark: #063fa3;
+            --primary-light: #1560d0;
+            --secondary: #9b59b6;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --bg-light: #f8f9fa;
+            --bg-white: #ffffff;
+            --border-color: #e0e0e0;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Header & Navigation */
         header {
-            background-color: var(--main-color);
-            color: var(--white);
-            padding: 1em;
-            text-align: center;
-            position: relative;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1.2rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .calendar {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: white;
-            color: #333;
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            font-size: 14px;
+        header .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        header .logo i { font-size: 2rem; }
+
+        .date-time {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         nav {
+            background-color: var(--text-dark);
+            padding: 0;
+        }
+
+        nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
             display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-            background-color: #333;
             gap: 0;
         }
 
-        nav > a,
-        nav > .dropdown {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            display: flex;
-            align-items: center;
-        }
-
-        nav a {
+        nav a, nav .dropdown > a {
             color: white;
-            padding: 14px 20px;
+            padding: 1rem 1.5rem;
             text-decoration: none;
-            text-align: center;
-            height: 100%;
             display: flex;
             align-items: center;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            font-weight: 500;
         }
 
-        nav a:hover, .dropdown:hover .dropbtn {
-            background-color: #575757;
+        nav a:hover, nav .dropdown:hover > a {
+            background-color: var(--primary);
+            color: white;
         }
 
-        .dropdown {
-            position: relative;
-        }
-
-        .dropbtn {
-            cursor: pointer;
-        }
-
+        .dropdown { position: relative; }
         .dropdown-content {
             display: none;
             position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
+            background: white;
+            min-width: 200px;
+            box-shadow: var(--shadow-lg);
+            border-radius: 0.5rem;
             top: 100%;
             left: 0;
+            z-index: 1000;
         }
+
+        .dropdown:hover .dropdown-content { display: block; }
 
         .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
+            color: var(--text-dark);
+            padding: 0.8rem 1.5rem;
             display: block;
-            background: none;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .dropdown-content a:hover {
-            background-color: #f1f1f1;
-        }
+        .dropdown-content a:last-child { border-bottom: none; }
+        .dropdown-content a:hover { background-color: var(--bg-light); color: var(--primary); }
 
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        main {
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 80px;
-        }
-
-        section {
-            margin: 20px 0;
-        }
-
-        footer {
-            background-color: #333;
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
+            padding: 4rem 2rem;
             text-align: center;
-            padding: 1em;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
+            margin-bottom: 3rem;
+            border-radius: 1rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .button {
-            display: inline-block;
-            margin: 10px;
-            padding: 10px 20px;
-            background-color: #4CAF50;
+        .hero h1 { font-size: 3.2rem; margin-bottom: 1rem; font-weight: 700; }
+        .hero p { font-size: 1.3rem; margin-bottom: 2rem; opacity: 0.95; }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.9rem 2rem;
+            background-color: var(--accent);
             color: white;
             text-decoration: none;
-            border-radius: 5px;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            cursor: pointer;
+            font-size: 0.95rem;
         }
 
-        .button:hover {
-            background-color: #45a049;
+        .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+
+        .btn-primary { background-color: var(--primary); }
+        .btn-primary:hover { background-color: var(--primary-dark); }
+
+        .btn-secondary { background-color: white; color: var(--primary); }
+        .btn-secondary:hover { background-color: var(--bg-light); }
+
+        /* Main Content */
+        main { max-width: 1200px; margin: 0 auto; padding: 0 2rem 4rem; }
+
+        /* Services Grid */
+        .services {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
         }
 
-        .announcement-section {
-            background: var(--white);
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            padding: 24px 32px;
-            max-width: 500px;
-            width: 100%;
-            margin: 40px auto;
-        }
-
-        .announcement-title {
-            font-size: 1.3rem;
-            color: var(--main-color);
-            margin-bottom: 16px;
+        .service-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
             text-align: center;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .service-card i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .service-card h3 { margin-bottom: 0.5rem; font-size: 1.3rem; }
+        .service-card p { color: var(--text-light); font-size: 0.95rem; }
+
+        /* Features Grid */
+        .features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 3rem 0;
+            align-items: center;
+        }
+
+        .features-list {
+            list-style: none;
+        }
+
+        .features-list li {
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: white;
+            border-left: 4px solid var(--primary);
+            border-radius: 0.5rem;
+        }
+
+        .features-list i { color: var(--success); margin-right: 0.8rem; }
+
+        /* Announcements Section */
+        .announcements-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            margin: 3rem 0;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-dark);
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
+            gap: 0.8rem;
         }
 
-        .announcement-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            max-height: 220px;
-            overflow-y: auto;
+        .section-title i { color: var(--primary); }
+
+        .announcements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
         }
 
-        .announcement-item {
-            background: var(--light-bg);
-            border-radius: 6px;
-            margin-bottom: 10px;
-            padding: 10px 16px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            color: var(--black);
+        .announcement-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 1.5rem;
+            border-radius: 0.8rem;
+            border-left: 4px solid var(--primary);
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .announcement-card:hover {
+            box-shadow: var(--shadow);
+            transform: translateY(-3px);
+        }
+
+        .announcement-card p { color: var(--text-dark); line-height: 1.5; }
+
+        .empty-announcement {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-light);
+        }
+
+        /* Stats Section */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label { color: var(--text-light); margin-top: 0.5rem; }
+
+        /* Footer */
+        footer {
+            background-color: var(--text-dark);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 1rem; }
+            .cta-buttons { flex-direction: column; }
+            .features { grid-template-columns: 1fr; }
+            nav .nav-container { flex-wrap: wrap; }
+            nav a { padding: 0.8rem 1rem; font-size: 0.85rem; }
+            .announcements-grid { grid-template-columns: 1fr; }
         }
     </style>
-    <script>
-        function updateCalendar() {
-            const calendar = document.getElementById('calendar');
-            const now = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            calendar.innerHTML = now.toLocaleDateString('en-US', options);
-        }
-
-        window.onload = function() {
-            updateCalendar();
-            setInterval(updateCalendar, 60000);
-        };
-    </script>
 </head>
 <body>
     <header>
-        <h1>Bangalore University Society Bank</h1>
-        <div class="calendar" id="calendar"></div>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-university"></i>
+                <span>Society Bank</span>
+            </div>
+            <div class="date-time">
+                <i class="fas fa-calendar-alt"></i>
+                <span id="date-display"></span>
+            </div>
+        </div>
     </header>
 
     <nav>
-        <a href="#about">About</a>
-        <div class="dropdown">
-            <a href="#" class="dropbtn">Gallery</a>
-            <div class="dropdown-content">
-                <a href="#campus">Campus</a>
-                <a href="#events">Events</a>
+        <div class="nav-container">
+            <a href="#home"><i class="fas fa-home"></i> Home</a>
+            <div class="dropdown">
+                <a href="#"><i class="fas fa-info-circle"></i> About</a>
+                <div class="dropdown-content">
+                    <a href="#about">Our Vision</a>
+                    <a href="#about">Services</a>
+                    <a href="#about">Benefits</a>
+                </div>
             </div>
-        </div>
-        
-        <div class="dropdown">
-            <a href="#" class="dropbtn">Applications</a>
-            <div class="dropdown-content">
-                <a href="/register">New Member</a>
+            <div class="dropdown">
+                <a href="#"><i class="fas fa-file-alt"></i> Applications</a>
+                <div class="dropdown-content">
+                    <a href="/register">Register as Member</a>
+                    <a href="/loan-application">Loan Application</a>
+                </div>
             </div>
+            <a href="#services"><i class="fas fa-cogs"></i> Services</a>
+            <a href="/login"><i class="fas fa-sign-in-alt"></i> Member Login</a>
+            <a href="#help"><i class="fas fa-question-circle"></i> Help</a>
         </div>
-        <a href="#services">Services</a>
-        <a href="/login">Log In</a>
-        <a href="#help">Help</a>    
     </nav>
 
     <main>
-        <section id="announcements" style="display: flex; flex-direction: column; align-items: flex-end; margin: 40px 0;">
-            <div style="background: #f3f4f6; border-radius: 12px; box-shadow: 0 2px 8px #e5e7eb; padding: 24px 32px; max-width: 500px; width: 100%; position: relative;">
-                <h3 class="font-bold mb-2" style="font-size: 1.3rem; color: #2563eb; margin-bottom: 16px; text-align: center;">
-                    <i class="fas fa-bullhorn" style="margin-right: 8px; color: #4F46E5;"></i>
-                    Announcements
-                </h3>
-                <ul style="list-style: none; padding: 0; margin: 0; max-height: 220px; overflow-y: auto;">
-                    {% for ann in announcements %}
-                        <li style="background: #fff; border-radius: 6px; margin-bottom: 10px; padding: 10px 16px; box-shadow: 0 1px 3px #e5e7eb; color: #1e293b;">
-                            {{ ann.message }}
-                        </li>
-                    {% else %}
-                        <li style="color: #64748b; text-align: center;">No announcements at this time.</li>
-                    {% endfor %}
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Welcome to Bangalore University Society Bank</h1>
+            <p>Secure Banking Solutions for Our Community Members</p>
+            <div class="cta-buttons">
+                <a href="/register" class="btn btn-primary"><i class="fas fa-user-plus"></i> Register as Member</a>
+                <a href="/login" class="btn btn-secondary"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a href="/loan-application" class="btn btn-primary"><i class="fas fa-file-invoice-dollar"></i> Apply for Loan</a>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="services" id="services">
+            <div class="service-card">
+                <i class="fas fa-wallet"></i>
+                <h3>Savings Accounts</h3>
+                <p>Secure your future with competitive interest rates and flexible withdrawal options.</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-piggy-bank"></i>
+                <h3>Fixed Deposits</h3>
+                <p>Earn guaranteed returns with our attractive fixed deposit schemes.</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-handshake"></i>
+                <h3>Loans</h3>
+                <p>Quick and easy loan approvals with minimal documentation.</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-exchange-alt"></i>
+                <h3>Transactions</h3>
+                <p>Fast and secure money transfers with real-time tracking.</p>
+            </div>
+        </section>
+
+        <!-- Why Choose Us -->
+        <section class="features">
+            <div>
+                <h2 style="margin-bottom: 1.5rem; font-size: 2rem;">Why Choose Us?</h2>
+                <ul class="features-list">
+                    <li><i class="fas fa-check-circle"></i> <strong>Community Focused:</strong> Designed for university members</li>
+                    <li><i class="fas fa-check-circle"></i> <strong>Secure & Transparent:</strong> Complete data protection</li>
+                    <li><i class="fas fa-check-circle"></i> <strong>Low Fees:</strong> Competitive rates and minimal charges</li>
+                    <li><i class="fas fa-check-circle"></i> <strong>24/7 Support:</strong> Always here to help you</li>
+                    <li><i class="fas fa-check-circle"></i> <strong>Fast Processing:</strong> Quick approvals and transactions</li>
                 </ul>
             </div>
+            <div style="background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); padding: 2rem; border-radius: 1rem; color: white; text-align: center;">
+                <i class="fas fa-university" style="font-size: 4rem; margin-bottom: 1rem;"></i>
+                <h3>Join Our Community</h3>
+                <p style="margin: 1rem 0; opacity: 0.9;">Be part of a trusted financial network serving university members since many years.</p>
+                <a href="/register" class="btn btn-secondary"><i class="fas fa-user-plus"></i> Start Today</a>
+            </div>
+        </section>
+
+        <!-- Statistics -->
+        <section class="stats">
+            <div class="stat-box">
+                <div class="stat-number">500+</div>
+                <div class="stat-label">Active Members</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">₹50Cr+</div>
+                <div class="stat-label">Total Assets</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">1000+</div>
+                <div class="stat-label">Successful Loans</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Customer Support</div>
+            </div>
+        </section>
+
+        <!-- Announcements -->
+        <section class="announcements-section">
+            <h2 class="section-title">
+                <i class="fas fa-bullhorn"></i> Latest Announcements
+            </h2>
+            {% if announcements %}
+                <div class="announcements-grid">
+                    {% for ann in announcements %}
+                        <div class="announcement-card">
+                            <p><strong>📢</strong> {{ ann.message }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-announcement">
+                    <i class="fas fa-info-circle" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
+                    <p>No announcements at this time. Check back soon for updates.</p>
+                </div>
+            {% endif %}
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2025 Bangalore University Society Bank. All rights reserved.</p>
+        <p>&copy; 2025 Bangalore University Society Bank. All rights reserved. | Secure • Transparent • Trustworthy</p>
     </footer>
+
+    <script>
+        function updateDateTime() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('date-display').textContent = now.toLocaleDateString('en-US', options);
+        }
+        updateDateTime();
+        setInterval(updateDateTime, 60000);
+    </script>
 </body>
 </html>
