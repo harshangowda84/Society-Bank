@@ -3,57 +3,321 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loan Application</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <title>Loan Application - Society Bank</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family:'Poppins',sans-serif; background:#f0f2f5; padding:2rem; }
-        .container { max-width:600px; margin:0 auto; background:white; padding:2rem; border-radius:1rem; box-shadow:0 4px 12px rgba(0,0,0,0.1); }
-        h1 { color:#0f52ba; margin-bottom:1.5rem; }
-        .form-group { margin:1.5rem 0; }
-        label { display:block; margin-bottom:0.5rem; font-weight:600; color:#333; }
-        input, select, textarea { width:100%; padding:0.8rem; border:1px solid #ddd; border-radius:0.5rem; font-size:1rem; }
-        button { background:#0f52ba; color:white; padding:1rem; border:none; border-radius:0.5rem; cursor:pointer; font-weight:600; margin-top:1rem; width:100%; }
-        button:hover { background:#063fa3; }
-        .alert { padding:1rem; border-radius:0.5rem; margin-bottom:1rem; }
-        .alert-success { background:#d4edda; color:#155724; border:1px solid #c3e6cb; }
-        .alert-error { background:#f8d7da; color:#721c24; border:1px solid #f5c6cb; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .header h1 {
+            color: #0f52ba;
+            font-size: 26px;
+            margin-bottom: 8px;
+        }
+
+        .header .subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .fee-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .section-title {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin: 30px 0 20px 0;
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group label .required {
+            color: #e53e3e;
+            margin-left: 3px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .error-message {
+            color: #e53e3e;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .form-group input.error,
+        .form-group textarea.error,
+        .form-group select.error {
+            border-color: #e53e3e;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+            font-size: 13px;
+            color: #856404;
+            line-height: 1.6;
+        }
+
+        .note strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            border-left: 4px solid #28a745;
+        }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1><i class="fas fa-file-invoice-dollar"></i> Loan Application</h1>
-    <form id="loanForm">
-        <div class="form-group">
-            <label>Loan Amount (₹)</label>
-            <input type="number" name="amount" min="1000" required>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-hand-holding-usd"></i> Loan Application</h1>
+            <p class="subtitle">Bengaluru University Employees' Loan Cooperative Society (Niyamita)</p>
+            <p class="subtitle">Jnanabharathi, Bengaluru - 560 056</p>
+            <span class="fee-badge"><i class="fas fa-receipt"></i> Application Fee: ₹50/-</span>
         </div>
-        <div class="form-group">
-            <label>Interest Rate (%)</label>
-            <input type="number" name="interest_rate" min="1" max="100" step="0.01" required>
+
+        <div class="success-message" id="successMessage"></div>
+
+        <form id="loanForm">
+            <!-- Loan Details -->
+            <div class="section-title">
+                <i class="fas fa-money-bill-wave"></i>
+                Loan Details
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="amount">Loan Amount (₹) <span class="required">*</span></label>
+                    <input type="number" id="amount" name="amount" min="5000" max="10000000" step="1000" required>
+                    <span class="error-message">Amount must be between ₹5,000 and ₹1,00,00,000</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="interest_rate">Interest Rate (% per annum) <span class="required">*</span></label>
+                    <input type="number" id="interest_rate" name="interest_rate" min="1" max="20" step="0.1" required value="10">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="tenure_months">Tenure (months) <span class="required">*</span></label>
+                <input type="number" id="tenure_months" name="tenure_months" min="6" max="360" required>
+                <span class="error-message">Tenure must be 6-360 months</span>
+            </div>
+
+            <div class="note">
+                <strong><i class="fas fa-info-circle"></i> Important:</strong>
+                All fields marked with <span class="required">*</span> are mandatory. Please ensure all information is accurate before submission.
+            </div>
+
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-paper-plane"></i>
+                Submit Loan Application
+            </button>
+        </form>
+
+        <div class="back-link">
+            <a href="/member-dashboard">
+                <i class="fas fa-arrow-left"></i>
+                Back to Dashboard
+            </a>
         </div>
-        <div class="form-group">
-            <label>Tenure (Months)</label>
-            <input type="number" name="tenure_months" min="1" max="360" required>
-        </div>
-        <button type="submit">Submit Application</button>
-    </form>
-    <div id="message"></div>
-</div>
-<script>
-document.getElementById('loanForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const response = await fetch('/member/apply-loan', { method: 'POST', body: formData });
-    const data = await response.json();
-    const msgDiv = document.getElementById('message');
-    if(data.ok) {
-        msgDiv.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
-        setTimeout(() => window.location.href = '/member-dashboard', 2000);
-    } else {
-        msgDiv.innerHTML = `<div class="alert alert-error">${data.error}</div>`;
-    }
-});
-</script>
+    </div>
+
+    <script>
+        const form = document.getElementById('loanForm');
+        
+        // Form validation
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Validate loan amount
+            const amount = parseFloat(document.getElementById('amount').value);
+            if (amount < 5000 || amount > 10000000) {
+                document.getElementById('amount').classList.add('error');
+                alert('Loan amount must be between ₹5,000 and ₹1,00,00,000');
+                return;
+            }
+
+            // Validate tenure
+            const tenure = parseInt(document.getElementById('tenure_months').value);
+            if (tenure < 6 || tenure > 360) {
+                document.getElementById('tenure_months').classList.add('error');
+                alert('Tenure must be between 6 and 360 months');
+                return;
+            }
+
+            // Submit form
+            const formData = new FormData(form);
+            
+            try {
+                const response = await fetch('/member/apply-loan', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                
+                if (result.ok) {
+                    const successMsg = document.getElementById('successMessage');
+                    successMsg.textContent = 'Loan application submitted successfully! Redirecting to dashboard...';
+                    successMsg.style.display = 'block';
+                    form.reset();
+                    setTimeout(() => {
+                        window.location.href = '/member-dashboard';
+                    }, 2000);
+                } else {
+                    alert(result.error || 'Error submitting application. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Network error. Please check your connection and try again.');
+            }
+        });
+
+        // Real-time validation
+        form.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.classList.remove('error');
+            });
+        });
+    </script>
 </body>
 </html>

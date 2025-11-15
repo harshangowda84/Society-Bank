@@ -225,12 +225,44 @@ pip install -r backend/requirements.txt --force-reinstall
 - Payment gateway integration
 - Mobile API
 
+## 🤝 Collaboration
+
+### Adding Collaborators
+1. Go to repository: https://github.com/harshangowda84/Society-Bank
+2. Click **Settings** → **Collaborators**
+3. Click **Add people** and enter their email
+4. They'll receive an invitation email
+
+### For New Collaborators
+See [SETUP.md](SETUP.md) for complete setup instructions including:
+- Prerequisites and installation
+- Running the application
+- Database setup
+- Troubleshooting
+
+## 📊 Database Schema
+
+View the complete ER diagram and schema documentation:
+- **[DATABASE_SCHEMA.md](DATABASE_SCHEMA.md)** - Text-based ER diagram with all relationships
+- **Generate Visual Diagram**: Run `python generate_er_diagram.py` (requires `eralchemy2`)
+
+### Quick ER Diagram Generation
+```bash
+# Install required package
+pip install eralchemy2 pydot
+
+# Generate diagram
+eralchemy2 -i 'sqlite:///backend/instance/society_bank.db' -o er_diagram.png
+```
+
 ## 📞 Support
 
 For questions or issues, refer to:
-1. [TESTING_GUIDE.md](TESTING_GUIDE.md) - Complete usage guide
-2. [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md) - Feature details
-3. Server logs in terminal
+1. [SETUP.md](SETUP.md) - Installation and setup guide
+2. [DATABASE_SCHEMA.md](DATABASE_SCHEMA.md) - Database structure and relationships
+3. [TESTING_GUIDE.md](TESTING_GUIDE.md) - Complete usage guide
+4. [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md) - Feature details
+5. Server logs in terminal
 
 ---
 

@@ -440,6 +440,21 @@ def admin_approvals_page(request: Request, is_admin: str = Cookie(default=None),
     })
 
 
+@app.get("/vision", response_class=HTMLResponse, name="vision")
+def vision(request: Request):
+    return templates.TemplateResponse("vision.html", {"request": request})
+
+
+@app.get("/services", response_class=HTMLResponse, name="services")
+def services(request: Request):
+    return templates.TemplateResponse("services.html", {"request": request})
+
+
+@app.get("/benefits", response_class=HTMLResponse, name="benefits")
+def benefits(request: Request):
+    return templates.TemplateResponse("benefits.html", {"request": request})
+
+
 @app.get("/about", response_class=HTMLResponse)
 def about(request: Request):
     return templates.TemplateResponse("about.html", {"request": request})
