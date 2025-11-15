@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deposits - Society Bank</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: Arial, sans-serif; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 20px auto; }
+        .header { margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #007bff; color: white; }
+        tr:hover { background: #f9f9f9; }
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+        .badge-pending { background: #ffc107; color: black; }
+        .badge-approved { background: #28a745; color: white; }
+        .badge-matured { background: #17a2b8; color: white; }
+        .back-link { display: inline-block; margin-bottom: 20px; }
+        .back-link a { color: #007bff; text-decoration: none; }
+        .back-link a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <nav style="background: #003d7a; padding: 10px 20px; color: white;">
+        <a href="/" style="color: white; text-decoration: none; font-size: 20px; font-weight: bold;">🏦 Society Bank</a>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-piggy-bank"></i> Fixed Deposits</h1>
+            <div class="back-link">
+                <a href="javascript:history.back()"><i class="fas fa-arrow-left"></i> Back</a>
+            </div>
+        </div>
+
+        {% if deposits %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Deposit ID</th>
+                    <th>Member ID</th>
+                    <th>Amount</th>
+                    <th>Type</th>
+                    <th>Maturity Date</th>
+                    <th>Status</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for deposit in deposits %}
+                <tr>
+                    <td>#{{ deposit.id }}</td>
+                    <td>{{ deposit.member_id }}</td>
+                    <td><strong>₹{{ "%.2f"|format(deposit.amount) }}</strong></td>
+                    <td>{{ deposit.type }}</td>
+                    <td>{{ deposit.maturity_date if deposit.maturity_date else 'N/A' }}</td>
+                    <td>
+                        {% if deposit.status == 'Pending' %}
+                            <span class="badge badge-pending">{{ deposit.status }}</span>
+                        {% elif deposit.status == 'Active' %}
+                            <span class="badge badge-approved">{{ deposit.status }}</span>
+                        {% else %}
+                            <span class="badge badge-matured">{{ deposit.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ deposit.created_at.strftime('%Y-%m-%d') if deposit.created_at else 'N/A' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p style="text-align: center; color: #999; margin-top: 40px;">
+            <i class="fas fa-inbox" style="font-size: 48px;"></i><br>
+            No deposits found.
+        </p>
+        {% endif %}
+    </div>
+</body>
+</html>

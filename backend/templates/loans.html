@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loans - Society Bank</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: Arial, sans-serif; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 20px auto; }
+        .header { margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #007bff; color: white; }
+        tr:hover { background: #f9f9f9; }
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+        .badge-pending { background: #ffc107; color: black; }
+        .badge-approved { background: #28a745; color: white; }
+        .badge-rejected { background: #dc3545; color: white; }
+        .back-link { display: inline-block; margin-bottom: 20px; }
+        .back-link a { color: #007bff; text-decoration: none; }
+        .back-link a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <nav style="background: #003d7a; padding: 10px 20px; color: white;">
+        <a href="/" style="color: white; text-decoration: none; font-size: 20px; font-weight: bold;">🏦 Society Bank</a>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-credit-card"></i> All Loans</h1>
+            <div class="back-link">
+                <a href="javascript:history.back()"><i class="fas fa-arrow-left"></i> Back</a>
+            </div>
+        </div>
+
+        {% if loans %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Loan ID</th>
+                    <th>Member ID</th>
+                    <th>Amount</th>
+                    <th>Interest Rate</th>
+                    <th>Tenure (Months)</th>
+                    <th>Status</th>
+                    <th>Repayment Status</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for loan in loans %}
+                <tr>
+                    <td>#{{ loan.id }}</td>
+                    <td>{{ loan.member_id }}</td>
+                    <td><strong>₹{{ "%.2f"|format(loan.amount) }}</strong></td>
+                    <td>{{ loan.interest_rate }}%</td>
+                    <td>{{ loan.tenure_months }}</td>
+                    <td>
+                        {% if loan.status == 'Pending' %}
+                            <span class="badge badge-pending">{{ loan.status }}</span>
+                        {% elif loan.status == 'Approved' %}
+                            <span class="badge badge-approved">{{ loan.status }}</span>
+                        {% else %}
+                            <span class="badge badge-rejected">{{ loan.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ loan.repayment_status }}</td>
+                    <td>{{ loan.created_at.strftime('%Y-%m-%d') if loan.created_at else 'N/A' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p style="text-align: center; color: #999; margin-top: 40px;">
+            <i class="fas fa-inbox" style="font-size: 48px;"></i><br>
+            No loans found.
+        </p>
+        {% endif %}
+    </div>
+</body>
+</html>

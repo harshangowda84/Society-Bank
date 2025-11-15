@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixed Deposit Application</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Poppins',sans-serif; background:#f0f2f5; padding:2rem; }
+        .container { max-width:600px; margin:0 auto; background:white; padding:2rem; border-radius:1rem; box-shadow:0 4px 12px rgba(0,0,0,0.1); }
+        h1 { color:#0f52ba; margin-bottom:1.5rem; }
+        .form-group { margin:1.5rem 0; }
+        label { display:block; margin-bottom:0.5rem; font-weight:600; color:#333; }
+        input, select, textarea { width:100%; padding:0.8rem; border:1px solid #ddd; border-radius:0.5rem; font-size:1rem; }
+        button { background:#0f52ba; color:white; padding:1rem; border:none; border-radius:0.5rem; cursor:pointer; font-weight:600; margin-top:1rem; width:100%; }
+        button:hover { background:#063fa3; }
+        .alert { padding:1rem; border-radius:0.5rem; margin-bottom:1rem; }
+        .alert-success { background:#d4edda; color:#155724; border:1px solid #c3e6cb; }
+        .alert-error { background:#f8d7da; color:#721c24; border:1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1><i class="fas fa-piggy-bank"></i> Fixed Deposit Application</h1>
+    <form id="fdForm">
+        <div class="form-group">
+            <label>Deposit Amount (₹)</label>
+            <input type="number" name="amount" min="5000" required>
+        </div>
+        <div class="form-group">
+            <label>Deposit Type</label>
+            <select name="fd_type" required>
+                <option value="">Select Type</option>
+                <option value="Fixed">Fixed Deposit</option>
+                <option value="Recurring">Recurring Deposit</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Maturity Date</label>
+            <input type="date" name="maturity_date" required>
+        </div>
+        <button type="submit">Submit Application</button>
+    </form>
+    <div id="message"></div>
+</div>
+<script>
+document.getElementById('fdForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const response = await fetch('/member/apply-fd', { method: 'POST', body: formData });
+    const data = await response.json();
+    const msgDiv = document.getElementById('message');
+    if(data.ok) {
+        msgDiv.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
+        setTimeout(() => window.location.href = '/member-dashboard', 2000);
+    } else {
+        msgDiv.innerHTML = `<div class="alert alert-error">${data.error}</div>`;
+    }
+});
+</script>
+</body>
+</html>

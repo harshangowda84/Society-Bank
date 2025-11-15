@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Approvals</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Poppins',sans-serif; background:#f0f2f5; }
+        header { background:linear-gradient(135deg,#0f52ba 0%,#9b59b6 100%); color:white; padding:1rem; }
+        .container { max-width:1200px; margin:2rem auto; padding:0 1rem; }
+        .tabs { display:flex; gap:1rem; margin-bottom:2rem; flex-wrap:wrap; }
+        .tab-btn { padding:0.8rem 1.5rem; background:white; border:2px solid #ddd; border-radius:0.5rem; cursor:pointer; font-weight:600; transition:all 0.3s; }
+        .tab-btn.active { background:#0f52ba; color:white; border-color:#0f52ba; }
+        .tab-content { display:none; }
+        .tab-content.active { display:block; }
+        table { width:100%; background:white; border-collapse:collapse; border-radius:1rem; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.1); margin-bottom:2rem; }
+        thead { background:#0f52ba; color:white; }
+        th, td { padding:1rem; text-align:left; border-bottom:1px solid #eee; }
+        th { font-weight:600; }
+        .btn { padding:0.6rem 1rem; border:none; border-radius:0.4rem; cursor:pointer; font-weight:600; font-size:0.85rem; }
+        .btn-approve { background:#27ae60; color:white; }
+        .btn-approve:hover { background:#1e8449; }
+        .btn-reject { background:#e74c3c; color:white; }
+        .btn-reject:hover { background:#c0392b; }
+        .form-modal { display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:white; padding:2rem; border-radius:1rem; box-shadow:0 8px 32px rgba(0,0,0,0.2); z-index:1000; width:90%; max-width:500px; }
+        .form-modal.active { display:block; }
+        .overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:999; }
+        .overlay.active { display:block; }
+        .form-group { margin:1rem 0; }
+        label { display:block; margin-bottom:0.5rem; font-weight:600; }
+        textarea { width:100%; padding:0.8rem; border:1px solid #ddd; border-radius:0.4rem; }
+        .back-btn { display:inline-block; padding:0.8rem 1.5rem; background:#0f52ba; color:white; text-decoration:none; border-radius:0.5rem; margin-bottom:1rem; }
+    </style>
+</head>
+<body>
+<header>
+    <h1><i class="fas fa-check-circle"></i> Admin Approvals</h1>
+</header>
+<div class="container">
+    <a href="/admin" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Admin</a>
+    
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('loans')">Loan Applications</button>
+        <button class="tab-btn" onclick="showTab('fds')">FD Applications</button>
+        <button class="tab-btn" onclick="showTab('shares')">Share Applications</button>
+    </div>
+    
+    <div id="loans" class="tab-content active">
+        <h2>Pending Loan Applications</h2>
+        <table id="loansTable">
+            <thead>
+                <tr>
+                    <th>Loan ID</th>
+                    <th>Member</th>
+                    <th>Amount</th>
+                    <th>Tenure</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="loansList">
+                <tr><td colspan="6" style="text-align:center; color:#666;">No pending loan applications</td></tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div id="fds" class="tab-content">
+        <h2>Pending FD Applications</h2>
+        <table id="fdsTable">
+            <thead>
+                <tr>
+                    <th>FD ID</th>
+                    <th>Member</th>
+                    <th>Amount</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="fdsList">
+                <tr><td colspan="6" style="text-align:center; color:#666;">No pending FD applications</td></tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div id="shares" class="tab-content">
+        <h2>Pending Share Applications</h2>
+        <table id="sharesTable">
+            <thead>
+                <tr>
+                    <th>Share ID</th>
+                    <th>Member</th>
+                    <th>Quantity</th>
+                    <th>Total Amount</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="sharesList">
+                <tr><td colspan="6" style="text-align:center; color:#666;">No pending share applications</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeModal()"></div>
+<div class="form-modal" id="approvalModal">
+    <h2>Office Approval Form</h2>
+    <form id="approvalForm">
+        <div class="form-group">
+            <label>Office Notes</label>
+            <textarea name="office_note" required placeholder="Enter approval notes..."></textarea>
+        </div>
+        <div style="display:flex; gap:1rem;">
+            <button type="submit" class="btn btn-approve">Approve</button>
+            <button type="button" class="btn btn-reject" onclick="closeModal()">Cancel</button>
+        </div>
+    </form>
+</div>
+
+<script>
+function showTab(tabName) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById(tabName).classList.add('active');
+    event.target.classList.add('active');
+}
+
+function openModal(type, id) {
+    document.getElementById('overlay').classList.add('active');
+    document.getElementById('approvalModal').classList.add('active');
+    document.getElementById('approvalForm').dataset.type = type;
+    document.getElementById('approvalForm').dataset.id = id;
+}
+
+function closeModal() {
+    document.getElementById('overlay').classList.remove('active');
+    document.getElementById('approvalModal').classList.remove('active');
+}
+
+document.getElementById('approvalForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const type = e.target.dataset.type;
+    const id = e.target.dataset.id;
+    const note = new FormData(e.target).get('office_note');
+    
+    let endpoint = '';
+    if(type === 'loan') endpoint = '/admin/approve-loan';
+    else if(type === 'fd') endpoint = '/admin/approve-fd';
+    else if(type === 'share') endpoint = '/admin/approve-share';
+    
+    const formData = new FormData();
+    if(type === 'loan') formData.append('loan_id', id);
+    else if(type === 'fd') formData.append('deposit_id', id);
+    else if(type === 'share') formData.append('share_id', id);
+    formData.append('office_note', note);
+    
+    const response = await fetch(endpoint, { method: 'POST', body: formData });
+    const data = await response.json();
+    
+    if(data.ok) {
+        alert(data.message);
+        closeModal();
+        location.reload();
+    } else {
+        alert('Error: ' + data.error);
+    }
+});
+
+// Note: In production, fetch actual pending applications from API
+// For now, this is a template structure
+</script>
+</body>
+</html>

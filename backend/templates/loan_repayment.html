@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Repayment</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Poppins',sans-serif; background:#f0f2f5; padding:2rem; }
+        .container { max-width:600px; margin:0 auto; background:white; padding:2rem; border-radius:1rem; box-shadow:0 4px 12px rgba(0,0,0,0.1); }
+        h1 { color:#0f52ba; margin-bottom:1.5rem; }
+        .form-group { margin:1.5rem 0; }
+        label { display:block; margin-bottom:0.5rem; font-weight:600; color:#333; }
+        input, select { width:100%; padding:0.8rem; border:1px solid #ddd; border-radius:0.5rem; font-size:1rem; }
+        button { background:#0f52ba; color:white; padding:1rem; border:none; border-radius:0.5rem; cursor:pointer; font-weight:600; margin-top:1rem; width:100%; }
+        button:hover { background:#063fa3; }
+        .alert { padding:1rem; border-radius:0.5rem; margin-bottom:1rem; }
+        .alert-success { background:#d4edda; color:#155724; border:1px solid #c3e6cb; }
+        .alert-error { background:#f8d7da; color:#721c24; border:1px solid #f5c6cb; }
+        .info-box { background:#e7f3ff; padding:1rem; border-radius:0.5rem; margin:1rem 0; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1><i class="fas fa-money-check-alt"></i> Loan Repayment & Pre-Closure</h1>
+    <div class="info-box">
+        <strong>Select a loan:</strong> Choose from your active loans to make repayment or request pre-closure.
+    </div>
+    <form id="repaymentForm">
+        <div class="form-group">
+            <label>Select Loan</label>
+            <select name="loan_id" required>
+                <option value="">Choose a loan...</option>
+                <!-- Populated by JavaScript -->
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Principal Amount (₹)</label>
+            <input type="number" name="principal" min="0" step="0.01" required>
+        </div>
+        <div class="form-group">
+            <label>Interest Amount (₹)</label>
+            <input type="number" name="interest" min="0" step="0.01" required>
+        </div>
+        <div class="form-group">
+            <label>Payment Method</label>
+            <select name="payment_method" required>
+                <option value="">Select Method</option>
+                <option value="Cash">Cash</option>
+                <option value="Bank Transfer">Bank Transfer</option>
+                <option value="UPI">UPI</option>
+                <option value="Cheque">Cheque</option>
+            </select>
+        </div>
+        <button type="submit">Record Repayment</button>
+    </form>
+    <div id="message"></div>
+</div>
+<script>
+document.getElementById('repaymentForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const response = await fetch('/member/repay-loan', { method: 'POST', body: formData });
+    const data = await response.json();
+    const msgDiv = document.getElementById('message');
+    if(data.ok) {
+        msgDiv.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
+        setTimeout(() => window.location.href = '/member-dashboard', 2000);
+    } else {
+        msgDiv.innerHTML = `<div class="alert alert-error">${data.error}</div>`;
+    }
+});
+</script>
+</body>
+</html>

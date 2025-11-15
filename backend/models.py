@@ -20,10 +20,17 @@ class Member(Base):
     pan = Column(String)
     is_approved = Column(Boolean, default=False)
     application_date = Column(String)
+    account_no = Column(String, unique=True, index=True, nullable=True)
+    email = Column(String, nullable=True)
+    phone = Column(String, nullable=True)
+    balance = Column(Float, default=0.0)
+    address = Column(String, nullable=True)
+    gender = Column(String, nullable=True)
 
     accounts = relationship("Account", back_populates="member", cascade="all, delete-orphan")
     loans = relationship("Loan", back_populates="member", cascade="all, delete-orphan")
     deposits = relationship("Deposit", back_populates="member", cascade="all, delete-orphan")
+    shares = relationship("Share", back_populates="member", cascade="all, delete-orphan")
 
     def set_password(self, raw_password: str) -> None:
         if raw_password:
@@ -57,9 +64,14 @@ class Loan(Base):
     interest_rate = Column(Float, nullable=False)
     tenure_months = Column(Integer, nullable=False)
     status = Column(String(20), default='Pending')
+    office_note = Column(Text, nullable=True)
+    office_approved = Column(Boolean, default=False)
+    approved_at = Column(DateTime, nullable=True)
+    repayment_status = Column(String(20), default='Not Started')  # Not Started, Active, Completed, Defaulted
     created_at = Column(DateTime, default=datetime.utcnow)
 
     member = relationship("Member", back_populates="loans")
+    repayments = relationship("LoanRepayment", back_populates="loan", cascade="all, delete-orphan")
 
 class Deposit(Base):
     __tablename__ = "deposit"
@@ -69,6 +81,9 @@ class Deposit(Base):
     type = Column(String(50), nullable=False)  # e.g., Fixed, Recurring
     maturity_date = Column(Date)
     status = Column(String(20), default='Active')
+    office_note = Column(Text, nullable=True)
+    office_approved = Column(Boolean, default=False)
+    approved_at = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     member = relationship("Member", back_populates="deposits")
@@ -89,3 +104,32 @@ class Announcement(Base):
     id = Column(Integer, primary_key=True, index=True)
     message = Column(Text, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
+
+
+class Share(Base):
+    __tablename__ = "share"
+    id = Column(Integer, primary_key=True, index=True)
+    member_id = Column(Integer, ForeignKey('member.id'), nullable=False)
+    quantity = Column(Integer, nullable=False)
+    amount_per_share = Column(Float, nullable=False)
+    total_amount = Column(Float, nullable=False)
+    status = Column(String(20), default='Pending')  # Pending, Approved, Active
+    office_note = Column(Text, nullable=True)
+    office_approved = Column(Boolean, default=False)
+    approved_at = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    member = relationship("Member", back_populates="shares")
+
+
+class LoanRepayment(Base):
+    __tablename__ = "loan_repayment"
+    id = Column(Integer, primary_key=True, index=True)
+    loan_id = Column(Integer, ForeignKey('loan.id'), nullable=False)
+    principal_paid = Column(Float, default=0.0)
+    interest_paid = Column(Float, default=0.0)
+    paid_at = Column(DateTime, default=datetime.utcnow)
+    payment_method = Column(String(50), nullable=True)  # Cash, Transfer, UPI, etc.
+    is_prepayment = Column(Boolean, default=False)
+
+    loan = relationship("Loan", back_populates="repayments")
