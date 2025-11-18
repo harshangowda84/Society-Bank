@@ -79,9 +79,16 @@ class Deposit(Base):
     id = Column(Integer, primary_key=True, index=True)
     member_id = Column(Integer, ForeignKey('member.id'), nullable=False)
     amount = Column(Float, nullable=False)
-    type = Column(String(50), nullable=False)  # e.g., Fixed, Recurring
-    maturity_date = Column(Date)
-    status = Column(String(20), default='Active')
+    type = Column(String(50), nullable=False)  # e.g., Fixed, Recurring, Senior Citizen
+    period = Column(Integer, nullable=False, default=1)  # Years
+    interest_rate = Column(Float, nullable=False, default=6.5)  # Interest rate in percentage
+    interest_payment = Column(String(50), nullable=False, default='annual')  # monthly, quarterly, half_yearly, annual, maturity
+    maturity_date = Column(Date, nullable=True)
+    maturity_amount = Column(Float, nullable=True)
+    nominee_name = Column(String(100), nullable=True)
+    nominee_relationship = Column(String(50), nullable=True)
+    special_instructions = Column(Text, nullable=True)
+    status = Column(String(20), default='Pending')  # Pending, Approved, Rejected, Active, Matured
     office_note = Column(Text, nullable=True)
     office_approved = Column(Boolean, default=False)
     approved_at = Column(DateTime, nullable=True)
@@ -134,6 +141,22 @@ class LoanRepayment(Base):
     is_prepayment = Column(Boolean, default=False)
 
     loan = relationship("Loan", back_populates="repayments")
+
+
+class FDInterestRate(Base):
+    __tablename__ = "fd_interest_rate"
+    id = Column(Integer, primary_key=True, index=True)
+    fd_type = Column(String(50), nullable=False, index=True)  # e.g., Fixed, Recurring, Senior Citizen
+    tenure_months = Column(Integer, nullable=True)  # Tenure in months (e.g., 3, 6, 12)
+    tenure_years = Column(Integer, nullable=True)  # Tenure in years (e.g., 1, 2, 3, 5, 10)
+    interest_rate = Column(Float, nullable=False)  # Interest rate in percentage for this tenure
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    def __repr__(self) -> str:
+        if self.tenure_months:
+            return f"<FDInterestRate type={self.fd_type} tenure={self.tenure_months}mo rate={self.interest_rate}%>"
+        else:
+            return f"<FDInterestRate type={self.fd_type} tenure={self.tenure_years}yrs rate={self.interest_rate}%>"
 
 
 class LoanInterestRate(Base):

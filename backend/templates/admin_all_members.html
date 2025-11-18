@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Members - Society Bank Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: #f3f4f6; }
+        .sidebar { background: #0a52b9; color: #fff; width: 240px; padding: 20px; position: fixed; left: 0; top: 0; height: 100vh; overflow-y: auto; }
+        .sidebar h2 { margin: 0 0 30px 0; font-size: 20px; font-weight: 600; }
+        .sidebar nav a { display: block; color: #fff; text-decoration: none; padding: 12px 15px; margin: 8px 0; border-radius: 6px; transition: 0.3s; }
+        .sidebar nav a:hover { background: #2563eb; }
+        .sidebar nav a.active { background: #1e40af; }
+        .main-content { margin-left: 240px; padding: 30px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .header h1 { color: #0a52b9; font-size: 28px; margin: 0; }
+        .logout-btn { background: #ef4444; color: #fff; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .logout-btn:hover { background: #dc2626; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .stat-card h3 { color: #666; font-size: 14px; margin: 0 0 10px 0; }
+        .stat-card .number { font-size: 32px; font-weight: 700; color: #0a52b9; }
+        .card { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 20px; }
+        .card h2 { color: #0a52b9; margin: 0 0 20px 0; font-size: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #0a52b9; color: #fff; padding: 12px; text-align: left; font-weight: 600; }
+        td { padding: 12px; border-bottom: 1px solid #eef2f7; }
+        tr:hover { background: #f9fafb; }
+        .badge { display: inline-block; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+        .badge-approved { background: #dcfce7; color: #166534; }
+        .badge-pending { background: #fef3c7; color: #92400e; }
+        .empty-message { padding: 40px; text-align: center; color: #666; }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <h2><i class="fas fa-university"></i> Society Bank</h2>
+        <nav>
+            <a href="/admin"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="/admin/new-members"><i class="fas fa-user-check"></i> New Members</a>
+            <a href="/admin/all-members" class="active"><i class="fas fa-users"></i> All Members</a>
+            <a href="/admin/announcements"><i class="fas fa-newspaper"></i> Announcements</a>
+            <a href="/admin/loan-management"><i class="fas fa-cog"></i> Loan Management</a>
+            <a href="/admin/fd-management"><i class="fas fa-piggy-bank"></i> FD Management</a>
+            <a href="/admin-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <h1><i class="fas fa-users"></i> All Members</h1>
+            <form action="/admin-logout" method="get" style="margin: 0;">
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats">
+            <div class="stat-card">
+                <h3>Total Members</h3>
+                <div class="number">{{ total_members }}</div>
+            </div>
+            <div class="stat-card">
+                <h3>Approved Members</h3>
+                <div class="number">{{ approved_count }}</div>
+            </div>
+            <div class="stat-card">
+                <h3>Pending Approvals</h3>
+                <div class="number">{{ pending_count }}</div>
+            </div>
+        </div>
+
+        <!-- All Members Section -->
+        <section class="card">
+            <h2><i class="fas fa-list"></i> Registered Members List</h2>
+            
+            {% if members %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>DOB</th>
+                        <th>Designation</th>
+                        <th>Mobile</th>
+                        <th>Account No.</th>
+                        <th>Status</th>
+                        <th>Joined Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for member in members %}
+                    <tr>
+                        <td><strong>{{ member.name }}</strong></td>
+                        <td>{{ member.dob }}</td>
+                        <td>{{ member.designation }}</td>
+                        <td>{{ member.phone }}</td>
+                        <td>{{ member.bank_account_no }}</td>
+                        <td>
+                            {% if member.is_approved %}
+                                <span class="badge badge-approved"><i class="fas fa-check"></i> Approved</span>
+                            {% else %}
+                                <span class="badge badge-pending"><i class="fas fa-clock"></i> Pending</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ member.created_at|strftime('%d %b %Y') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="empty-message">
+                <i class="fas fa-inbox" style="font-size: 48px; color: #999; margin-bottom: 20px;"></i>
+                <p>No members registered yet</p>
+            </div>
+            {% endif %}
+        </section>
+    </main>
+</body>
+</html>

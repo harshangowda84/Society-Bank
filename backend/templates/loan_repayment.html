@@ -3,74 +3,518 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loan Repayment</title>
+    <title>Loan Repayment - Society Bank</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family:'Poppins',sans-serif; background:#f0f2f5; padding:2rem; }
-        .container { max-width:600px; margin:0 auto; background:white; padding:2rem; border-radius:1rem; box-shadow:0 4px 12px rgba(0,0,0,0.1); }
-        h1 { color:#0f52ba; margin-bottom:1.5rem; }
-        .form-group { margin:1.5rem 0; }
-        label { display:block; margin-bottom:0.5rem; font-weight:600; color:#333; }
-        input, select { width:100%; padding:0.8rem; border:1px solid #ddd; border-radius:0.5rem; font-size:1rem; }
-        button { background:#0f52ba; color:white; padding:1rem; border:none; border-radius:0.5rem; cursor:pointer; font-weight:600; margin-top:1rem; width:100%; }
-        button:hover { background:#063fa3; }
-        .alert { padding:1rem; border-radius:0.5rem; margin-bottom:1rem; }
-        .alert-success { background:#d4edda; color:#155724; border:1px solid #c3e6cb; }
-        .alert-error { background:#f8d7da; color:#721c24; border:1px solid #f5c6cb; }
-        .info-box { background:#e7f3ff; padding:1rem; border-radius:0.5rem; margin:1rem 0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #0f52ba;
+            --primary-dark: #063fa3;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --bg-light: #f8f9fa;
+            --bg-white: #ffffff;
+            --border: #e0e0e0;
+            --shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white; padding: 30px 0; margin-bottom: 30px;
+            border-radius: 12px; box-shadow: 0 4px 15px rgba(15, 82, 186, 0.2);
+        }
+        .header-content { display: flex; justify-content: space-between; align-items: center; padding: 0 40px; gap: 30px; }
+        header h1 { font-size: 32px; font-weight: 700; display: flex; align-items: center; gap: 15px; margin: 0; }
+        header i { font-size: 36px; }
+        .back-btn { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 6px 14px; border-radius: 5px; cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; width: auto; }
+        .back-btn:hover { background: rgba(255,255,255,0.25); border-color: rgba(255,255,255,0.5); transform: translateX(-2px); }
+        .back-btn i { font-size: 12px; }
+        .page-title { text-align: center; margin-bottom: 30px; }
+        .page-title h2 { font-size: 24px; color: var(--text-dark); margin-bottom: 5px; }
+        .page-title p { color: var(--text-light); font-size: 14px; }
+        .alert { padding: 15px; border-radius: 5px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .alert-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .grid { display: grid; grid-template-columns: 1fr 2fr; gap: 25px; margin-bottom: 30px; }
+        .card { background: var(--bg-white); border-radius: 10px; padding: 25px; box-shadow: var(--shadow); }
+        .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid var(--border); }
+        .card-header i { color: var(--primary); font-size: 24px; }
+        .card-header h3 { font-size: 18px; color: var(--text-dark); }
+        .loans-list { max-height: 400px; overflow-y: auto; }
+        .loan-item { padding: 15px; border: 2px solid transparent; border-radius: 8px; margin-bottom: 10px; cursor: pointer; transition: all 0.3s; background: var(--bg-light); }
+        .loan-item:hover { border-color: var(--primary); background: #f0f5ff; }
+        .loan-item.selected { border-color: var(--primary); background: #e3f2fd; box-shadow: 0 2px 8px rgba(15, 82, 186, 0.2); }
+        .loan-item-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
+        .loan-type { font-weight: 600; color: var(--primary); }
+        .loan-status { background: var(--success); color: white; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+        .loan-details { font-size: 13px; color: var(--text-light); display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+        .loan-detail { display: flex; justify-content: space-between; }
+        .empty-state { text-align: center; padding: 40px 20px; color: var(--text-light); }
+        .empty-state i { font-size: 48px; margin-bottom: 15px; opacity: 0.3; }
+        .loading { display: inline-block; width: 30px; height: 30px; border: 4px solid rgba(15, 82, 186, 0.2); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-dark); }
+        .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 5px; font-family: 'Poppins', sans-serif; font-size: 14px; transition: border-color 0.3s; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(15, 82, 186, 0.1); }
+        .form-group input:disabled, .form-group select:disabled { background: var(--bg-light); cursor: not-allowed; }
+        .payment-type-group { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 20px; }
+        .radio-option { display: flex; align-items: center; padding: 12px; border: 2px solid var(--border); border-radius: 8px; cursor: pointer; transition: all 0.3s; background: var(--bg-light); }
+        .radio-option:hover { border-color: var(--primary); }
+        .radio-option input[type="radio"] { width: auto; margin-right: 12px; cursor: pointer; }
+        .radio-option input[type="radio"]:checked + label { font-weight: 600; color: var(--primary); }
+        .radio-option.selected { border-color: var(--primary); background: #e3f2fd; }
+        .payment-section { display: none; padding: 15px; background: var(--bg-light); border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--primary); animation: slideIn 0.3s ease; }
+        .payment-section.active { display: block; }
+        .summary-table { width: 100%; margin-bottom: 15px; border-collapse: collapse; }
+        .summary-table tr { border-bottom: 1px solid var(--border); }
+        .summary-table td { padding: 10px 0; font-size: 14px; }
+        .summary-table td:first-child { color: var(--text-light); }
+        .summary-table td:last-child { text-align: right; font-weight: 600; color: var(--text-dark); }
+        .summary-table tr:last-child td { border-bottom: none; padding-top: 10px; font-size: 16px; color: var(--success); border-top: 2px solid var(--border); }
+        .error-message { color: var(--danger); font-size: 12px; margin-top: 5px; }
+        button { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; padding: 12px 30px; border: none; border-radius: 5px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        button:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(15, 82, 186, 0.3); }
+        button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .placeholder { text-align: center; padding: 60px 20px; color: var(--text-light); }
+        .placeholder i { font-size: 64px; opacity: 0.2; margin-bottom: 20px; display: block; }
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+            .header-content { flex-direction: column; gap: 15px; padding: 0 20px; align-items: flex-start; }
+            header h1 { font-size: 24px; }
+            .back-btn { width: 100%; justify-content: center; }
+        }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1><i class="fas fa-money-check-alt"></i> Loan Repayment & Pre-Closure</h1>
-    <div class="info-box">
-        <strong>Select a loan:</strong> Choose from your active loans to make repayment or request pre-closure.
+    <header>
+        <div class="header-content">
+            <h1><i class="fas fa-money-check-alt"></i> Loan Repayment</h1>
+            <button class="back-btn" onclick="window.location.href='/member-dashboard'">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-title">
+            <h2>Manage Your Loans</h2>
+            <p>Select a loan and choose your preferred repayment option</p>
+        </div>
+
+        <div id="alertContainer"></div>
+
+        <div class="grid">
+            <!-- Loans List -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-list"></i>
+                    <h3>Your Active Loans</h3>
+                </div>
+
+                <div id="loansLoading" style="text-align: center; padding: 40px;">
+                    <div class="loading"></div>
+                    <p style="margin-top: 15px; color: var(--text-light);">Loading loans...</p>
+                </div>
+
+                <div id="loansList" class="loans-list" style="display: none;"></div>
+
+                <div id="noLoans" class="empty-state" style="display: none;">
+                    <i class="fas fa-inbox"></i>
+                    <p><strong>No Active Loans</strong></p>
+                    <p style="font-size: 13px;">You don't have any active loans to repay</p>
+                </div>
+            </div>
+
+            <!-- Repayment Form -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-credit-card"></i>
+                    <h3>Repayment Details</h3>
+                </div>
+
+                <div id="formPlaceholder" class="placeholder">
+                    <i class="fas fa-arrow-left"></i>
+                    <p>Select a loan to start</p>
+                </div>
+
+                <form id="repaymentForm" style="display: none;">
+                    <!-- Loan Summary -->
+                    <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                        <table class="summary-table">
+                            <tr>
+                                <td>Loan Amount:</td>
+                                <td id="summaryAmount">₹0</td>
+                            </tr>
+                            <tr>
+                                <td>Interest Rate:</td>
+                                <td id="summaryRate">0% p.a.</td>
+                            </tr>
+                            <tr>
+                                <td>Tenure:</td>
+                                <td id="summaryTenure">0 months</td>
+                            </tr>
+                            <tr>
+                                <td>Total Interest:</td>
+                                <td id="summaryInterest">₹0</td>
+                            </tr>
+                            <tr style="color: var(--success);">
+                                <td><strong>Total Due:</strong></td>
+                                <td id="summaryTotal">₹0</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Payment Type Selection -->
+                    <div class="form-group">
+                        <label>Payment Type</label>
+                        <div class="payment-type-group">
+                            <div class="radio-option selected">
+                                <input type="radio" id="fullPayment" name="paymentType" value="full" checked>
+                                <label for="fullPayment">Full Payment - Pay entire loan at once</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="customPayment" name="paymentType" value="custom">
+                                <label for="customPayment">Custom Amount - Pay any amount</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="emiPayment" name="paymentType" value="emi">
+                                <label for="emiPayment">EMI - Monthly installments</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Full Payment Section -->
+                    <div id="fullPaymentSection" class="payment-section active">
+                        <table class="summary-table">
+                            <tr>
+                                <td>Principal:</td>
+                                <td id="fpPrincipal">₹0</td>
+                            </tr>
+                            <tr>
+                                <td>Interest:</td>
+                                <td id="fpInterest">₹0</td>
+                            </tr>
+                            <tr style="color: var(--success);">
+                                <td><strong>Total Payment:</strong></td>
+                                <td id="fpTotal">₹0</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Custom Payment Section -->
+                    <div id="customPaymentSection" class="payment-section">
+                        <div class="form-group">
+                            <label for="customAmount">Payment Amount (₹)</label>
+                            <input type="number" id="customAmount" placeholder="Enter amount" min="1000" step="100">
+                            <small style="color: var(--text-light); margin-top: 5px; display: block;">
+                                Minimum: ₹1,000 | Maximum: <span id="customMax">₹0</span>
+                            </small>
+                            <div id="customError" class="error-message"></div>
+                        </div>
+                        <table class="summary-table">
+                            <tr>
+                                <td>Payment Amount:</td>
+                                <td id="cpAmount">₹0</td>
+                            </tr>
+                            <tr style="color: var(--text-light);">
+                                <td>Remaining Balance:</td>
+                                <td id="cpRemaining">₹0</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- EMI Payment Section -->
+                    <div id="emiPaymentSection" class="payment-section">
+                        <table class="summary-table">
+                            <tr>
+                                <td>Monthly EMI:</td>
+                                <td id="epMonthly">₹0</td>
+                            </tr>
+                            <tr>
+                                <td>Number of EMIs:</td>
+                                <td id="epCount">0</td>
+                            </tr>
+                            <tr>
+                                <td>Total Payment:</td>
+                                <td id="epTotal">₹0</td>
+                            </tr>
+                            <tr style="color: var(--success);">
+                                <td><strong>First EMI (₹):</strong></td>
+                                <td id="epFirst">₹0</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="form-group">
+                        <label for="paymentMethod">Payment Method</label>
+                        <select id="paymentMethod" required disabled>
+                            <option value="">-- Select Payment Method --</option>
+                            <option value="Cash">Cash</option>
+                            <option value="Bank Transfer">Bank Transfer</option>
+                            <option value="UPI">UPI</option>
+                            <option value="Cheque">Cheque</option>
+                            <option value="Net Banking">Net Banking</option>
+                        </select>
+                    </div>
+
+                    <!-- Hidden Fields -->
+                    <input type="hidden" id="loanId" name="loanId">
+                    <input type="hidden" id="principalAmount" name="principalAmount">
+                    <input type="hidden" id="interestAmount" name="interestAmount">
+
+                    <!-- Submit Button -->
+                    <button type="submit">
+                        <i class="fas fa-check-circle"></i> Record Repayment
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
-    <form id="repaymentForm">
-        <div class="form-group">
-            <label>Select Loan</label>
-            <select name="loan_id" required>
-                <option value="">Choose a loan...</option>
-                <!-- Populated by JavaScript -->
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Principal Amount (₹)</label>
-            <input type="number" name="principal" min="0" step="0.01" required>
-        </div>
-        <div class="form-group">
-            <label>Interest Amount (₹)</label>
-            <input type="number" name="interest" min="0" step="0.01" required>
-        </div>
-        <div class="form-group">
-            <label>Payment Method</label>
-            <select name="payment_method" required>
-                <option value="">Select Method</option>
-                <option value="Cash">Cash</option>
-                <option value="Bank Transfer">Bank Transfer</option>
-                <option value="UPI">UPI</option>
-                <option value="Cheque">Cheque</option>
-            </select>
-        </div>
-        <button type="submit">Record Repayment</button>
-    </form>
-    <div id="message"></div>
-</div>
-<script>
-document.getElementById('repaymentForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const response = await fetch('/member/repay-loan', { method: 'POST', body: formData });
-    const data = await response.json();
-    const msgDiv = document.getElementById('message');
-    if(data.ok) {
-        msgDiv.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
-        setTimeout(() => window.location.href = '/member-dashboard', 2000);
-    } else {
-        msgDiv.innerHTML = `<div class="alert alert-error">${data.error}</div>`;
-    }
-});
-</script>
+
+    <script>
+        let loans = [];
+        let selectedLoan = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadLoans();
+            setupPaymentTypeListeners();
+        });
+
+        async function loadLoans() {
+            try {
+                const response = await fetch('/api/member/loans');
+                if (!response.ok) throw new Error('Failed to fetch loans');
+                loans = await response.json();
+                displayLoans();
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Failed to load loans', 'error');
+                document.getElementById('loansLoading').style.display = 'none';
+                document.getElementById('noLoans').style.display = 'block';
+            }
+        }
+
+        function displayLoans() {
+            document.getElementById('loansLoading').style.display = 'none';
+
+            if (loans.length === 0) {
+                document.getElementById('noLoans').style.display = 'block';
+                return;
+            }
+
+            const loansList = document.getElementById('loansList');
+            loansList.innerHTML = '';
+
+            loans.forEach(loan => {
+                const totalDue = loan.amount + (loan.amount * loan.interest_rate / 100);
+                const div = document.createElement('div');
+                div.className = 'loan-item';
+                div.innerHTML = `
+                    <div class="loan-item-header">
+                        <span class="loan-type">${loan.loan_type} Loan</span>
+                        <span class="loan-status">${loan.status}</span>
+                    </div>
+                    <div class="loan-details">
+                        <div class="loan-detail">
+                            <span>Amount:</span>
+                            <strong>₹${loan.amount.toLocaleString()}</strong>
+                        </div>
+                        <div class="loan-detail">
+                            <span>Rate:</span>
+                            <strong>${loan.interest_rate}% p.a.</strong>
+                        </div>
+                        <div class="loan-detail">
+                            <span>Tenure:</span>
+                            <strong>${loan.tenure_months} months</strong>
+                        </div>
+                        <div class="loan-detail">
+                            <span>Total Due:</span>
+                            <strong>₹${totalDue.toLocaleString()}</strong>
+                        </div>
+                    </div>
+                `;
+                div.onclick = () => selectLoan(loan, div);
+                loansList.appendChild(div);
+            });
+
+            loansList.style.display = 'block';
+        }
+
+        function selectLoan(loan, element) {
+            document.querySelectorAll('.loan-item').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedLoan = loan;
+            updateForm(loan);
+        }
+
+        function updateForm(loan) {
+            const totalDue = loan.amount + (loan.amount * loan.interest_rate / 100);
+            const totalInterest = loan.amount * loan.interest_rate / 100;
+
+            document.getElementById('loanId').value = loan.id;
+            document.getElementById('summaryAmount').textContent = `₹${loan.amount.toLocaleString()}`;
+            document.getElementById('summaryRate').textContent = `${loan.interest_rate}% p.a.`;
+            document.getElementById('summaryTenure').textContent = `${loan.tenure_months} months`;
+            document.getElementById('summaryInterest').textContent = `₹${totalInterest.toLocaleString()}`;
+            document.getElementById('summaryTotal').textContent = `₹${totalDue.toLocaleString()}`;
+
+            document.getElementById('customMax').textContent = `₹${totalDue.toLocaleString()}`;
+            document.getElementById('customAmount').max = totalDue;
+
+            document.getElementById('paymentMethod').disabled = false;
+            document.getElementById('formPlaceholder').style.display = 'none';
+            document.getElementById('repaymentForm').style.display = 'block';
+
+            document.getElementById('fullPayment').checked = true;
+            updatePaymentSections('full');
+            calculatePayment('full', loan);
+        }
+
+        function setupPaymentTypeListeners() {
+            document.querySelectorAll('input[name="paymentType"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    document.querySelectorAll('.radio-option').forEach(el => el.classList.remove('selected'));
+                    e.target.closest('.radio-option').classList.add('selected');
+                    updatePaymentSections(e.target.value);
+                    if (selectedLoan) calculatePayment(e.target.value, selectedLoan);
+                });
+            });
+
+            document.getElementById('customAmount').addEventListener('input', () => {
+                if (selectedLoan) calculatePayment('custom', selectedLoan);
+            });
+        }
+
+        function updatePaymentSections(type) {
+            document.getElementById('fullPaymentSection').classList.remove('active');
+            document.getElementById('customPaymentSection').classList.remove('active');
+            document.getElementById('emiPaymentSection').classList.remove('active');
+
+            if (type === 'full') document.getElementById('fullPaymentSection').classList.add('active');
+            if (type === 'custom') document.getElementById('customPaymentSection').classList.add('active');
+            if (type === 'emi') document.getElementById('emiPaymentSection').classList.add('active');
+        }
+
+        function calculatePayment(type, loan) {
+            const totalDue = loan.amount + (loan.amount * loan.interest_rate / 100);
+            const totalInterest = loan.amount * loan.interest_rate / 100;
+
+            if (type === 'full') {
+                document.getElementById('fpPrincipal').textContent = `₹${loan.amount.toLocaleString()}`;
+                document.getElementById('fpInterest').textContent = `₹${totalInterest.toLocaleString()}`;
+                document.getElementById('fpTotal').textContent = `₹${totalDue.toLocaleString()}`;
+                document.getElementById('principalAmount').value = loan.amount;
+                document.getElementById('interestAmount').value = totalInterest.toFixed(2);
+            }
+            else if (type === 'custom') {
+                const amount = parseFloat(document.getElementById('customAmount').value) || 0;
+                const error = document.getElementById('customError');
+
+                if (amount > 0 && amount < 1000) {
+                    error.textContent = 'Minimum amount is ₹1,000';
+                    return;
+                }
+                if (amount > totalDue) {
+                    error.textContent = 'Amount exceeds total due';
+                    return;
+                }
+
+                error.textContent = '';
+                const remaining = totalDue - amount;
+                document.getElementById('cpAmount').textContent = `₹${amount.toLocaleString()}`;
+                document.getElementById('cpRemaining').textContent = `₹${remaining.toLocaleString()}`;
+
+                const principal = amount * (loan.amount / totalDue);
+                const interest = amount * (totalInterest / totalDue);
+                document.getElementById('principalAmount').value = principal.toFixed(2);
+                document.getElementById('interestAmount').value = interest.toFixed(2);
+            }
+            else if (type === 'emi') {
+                const emiCount = loan.tenure_months;
+                const monthlyEmi = totalDue / emiCount;
+
+                document.getElementById('epMonthly').textContent = `₹${monthlyEmi.toLocaleString()}`;
+                document.getElementById('epCount').textContent = emiCount;
+                document.getElementById('epTotal').textContent = `₹${totalDue.toLocaleString()}`;
+                document.getElementById('epFirst').textContent = `₹${monthlyEmi.toLocaleString()}`;
+
+                document.getElementById('principalAmount').value = (loan.amount / emiCount).toFixed(2);
+                document.getElementById('interestAmount').value = (totalInterest / emiCount).toFixed(2);
+            }
+        }
+
+        document.getElementById('repaymentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!selectedLoan) {
+                showAlert('Please select a loan', 'error');
+                return;
+            }
+
+            const paymentMethod = document.getElementById('paymentMethod').value;
+            if (!paymentMethod) {
+                showAlert('Please select a payment method', 'error');
+                return;
+            }
+
+            const btn = e.target.querySelector('button');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+            try {
+                const formData = new FormData();
+                formData.append('loan_id', selectedLoan.id);
+                formData.append('principal', document.getElementById('principalAmount').value);
+                formData.append('interest', document.getElementById('interestAmount').value);
+                formData.append('payment_method', paymentMethod);
+
+                const response = await fetch('/member/repay-loan', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.ok) {
+                    showAlert('✓ Repayment recorded successfully!', 'success');
+                    setTimeout(() => window.location.href = '/member-dashboard', 2000);
+                } else {
+                    showAlert(data.error || 'Error recording repayment', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-check-circle"></i> Record Repayment';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Network error. Please try again.', 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> Record Repayment';
+            }
+        });
+
+        function showAlert(message, type) {
+            const container = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                <span>${message}</span>
+            `;
+            container.appendChild(alert);
+            setTimeout(() => alert.remove(), 5000);
+        }
+    </script>
 </body>
 </html>

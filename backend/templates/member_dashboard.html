@@ -504,7 +504,7 @@
                         {% for loan in loans %}
                         <tr>
                             <td><strong>#{{ loan.id }}</strong></td>
-                            <td>₹{{ "{:.2f}".format(loan.amount) }}</td>
+                            <td>₹{{ "%.2f"|format(loan.amount) }}</td>
                             <td>{{ loan.interest_rate }}%</td>
                             <td>{{ loan.tenure_months }} months</td>
                             <td>
@@ -548,7 +548,7 @@
                         {% for deposit in deposits %}
                         <tr>
                             <td><strong>#{{ deposit.id }}</strong></td>
-                            <td>₹{{ "{:.2f}".format(deposit.amount) }}</td>
+                            <td>₹{{ "%.2f"|format(deposit.amount) }}</td>
                             <td>{{ deposit.type }}</td>
                             <td>{{ deposit.maturity_date or '-' }}</td>
                             <td>
@@ -592,8 +592,8 @@
                         <tr>
                             <td><strong>#{{ share.id }}</strong></td>
                             <td>{{ share.quantity }}</td>
-                            <td>₹{{ "{:.2f}".format(share.amount_per_share) }}</td>
-                            <td>₹{{ "{:.2f}".format(share.total_amount) }}</td>
+                            <td>₹{{ "%.2f"|format(share.amount_per_share) }}</td>
+                            <td>₹{{ "%.2f"|format(share.total_amount) }}</td>
                             <td>
                                 <span class="status-badge status-{% if share.status == 'Approved' %}approved{% elif share.status == 'Pending' %}pending{% else %}inactive{% endif %}">
                                     {{ share.status }}
@@ -639,9 +639,9 @@
                                     {{ txn.type }}
                                 </span>
                             </td>
-                            <td>₹{{ "{:.2f}".format(txn.amount) }}</td>
+                            <td>₹{{ "%.2f"|format(txn.amount) }}</td>
                             <td>{{ txn.description or '-' }}</td>
-                            <td>{{ txn.created_at.strftime('%Y-%m-%d %H:%M') if txn.created_at else '-' }}</td>
+                            <td>{{ txn.created_at if txn.created_at else '-' }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>

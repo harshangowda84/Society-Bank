@@ -1,269 +1,159 @@
-# 🏦 Society Bank
+# Society Bank - Cooperative Banking System
 
-A complete web-based banking platform for university community members with member registration, loans, fixed deposits, shares, and admin controls.
+A modern web-based cooperative banking platform built with FastAPI and SQLAlchemy.
 
 ## ✨ Features
 
-✅ **Member Management**
-- Registration with auto-generated account numbers
-- Secure login/logout with password hashing
-- Member dashboard with applications and transactions
-
-✅ **Loan Management**
-- Apply for loans with flexible terms
-- Admin approval with office notes
-- Repayment tracking with pre-closure support
-
-✅ **Fixed Deposits**
-- FD applications (Fixed & Recurring)
-- Admin approval workflow
-- Maturity tracking
-
-✅ **Share Holdings**
-- Share investment with auto-calculated totals
-- Admin approval process
-- Portfolio tracking
-
-✅ **Admin Controls**
-- Complete admin dashboard
-- Application approvals (loans, FDs, shares)
-- Bank reports and P&L analysis
-- CSV export for all data
-- Gallery image management
-- Member management
-
-✅ **Advanced Features**
-- Member-to-member fund transfers
-- CSV export for reports
-- Atomic transactions (ACID compliant)
-- Security hardening (secure cookies, password hashing)
+✅ **Member Management** - Registration with auto-generated account numbers, secure login, member dashboard  
+✅ **Loan Management** - Application, admin approval, and flexible repayment options  
+✅ **Loan Repayment** - 3 payment types: Full Payment, Custom Amount, or EMI  
+✅ **Fixed Deposits** - FD applications with admin approval workflow  
+✅ **Share Holdings** - Share investment and portfolio tracking  
+✅ **Admin Dashboard** - Complete application approvals and management  
+✅ **Transactions** - Member-to-member transfers and tracking  
+✅ **Reports** - CSV export for members, loans, deposits, and transactions  
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 - Python 3.8+
-- Virtual environment (`.venv`)
+- Windows PowerShell or terminal
 
 ### Setup
-```bash
+```powershell
 # Activate virtual environment
 .\.venv\Scripts\Activate.ps1
 
 # Install dependencies
-pip install -r backend/requirements.txt
+cd backend
+pip install -r requirements.txt
 
 # Start server
-python -m uvicorn backend.main:app --reload --host 127.0.0.1 --port 8001 --app-dir backend
+python main.py
 ```
 
 ### Access
 - **Homepage**: http://127.0.0.1:8001/
 - **Member Login**: http://127.0.0.1:8001/login
 - **Admin Login**: http://127.0.0.1:8001/admin-login
-  - Username: `admin`
-  - Password: `Admin@123`
 
-## 📋 Directory Structure
+## 📁 Project Structure
+
 ```
 Society-Bank/
 ├── backend/
-│   ├── main.py           # FastAPI application with all routes
-│   ├── models.py         # SQLAlchemy ORM models
-│   ├── db.py            # Database connection
-│   ├── requirements.txt  # Python dependencies
-│   ├── instance/         # Database files
-│   ├── static/          # CSS, JS, images
-│   └── templates/       # HTML templates (25+ files)
-├── IMPLEMENTATION_SUMMARY.md  # Feature documentation
-├── TESTING_GUIDE.md          # Complete testing guide
-└── README.md                 # This file
+│   ├── main.py              # FastAPI application & routes
+│   ├── models.py            # Database models
+│   ├── db.py                # Database configuration
+│   ├── config.py            # Settings
+│   ├── requirements.txt      # Dependencies
+│   ├── templates/           # 20 HTML templates
+│   │   ├── admin.html
+│   │   ├── member_dashboard.html
+│   │   ├── loan_repayment.html
+│   │   ├── loan_application_form.html
+│   │   └── ...
+│   └── static/              # CSS & JavaScript
+│       ├── css/
+│       ├── script.js
+│       └── styles.css
+├── package.json
+├── README.md
+└── SETUP.md
 ```
 
-## 🔧 Configuration
+## 🔧 Key APIs
 
-### Environment Variables
-```
-ADMIN_USERNAME=admin
-ADMIN_PASSWORD=Admin@123
-SECURE_COOKIES=false          # Set to true in production
-OTP_TTL_SECONDS=300           # OTP validity in seconds
-FAST2SMS_API_KEY=...          # SMS API key (optional)
-EMAIL_HOST_USER=...           # Email address (optional)
-EMAIL_HOST_PASSWORD=...       # Email password (optional)
-```
-
-## 📊 API Endpoints
-
-### Public
-- `GET /` - Homepage
-- `GET /register` - Registration form
-- `GET /login` - Member login
-- `GET /about` - About page
-- `GET /gallery` - Image gallery
-
-### Member (requires login)
-- `GET /member-dashboard` - Dashboard
+### Member Endpoints
+- `GET /member-dashboard` - View dashboard
 - `POST /member/apply-loan` - Apply for loan
 - `POST /member/apply-fd` - Apply for FD
-- `POST /member/invest-shares` - Invest in shares
-- `POST /member/repay-loan` - Record loan repayment
-- `POST /member/transfer` - Transfer funds
+- `POST /member/repay-loan` - Record repayment
+- `GET /api/member/loans` - Get active loans (JSON)
 
-### Admin (requires admin login)
+### Admin Endpoints
 - `GET /admin` - Admin dashboard
 - `GET /admin/approvals` - View pending approvals
 - `POST /admin/approve-loan` - Approve loan
 - `POST /admin/approve-fd` - Approve FD
-- `POST /admin/approve-share` - Approve share
-- `GET /admin/bank-reports` - Bank reports
-- `GET /export/members` - Export members (CSV)
-- `GET /export/loans` - Export loans (CSV)
-- `GET /export/deposits` - Export deposits (CSV)
-- `GET /export/transactions` - Export transactions (CSV)
-- `GET /export/bank-report` - Export full report (CSV)
 
-## 🗄️ Database Models
+## 💾 Database Models
 
-- **Member** - User accounts with personal details
+- **Member** - User accounts and personal details
 - **Account** - Bank accounts (Savings/Current)
-- **Loan** - Loan applications and tracking
+- **Loan** - Loan applications and status
+- **LoanRepayment** - Repayment tracking
 - **Deposit** - Fixed deposit management
 - **Share** - Share holdings
-- **LoanRepayment** - Repayment audit trail
-- **Transaction** - Account transactions
-- **Announcement** - Bank announcements
+- **Transaction** - All transactions
 
-## 🔐 Security Features
+## 🔐 Security
 
 ✅ Bcrypt password hashing  
 ✅ HttpOnly secure cookies  
-✅ CSRF protection (SameSite)  
+✅ SQL injection prevention (ORM)  
 ✅ Role-based access control  
-✅ Atomic transactions  
-✅ Input validation  
-✅ SQL injection prevention (ORM)
+✅ CSRF protection  
 
-## 📖 Documentation
+## 🎯 Loan Repayment Options
 
-- **[IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md)** - Feature details and specifications
-- **[TESTING_GUIDE.md](TESTING_GUIDE.md)** - Complete testing workflows and API reference
+The new loan repayment page supports:
+
+1. **Full Payment** - Pay entire loan including interest at once
+2. **Custom Amount** - Pay any amount between ₹1,000 and total due
+3. **EMI** - Monthly installments based on loan tenure
+
+Each option shows real-time calculations and handles payment method selection.
+
+## 📊 Tech Stack
+
+- **Backend**: FastAPI 0.121.2
+- **Database**: SQLite with SQLAlchemy ORM
+- **Frontend**: HTML5, CSS3, JavaScript (Vanilla)
+- **Authentication**: Session-based with bcrypt
 
 ## 🧪 Testing
 
-Complete testing guide available in `TESTING_GUIDE.md`:
-- User workflows (registration, loans, approvals)
-- API endpoint testing
-- Database validation
-- Security testing
-- Export functionality
+### Test User Credentials
+- Username: `testuser`
+- Password: `password123`
 
-## 📱 Sample User Flows
+### Test Data
+- Test Member created with account number
+- Test Loan: ₹50,000 @ 8.5% for 12 months (Personal, Active)
 
-### Member Registration → Loan Application → Approval
-1. Register at `/register` (auto-generated account number)
-2. Login at `/login`
-3. Apply for loan at `/loan-application`
-4. Admin approves at `/admin/approvals`
-5. View approved loan in dashboard
-6. Repay loan at `/loan-repayment`
+## 📝 Notes
 
-### Admin Reporting
-1. Login at `/admin-login`
-2. View statistics at `/admin`
-3. Access bank reports at `/admin/bank-reports`
-4. Export data as CSV via export buttons
+- Database automatically created on first run
+- All features work without email/SMS configuration
+- Development mode enabled by default
+- Static files served from `/static`
 
-## 🚨 Troubleshooting
+## 🚨 Common Issues
 
 ### Server won't start
 ```powershell
-# Check virtual environment
+# Check if port 8001 is in use
+# Activate virtual environment first
 .\.venv\Scripts\Activate.ps1
-
-# Check port availability (default 8001)
-# If port in use, change to 8002 in command
 ```
 
 ### Database errors
 ```powershell
-# Reset database
-# Delete: backend/instance/society_bank.db
-# Restart server (auto-creates new database)
+# Database is stored in backend/instance/
+# Delete it to reset: Remove-Item backend/instance -Recurse
 ```
 
 ### Import errors
 ```powershell
-# Reinstall dependencies
-pip install -r backend/requirements.txt --force-reinstall
-```
-
-## 📝 Notes
-
-- **No Email/SMS Required**: All features work without email or SMS configuration
-- **Development Mode**: Using SQLite for development (use MySQL for production)
-- **OTP Storage**: In-memory for development (use Redis for production)
-- **Auto-reload**: Enabled for development convenience
-
-## 🎯 Project Status
-
-**Version**: 1.0 Complete  
-**Status**: ✅ Production Ready  
-**Last Updated**: November 15, 2025
-
-### Completed Features (36/44)
-- ✅ All core banking features
-- ✅ Admin dashboard and controls
-- ✅ CSV export system
-- ✅ Member-to-member transfers
-- ✅ Comprehensive testing
-
-### Future Enhancements
-- Database migrations (Alembic)
-- Advanced form validation
-- Email notification templates
-- Dockerization & CI/CD
-- Payment gateway integration
-- Mobile API
-
-## 🤝 Collaboration
-
-### Adding Collaborators
-1. Go to repository: https://github.com/harshangowda84/Society-Bank
-2. Click **Settings** → **Collaborators**
-3. Click **Add people** and enter their email
-4. They'll receive an invitation email
-
-### For New Collaborators
-See [SETUP.md](SETUP.md) for complete setup instructions including:
-- Prerequisites and installation
-- Running the application
-- Database setup
-- Troubleshooting
-
-## 📊 Database Schema
-
-View the complete ER diagram and schema documentation:
-- **[DATABASE_SCHEMA.md](DATABASE_SCHEMA.md)** - Text-based ER diagram with all relationships
-- **Generate Visual Diagram**: Run `python generate_er_diagram.py` (requires `eralchemy2`)
-
-### Quick ER Diagram Generation
-```bash
-# Install required package
-pip install eralchemy2 pydot
-
-# Generate diagram
-eralchemy2 -i 'sqlite:///backend/instance/society_bank.db' -o er_diagram.png
+# Reinstall requirements
+pip install -r backend/requirements.txt
 ```
 
 ## 📞 Support
 
-For questions or issues, refer to:
-1. [SETUP.md](SETUP.md) - Installation and setup guide
-2. [DATABASE_SCHEMA.md](DATABASE_SCHEMA.md) - Database structure and relationships
-3. [TESTING_GUIDE.md](TESTING_GUIDE.md) - Complete usage guide
-4. [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md) - Feature details
-5. Server logs in terminal
+For setup help, see **[SETUP.md](SETUP.md)**
 
 ---
 
-**Made for University Community Banking** 🏫💰
+**Made for Cooperative Banking** 🏦💰

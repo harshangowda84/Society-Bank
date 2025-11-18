@@ -29,6 +29,10 @@
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             color: var(--text-dark);
             min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            display: flex;
         }
 
         /* Header */
@@ -43,8 +47,8 @@
         }
 
         .header-content {
-            max-width: 1400px;
-            margin: 0 auto;
+            max-width: 100%;
+            margin: 0;
             padding: 0 2rem;
             display: flex;
             justify-content: space-between;
@@ -93,8 +97,8 @@
 
         /* Container */
         .container {
-            max-width: 1400px;
-            margin: 0 auto;
+            width: 100%;
+            margin: 0;
             padding: 2rem;
         }
 
@@ -388,6 +392,21 @@
     </style>
 </head>
 <body>
+    <!-- Sidebar -->
+    <aside style="background: #0a52b9; color: #fff; width: 240px; padding: 20px; position: fixed; left: 0; top: 0; height: 100vh; overflow-y: auto;">
+        <h2 style="margin: 0 0 30px 0; font-size: 20px; font-weight: 600;"><i class="fas fa-university"></i> Society Bank</h2>
+        <nav>
+            <a href="/admin" style="display: block; color: #fff; text-decoration: none; padding: 12px 15px; margin: 8px 0; border-radius: 6px; transition: 0.3s;"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="/admin/new-members" style="display: block; color: #fff; text-decoration: none; padding: 12px 15px; margin: 8px 0; border-radius: 6px; transition: 0.3s;"><i class="fas fa-user-check"></i> New Members</a>
+            <a href="/admin/all-members" style="display: block; color: #fff; text-decoration: none; padding: 12px 15px; margin: 8px 0; border-radius: 6px; transition: 0.3s;"><i class="fas fa-users"></i> All Members</a>
+            <a href="/admin/announcements" style="display: block; color: #fff; text-decoration: none; padding: 12px 15px; margin: 8px 0; border-radius: 6px; transition: 0.3s;"><i class="fas fa-newspaper"></i> Announcements</a>
+            <a href="/admin/loan-management" class="active" style="display: block; color: #fff; text-decoration: none; padding: 12px 15px; margin: 8px 0; border-radius: 6px; transition: 0.3s; background: #1e40af;"><i class="fas fa-cog"></i> Loan Management</a>
+            <a href="/admin/fd-management" style="display: block; color: #fff; text-decoration: none; padding: 12px 15px; margin: 8px 0; border-radius: 6px; transition: 0.3s;"><i class="fas fa-piggy-bank"></i> FD Management</a>
+            <a href="/admin-logout" style="display: block; color: #fff; text-decoration: none; padding: 12px 15px; margin: 8px 0; border-radius: 6px; transition: 0.3s;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </nav>
+    </aside>
+
+    <div style="margin-left: 240px; width: calc(100% - 240px); display: flex; flex-direction: column;">
     <header>
         <div class="header-content">
             <h1>
@@ -416,16 +435,94 @@
 
         <!-- Tabs -->
         <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab(event, 'interest-rates')">
-                <i class="fas fa-percentage"></i> Interest Rates
-            </button>
-            <button class="tab-btn" onclick="switchTab(event, 'loan-applications')">
+            <button class="tab-btn active" onclick="switchTab(event, 'loan-applications')">
                 <i class="fas fa-file-invoice"></i> Loan Applications
+            </button>
+            <button class="tab-btn" onclick="switchTab(event, 'interest-rates')">
+                <i class="fas fa-percentage"></i> Interest Rates
             </button>
         </div>
 
-        <!-- Tab 1: Interest Rates Management -->
-        <div id="interest-rates" class="tab-content active">
+        <!-- Tab 1: Loan Applications -->
+        <div id="loan-applications" class="tab-content active">
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-file-invoice"></i>
+                    Loan Applications
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Loan ID</th>
+                                <th>Member Name</th>
+                                <th>Loan Amount</th>
+                                <th>Interest Rate</th>
+                                <th>Tenure</th>
+                                <th>Status</th>
+                                <th>Applied On</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for loan in loans %}
+                            <tr>
+                                <td><strong>#{{ loan.id }}</strong></td>
+                                <td>{{ loan.member.name }}</td>
+                                <td>₹{{ "%.2f"|format(loan.amount) }}</td>
+                                <td>{{ loan.interest_rate }}%</td>
+                                <td>{{ loan.tenure_months }} months</td>
+                                <td>
+                                    <span class="badge badge-{{ loan.status|lower }}">
+                                        {{ loan.status }}
+                                    </span>
+                                </td>
+                                <td>{{ loan.created_at }}</td>
+                                <td>
+                                    {% if loan.status == 'Pending' %}
+                                    <div class="btn-group">
+                                        <button class="btn btn-success" onclick="approveLoan({{ loan.id }})">
+                                            <i class="fas fa-check"></i> Approve
+                                        </button>
+                                        <button class="btn btn-danger" onclick="rejectLoan({{ loan.id }})">
+                                            <i class="fas fa-times"></i> Reject
+                                        </button>
+                                    </div>
+                                    {% else %}
+                                    <button class="btn btn-edit" onclick="viewLoanDetails({{ loan.id }})">
+                                        <i class="fas fa-eye"></i> View
+                                    </button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="8" class="empty-state">
+                                    <i class="fas fa-inbox"></i>
+                                    <p>No loan applications</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Loan Details Modal -->
+            <div id="loanDetailsModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span>Loan Application Details</span>
+                        <button class="close-btn" onclick="closeModal('loanDetailsModal')">&times;</button>
+                    </div>
+                    <div id="loanDetailsContent"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 2: Interest Rates Management -->
+        <div id="interest-rates" class="tab-content">
             <div class="card">
                 <div class="card-title">
                     <i class="fas fa-percentage"></i>
@@ -447,11 +544,11 @@
                         <tbody id="ratesTableBody">
                             {% for rate in loan_rates %}
                             <tr data-id="{{ rate.id }}">
-                                <td><strong>{{ rate.loan_type.replace('_', ' ').title() }}</strong></td>
+                                <td><strong>{{ rate.loan_type|replace('_', ' ')|title }}</strong></td>
                                 <td><strong>{{ rate.interest_rate }}%</strong></td>
-                                <td>₹{{ "{:.0f}".format(rate.min_amount) }}</td>
-                                <td>₹{{ "{:.0f}".format(rate.max_amount) }}</td>
-                                <td>{{ rate.updated_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td>₹{{ "%.0f"|format(rate.min_amount) }}</td>
+                                <td>₹{{ "%.0f"|format(rate.max_amount) }}</td>
+                                <td>{{ rate.updated_at }}</td>
                                 <td>
                                     <button class="btn btn-edit" onclick="editRate({{ rate.id }}, '{{ rate.loan_type }}', {{ rate.interest_rate }}, {{ rate.min_amount }}, {{ rate.max_amount }})">
                                         <i class="fas fa-edit"></i> Edit
@@ -508,84 +605,6 @@
                             </button>
                         </div>
                     </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tab 2: Loan Applications -->
-        <div id="loan-applications" class="tab-content">
-            <div class="card">
-                <div class="card-title">
-                    <i class="fas fa-file-invoice"></i>
-                    Loan Applications
-                </div>
-
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Loan ID</th>
-                                <th>Member Name</th>
-                                <th>Loan Amount</th>
-                                <th>Interest Rate</th>
-                                <th>Tenure</th>
-                                <th>Status</th>
-                                <th>Applied On</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for loan in loans %}
-                            <tr>
-                                <td><strong>#{{ loan.id }}</strong></td>
-                                <td>{{ loan.member.name }}</td>
-                                <td>₹{{ "{:.2f}".format(loan.amount) }}</td>
-                                <td>{{ loan.interest_rate }}%</td>
-                                <td>{{ loan.tenure_months }} months</td>
-                                <td>
-                                    <span class="badge badge-{{ loan.status.lower() }}">
-                                        {{ loan.status }}
-                                    </span>
-                                </td>
-                                <td>{{ loan.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
-                                <td>
-                                    {% if loan.status == 'Pending' %}
-                                    <div class="btn-group">
-                                        <button class="btn btn-success" onclick="approveLoan({{ loan.id }})">
-                                            <i class="fas fa-check"></i> Approve
-                                        </button>
-                                        <button class="btn btn-danger" onclick="rejectLoan({{ loan.id }})">
-                                            <i class="fas fa-times"></i> Reject
-                                        </button>
-                                    </div>
-                                    {% else %}
-                                    <button class="btn btn-edit" onclick="viewLoanDetails({{ loan.id }})">
-                                        <i class="fas fa-eye"></i> View
-                                    </button>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% else %}
-                            <tr>
-                                <td colspan="8" class="empty-state">
-                                    <i class="fas fa-inbox"></i>
-                                    <p>No loan applications</p>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Loan Details Modal -->
-            <div id="loanDetailsModal" class="modal">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <span>Loan Application Details</span>
-                        <button class="close-btn" onclick="closeModal('loanDetailsModal')">&times;</button>
-                    </div>
-                    <div id="loanDetailsContent"></div>
                 </div>
             </div>
         </div>
@@ -667,7 +686,7 @@
         function approveLoan(loanId) {
             if (!confirm('Approve this loan application?')) return;
             
-            fetch('/admin/approve-loan', {
+            fetch('/admin/loan/approve', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ loan_id: loanId })
@@ -689,7 +708,7 @@
             const reason = prompt('Enter reason for rejection:');
             if (!reason) return;
 
-            fetch('/admin/reject-loan', {
+            fetch('/admin/loan/reject', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ loan_id: loanId, reason })
@@ -708,7 +727,7 @@
 
         // View loan details
         function viewLoanDetails(loanId) {
-            fetch(`/admin/loan-details/${loanId}`)
+            fetch(`/admin/loan/${loanId}/details`)
             .then(r => r.json())
             .then(data => {
                 if (data.ok) {
@@ -741,5 +760,6 @@
             });
         }
     </script>
+    </div>
 </body>
 </html>

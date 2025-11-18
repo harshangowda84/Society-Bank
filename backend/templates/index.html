@@ -21,10 +21,9 @@
             --accent: #e74c3c;
             --success: #27ae60;
             --warning: #f39c12;
-            --danger: #e74c3c;
             --text-dark: #2c3e50;
             --text-light: #7f8c8d;
-            --bg-light: #f8f9fa;
+            --bg-light: #f0f2f5;
             --bg-white: #ffffff;
             --border-color: #e0e0e0;
             --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -35,7 +34,7 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-light);
+            background: linear-gradient(135deg, #f0f2f5 0%, #e8eaed 100%);
             color: var(--text-dark);
             line-height: 1.6;
         }
@@ -44,20 +43,20 @@
         header {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
-            padding: 1.2rem 0;
-            box-shadow: var(--shadow);
+            padding: 1rem 0;
+            box-shadow: var(--shadow-lg);
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
-        header .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
+        header .header-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            width: 100%;
+            padding: 0 2rem;
+            margin-bottom: 1rem;
         }
 
         header .logo {
@@ -68,7 +67,12 @@
             gap: 0.8rem;
         }
 
-        header .logo i { font-size: 2rem; }
+        header .logo i { font-size: 2rem; animation: float 3s ease-in-out infinite; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
 
         .date-time {
             font-size: 0.95rem;
@@ -79,21 +83,22 @@
         }
 
         nav {
-            background-color: var(--text-dark);
+            background-color: rgba(0, 0, 0, 0.2);
             padding: 0;
+            backdrop-filter: blur(10px);
         }
 
         nav .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
             display: flex;
             gap: 0;
+            flex-wrap: wrap;
+            width: 100%;
+            padding: 0 2rem;
         }
 
         nav a, nav .dropdown > a {
             color: white;
-            padding: 1rem 1.5rem;
+            padding: 0.9rem 1.5rem;
             text-decoration: none;
             display: flex;
             align-items: center;
@@ -103,8 +108,9 @@
         }
 
         nav a:hover, nav .dropdown:hover > a {
-            background-color: var(--primary);
-            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            transform: translateY(-2px);
         }
 
         .dropdown { position: relative; }
@@ -114,10 +120,11 @@
             background: white;
             min-width: 200px;
             box-shadow: var(--shadow-lg);
-            border-radius: 0.5rem;
+            border-radius: 0.8rem;
             top: 100%;
             left: 0;
             z-index: 1000;
+            overflow: hidden;
         }
 
         .dropdown:hover .dropdown-content { display: block; }
@@ -127,26 +134,147 @@
             padding: 0.8rem 1.5rem;
             display: block;
             border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
         }
 
         .dropdown-content a:last-child { border-bottom: none; }
-        .dropdown-content a:hover { background-color: var(--bg-light); color: var(--primary); }
+        .dropdown-content a:hover { 
+            background: var(--primary);
+            color: white;
+            padding-left: 2rem;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        main { width: 100%; }
+
+        /* Announcements Banner */
+        .announcements-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2.5rem 0;
+            color: white;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .announcements-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.05)" fill-opacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,170.7C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: cover;
+            pointer-events: none;
+        }
+
+        .announcements-container {
+            max-width: 100%;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-weight: 700;
+        }
+
+        .section-title i { font-size: 1.5rem; animation: pulse 2s ease-in-out infinite; }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .announcements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .announcement-card {
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--text-dark);
+            padding: 1.5rem;
+            border-radius: 0.8rem;
+            border-left: 4px solid var(--accent);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            animation: slideUp 0.6s ease;
+            transition: all 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .announcement-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            background: white;
+        }
+
+        .announcement-card p { margin-bottom: 0.8rem; font-size: 0.95rem; line-height: 1.5; }
+        .announcement-card .date { font-size: 0.85rem; color: var(--text-light); }
+
+        .empty-announcement {
+            text-align: center;
+            padding: 2rem;
+            color: rgba(255, 255, 255, 0.7);
+            grid-column: 1 / -1;
+        }
 
         /* Hero Section */
         .hero {
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
-            padding: 4rem 2rem;
+            padding: 5rem 2rem;
             text-align: center;
-            margin-bottom: 3rem;
-            border-radius: 1rem;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
         }
 
-        .hero h1 { font-size: 3.2rem; margin-bottom: 1rem; font-weight: 700; }
-        .hero p { font-size: 1.3rem; margin-bottom: 2rem; opacity: 0.95; }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" fill-opacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,170.7C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: cover;
+            opacity: 0.2;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero h1 { font-size: 3.5rem; margin-bottom: 1rem; font-weight: 800; letter-spacing: -1px; }
+        .hero p { font-size: 1.3rem; margin-bottom: 2.5rem; opacity: 0.95; }
 
         .cta-buttons {
             display: flex;
@@ -159,19 +287,23 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            padding: 0.9rem 2rem;
+            padding: 1.1rem 2.8rem;
             background-color: var(--accent);
             color: white;
             text-decoration: none;
-            border-radius: 0.5rem;
+            border-radius: 0.8rem;
             font-weight: 600;
             transition: all 0.3s ease;
             border: 2px solid transparent;
             cursor: pointer;
-            font-size: 0.95rem;
+            font-size: 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
         }
 
-        .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+        .btn:hover { 
+            transform: translateY(-5px);
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.35);
+        }
 
         .btn-primary { background-color: var(--primary); }
         .btn-primary:hover { background-color: var(--primary-dark); }
@@ -179,47 +311,91 @@
         .btn-secondary { background-color: white; color: var(--primary); }
         .btn-secondary:hover { background-color: var(--bg-light); }
 
-        /* Main Content */
-        main { max-width: 1200px; margin: 0 auto; padding: 0 2rem 4rem; }
+        /* Services Section */
+        .services-section {
+            padding: 5rem 2rem;
+            width: 100%;
+            background: var(--bg-light);
+            position: relative;
+        }
 
-        /* Services Grid */
+        .services-container {
+            max-width: 100%;
+            padding: 0 2rem;
+        }
+
         .services {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
-            margin: 3rem 0;
+            margin-top: 2.5rem;
         }
 
         .service-card {
             background: white;
-            padding: 2rem;
-            border-radius: 1rem;
+            padding: 2.5rem;
+            border-radius: 1.2rem;
             box-shadow: var(--shadow);
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
 
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s ease;
+            z-index: 1;
+        }
+
+        .service-card:hover::before { left: 100%; }
+
         .service-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-lg);
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(15, 82, 186, 0.2);
+            border-top: 3px solid var(--primary);
         }
 
         .service-card i {
-            font-size: 2.5rem;
+            font-size: 3.5rem;
             color: var(--primary);
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem;
+            animation: bounce 2.5s ease-in-out infinite;
         }
 
-        .service-card h3 { margin-bottom: 0.5rem; font-size: 1.3rem; }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .service-card h3 { margin-bottom: 1rem; font-size: 1.4rem; font-weight: 700; }
         .service-card p { color: var(--text-light); font-size: 0.95rem; }
 
-        /* Features Grid */
+        /* Features Section */
+        .features-section {
+            padding: 5rem 2rem;
+            width: 100%;
+            background: white;
+            position: relative;
+        }
+
+        .features-container {
+            max-width: 100%;
+            padding: 0 2rem;
+        }
+
         .features {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin: 3rem 0;
+            gap: 4rem;
             align-items: center;
+            margin-top: 2.5rem;
         }
 
         .features-list {
@@ -227,115 +403,267 @@
         }
 
         .features-list li {
-            padding: 1rem;
-            margin: 0.5rem 0;
-            background: white;
+            padding: 1.2rem;
+            margin: 1rem 0;
+            background: var(--bg-light);
             border-left: 4px solid var(--primary);
-            border-radius: 0.5rem;
-        }
-
-        .features-list i { color: var(--success); margin-right: 0.8rem; }
-
-        /* Announcements Section */
-        .announcements-section {
-            background: white;
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: var(--shadow);
-            margin: 3rem 0;
-        }
-
-        .section-title {
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            color: var(--text-dark);
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
-
-        .section-title i { color: var(--primary); }
-
-        .announcements-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .announcement-card {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding: 1.5rem;
             border-radius: 0.8rem;
-            border-left: 4px solid var(--primary);
-            animation: slideIn 0.5s ease;
+            transition: all 0.3s ease;
+            animation: fadeIn 0.6s ease;
         }
 
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .features-list li:nth-child(1) { animation-delay: 0.1s; }
+        .features-list li:nth-child(2) { animation-delay: 0.2s; }
+        .features-list li:nth-child(3) { animation-delay: 0.3s; }
+        .features-list li:nth-child(4) { animation-delay: 0.4s; }
+        .features-list li:nth-child(5) { animation-delay: 0.5s; }
+
+        .features-list li:hover {
+            transform: translateX(15px);
+            box-shadow: var(--shadow-lg);
+            background: linear-gradient(90deg, var(--bg-light) 0%, white 100%);
         }
 
-        .announcement-card:hover {
-            box-shadow: var(--shadow);
-            transform: translateY(-3px);
-        }
+        .features-list i { color: var(--success); margin-right: 1rem; font-size: 1.3rem; }
+        .features-list strong { color: var(--primary); }
 
-        .announcement-card p { color: var(--text-dark); line-height: 1.5; }
-
-        .empty-announcement {
+        .features-right {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 3.5rem;
+            border-radius: 1.5rem;
+            color: white;
             text-align: center;
-            padding: 2rem;
-            color: var(--text-light);
+            box-shadow: 0 10px 40px rgba(15, 82, 186, 0.3);
+            transition: all 0.4s ease;
         }
+
+        .features-right:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 60px rgba(15, 82, 186, 0.4);
+        }
+
+        .features-right i { font-size: 4.5rem; margin-bottom: 1.5rem; display: block; animation: float 3s ease-in-out infinite; }
+        .features-right h3 { margin-bottom: 1rem; font-size: 1.8rem; font-weight: 700; }
+        .features-right p { margin-bottom: 2rem; opacity: 0.9; font-size: 1rem; }
 
         /* Stats Section */
+        .stats-section {
+            padding: 5rem 2rem;
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-section::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 150px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.05)" fill-opacity="1" d="M0,224L48,213.3C96,203,192,181,288,170.7C384,160,480,160,576,154.7C672,149,768,139,864,144C960,149,1056,171,1152,176C1248,181,1344,171,1392,165.3L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: cover;
+            pointer-events: none;
+        }
+
+        .stats-container {
+            max-width: 100%;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
         .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin: 3rem 0;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2.5rem;
+            margin-top: 2.5rem;
         }
 
         .stat-box {
-            background: white;
-            padding: 2rem;
-            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem 2rem;
+            border-radius: 1.2rem;
             text-align: center;
-            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            transition: all 0.4s ease;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .stat-box:nth-child(1) { animation-delay: 0.1s; }
+        .stat-box:nth-child(2) { animation-delay: 0.2s; }
+        .stat-box:nth-child(3) { animation-delay: 0.3s; }
+        .stat-box:nth-child(4) { animation-delay: 0.4s; }
+
+        .stat-box:hover {
+            transform: translateY(-15px);
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
         }
 
         .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--primary);
+            font-size: 3.2rem;
+            font-weight: 800;
+            margin-bottom: 0.8rem;
+            color: #ffd700;
         }
 
-        .stat-label { color: var(--text-light); margin-top: 0.5rem; }
+        .stat-label { font-size: 1.05rem; opacity: 0.95; font-weight: 500; }
 
         /* Footer */
         footer {
             background-color: var(--text-dark);
             color: white;
             text-align: center;
-            padding: 2rem;
-            margin-top: 3rem;
+            padding: 3rem 2rem;
+            width: 100%;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         /* Responsive */
+        @media (max-width: 1024px) {
+            .hero h1 { font-size: 2.5rem; }
+            .features { grid-template-columns: 1fr; gap: 2rem; }
+            .features-right { padding: 2.5rem; }
+        }
+
         @media (max-width: 768px) {
+            header .header-top { padding: 0 1.5rem; }
+            nav .nav-container { padding: 0; }
+
+            header .logo { font-size: 1.3rem; }
+            header .logo i { font-size: 1.5rem; }
+
+            .date-time { font-size: 0.8rem; }
+
+            nav .nav-container {
+                display: none;
+                flex-direction: column;
+                gap: 0;
+                width: 100%;
+                background: var(--text-dark);
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                border-radius: 0;
+            }
+
+            nav .nav-container.active { display: flex; }
+
+            nav a, nav .dropdown > a {
+                padding: 0.8rem 1.5rem;
+                font-size: 0.85rem;
+            }
+
+            .menu-toggle { display: block; margin-right: 1rem; }
+
+            .hero {
+                padding: 3rem 1.5rem;
+            }
+
             .hero h1 { font-size: 2rem; }
             .hero p { font-size: 1rem; }
-            .cta-buttons { flex-direction: column; }
-            .features { grid-template-columns: 1fr; }
-            nav .nav-container { flex-wrap: wrap; }
-            nav a { padding: 0.8rem 1rem; font-size: 0.85rem; }
+
+            .cta-buttons { flex-direction: column; gap: 0.8rem; }
+            .btn { width: 100%; justify-content: center; }
+
+            .announcements-section { padding: 2rem 0; }
+            .announcements-container { padding: 0 1.5rem; }
+
+            .services-section { padding: 3rem 1.5rem; }
+            .services-container { padding: 0; }
+            .services { gap: 1.5rem; margin-top: 1.5rem; }
+
+            .features-section { padding: 3rem 1.5rem; }
+            .features-container { padding: 0; }
+
+            .stats-section { padding: 3rem 1.5rem; }
+            .stats-container { padding: 0; }
+            .stats { gap: 1.5rem; margin-top: 1.5rem; }
+
+            .section-title { font-size: 1.5rem; }
+
+            .service-card {
+                padding: 2rem;
+            }
+
+            .service-card:hover {
+                transform: translateY(-10px) scale(1.01);
+            }
+
+            .features-right {
+                margin-top: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header .logo { font-size: 1.1rem; }
+            header .logo i { font-size: 1.3rem; }
+
+            .date-time { display: none; }
+
+            header .header-top { padding: 0 1rem; }
+
+            .hero {
+                padding: 2.5rem 1rem;
+            }
+
+            .hero h1 { font-size: 1.6rem; }
+            .hero p { font-size: 0.9rem; }
+
+            .cta-buttons { gap: 0.5rem; }
+            .btn { padding: 0.9rem 1.8rem; font-size: 0.85rem; }
+
             .announcements-grid { grid-template-columns: 1fr; }
+            .announcements-container { padding: 0 1rem; }
+            .announcements-section { padding: 1.5rem 0; }
+
+            .announcement-card { padding: 1.2rem; }
+
+            .section-title { font-size: 1.3rem; }
+
+            .service-card {
+                padding: 1.5rem;
+                border-radius: 0.8rem;
+            }
+
+            .service-card i { font-size: 2.5rem; }
+            .service-card h3 { font-size: 1.1rem; }
+
+            .features-list li {
+                padding: 1rem;
+                margin: 0.6rem 0;
+                font-size: 0.9rem;
+            }
+
+            .features-list i { font-size: 1.1rem; margin-right: 0.6rem; }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .stat-box { padding: 1.8rem 1rem; }
+            .stat-number { font-size: 2.2rem; }
+            .stat-label { font-size: 0.9rem; }
+
+            footer { padding: 2rem 1rem; }
         }
     </style>
 </head>
 <body>
     <header>
-        <div class="container">
+        <div class="header-top">
             <div class="logo">
                 <i class="fas fa-university"></i>
                 <span>Society Bank</span>
@@ -345,127 +673,147 @@
                 <span id="date-display"></span>
             </div>
         </div>
-    </header>
 
-    <nav>
-        <div class="nav-container">
-            <a href="#home"><i class="fas fa-home"></i> Home</a>
-            <div class="dropdown">
-                <a href="#"><i class="fas fa-info-circle"></i> About</a>
-                <div class="dropdown-content">
-                    <a href="/vision">Our Vision</a>
-                    <a href="/services">Services</a>
-                    <a href="/benefits">Benefits</a>
+        <nav>
+            <div class="nav-container" id="navContainer">
+                <a href="#home"><i class="fas fa-home"></i> Home</a>
+                <div class="dropdown">
+                    <a href="#"><i class="fas fa-info-circle"></i> About</a>
+                    <div class="dropdown-content">
+                        <a href="/vision">Our Vision</a>
+                        <a href="/services">Services</a>
+                        <a href="/benefits">Benefits</a>
+                    </div>
                 </div>
+                <a href="#services"><i class="fas fa-cogs"></i> Services</a>
+                <a href="/login"><i class="fas fa-sign-in-alt"></i> Member Login</a>
+                <a href="/help"><i class="fas fa-question-circle"></i> Help</a>
             </div>
-            <div class="dropdown">
-                <a href="#"><i class="fas fa-file-alt"></i> Applications</a>
-                <div class="dropdown-content">
-                    <a href="/register">Register as Member</a>
-                    <a href="/loan-application">Loan Application</a>
-                </div>
-            </div>
-            <a href="#services"><i class="fas fa-cogs"></i> Services</a>
-            <a href="/login"><i class="fas fa-sign-in-alt"></i> Member Login</a>
-            <a href="#help"><i class="fas fa-question-circle"></i> Help</a>
-        </div>
-    </nav>
+            <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+        </nav>
+    </header>
 
     <main>
         <!-- Hero Section -->
         <section class="hero">
-            <h1>Welcome to Bangalore University Society Bank</h1>
-            <p>Secure Banking Solutions for Our Community Members</p>
-            <div class="cta-buttons">
-                <a href="/register" class="btn btn-primary"><i class="fas fa-user-plus"></i> Register as Member</a>
-                <a href="/login" class="btn btn-secondary"><i class="fas fa-sign-in-alt"></i> Login</a>
-                <a href="/loan-application" class="btn btn-primary"><i class="fas fa-file-invoice-dollar"></i> Apply for Loan</a>
-            </div>
-        </section>
-
-        <!-- Services Section -->
-        <section class="services" id="services">
-            <div class="service-card">
-                <i class="fas fa-wallet"></i>
-                <h3>Savings Accounts</h3>
-                <p>Secure your future with competitive interest rates and flexible withdrawal options.</p>
-            </div>
-            <div class="service-card">
-                <i class="fas fa-piggy-bank"></i>
-                <h3>Fixed Deposits</h3>
-                <p>Earn guaranteed returns with our attractive fixed deposit schemes.</p>
-            </div>
-            <div class="service-card">
-                <i class="fas fa-handshake"></i>
-                <h3>Loans</h3>
-                <p>Quick and easy loan approvals with minimal documentation.</p>
-            </div>
-            <div class="service-card">
-                <i class="fas fa-exchange-alt"></i>
-                <h3>Transactions</h3>
-                <p>Fast and secure money transfers with real-time tracking.</p>
-            </div>
-        </section>
-
-        <!-- Why Choose Us -->
-        <section class="features">
-            <div>
-                <h2 style="margin-bottom: 1.5rem; font-size: 2rem;">Why Choose Us?</h2>
-                <ul class="features-list">
-                    <li><i class="fas fa-check-circle"></i> <strong>Community Focused:</strong> Designed for university members</li>
-                    <li><i class="fas fa-check-circle"></i> <strong>Secure & Transparent:</strong> Complete data protection</li>
-                    <li><i class="fas fa-check-circle"></i> <strong>Low Fees:</strong> Competitive rates and minimal charges</li>
-                    <li><i class="fas fa-check-circle"></i> <strong>24/7 Support:</strong> Always here to help you</li>
-                    <li><i class="fas fa-check-circle"></i> <strong>Fast Processing:</strong> Quick approvals and transactions</li>
-                </ul>
-            </div>
-            <div style="background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); padding: 2rem; border-radius: 1rem; color: white; text-align: center;">
-                <i class="fas fa-university" style="font-size: 4rem; margin-bottom: 1rem;"></i>
-                <h3>Join Our Community</h3>
-                <p style="margin: 1rem 0; opacity: 0.9;">Be part of a trusted financial network serving university members since many years.</p>
-                <a href="/register" class="btn btn-secondary"><i class="fas fa-user-plus"></i> Start Today</a>
-            </div>
-        </section>
-
-        <!-- Statistics -->
-        <section class="stats">
-            <div class="stat-box">
-                <div class="stat-number">500+</div>
-                <div class="stat-label">Active Members</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">₹50Cr+</div>
-                <div class="stat-label">Total Assets</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">1000+</div>
-                <div class="stat-label">Successful Loans</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">24/7</div>
-                <div class="stat-label">Customer Support</div>
+            <div class="hero-content">
+                <h1>Welcome to Bangalore University Society Bank</h1>
+                <p>Secure Banking Solutions for Our Community Members</p>
+                <div class="cta-buttons">
+                    <a href="/register" class="btn btn-primary"><i class="fas fa-user-plus"></i> Register</a>
+                    <a href="/login" class="btn btn-secondary"><i class="fas fa-sign-in-alt"></i> Login</a>
+                </div>
             </div>
         </section>
 
         <!-- Announcements -->
         <section class="announcements-section">
-            <h2 class="section-title">
-                <i class="fas fa-bullhorn"></i> Latest Announcements
-            </h2>
-            {% if announcements %}
-                <div class="announcements-grid">
-                    {% for ann in announcements %}
-                        <div class="announcement-card">
-                            <p><strong>📢</strong> {{ ann.message }}</p>
+            <div class="announcements-container">
+                <h2 class="section-title">
+                    <i class="fas fa-bell"></i> Latest Announcements & News
+                </h2>
+                {% if announcements %}
+                    <div class="announcements-grid">
+                        {% for ann in announcements %}
+                            <div class="announcement-card">
+                                <p>{{ ann.message }}</p>
+                                <div class="date"><i class="fas fa-calendar-alt"></i> {{ ann.created_at|strftime('%B %d, %Y') }}</div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="announcements-grid">
+                        <div class="empty-announcement">
+                            <i class="fas fa-inbox"></i>
+                            <p>No announcements at this time. Check back soon for updates.</p>
                         </div>
-                    {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="services-section" id="services">
+            <div class="services-container">
+                <h2 class="section-title" style="color: var(--text-dark);">
+                    <i class="fas fa-star"></i> Our Services
+                </h2>
+                <div class="services">
+                    <div class="service-card">
+                        <i class="fas fa-wallet"></i>
+                        <h3>Savings Accounts</h3>
+                        <p>Secure your future with competitive interest rates and flexible withdrawal options.</p>
+                    </div>
+                    <div class="service-card">
+                        <i class="fas fa-piggy-bank"></i>
+                        <h3>Fixed Deposits</h3>
+                        <p>Earn guaranteed returns with our attractive fixed deposit schemes.</p>
+                    </div>
+                    <div class="service-card">
+                        <i class="fas fa-handshake"></i>
+                        <h3>Loans</h3>
+                        <p>Quick and easy loan approvals with minimal documentation.</p>
+                    </div>
+                    <div class="service-card">
+                        <i class="fas fa-exchange-alt"></i>
+                        <h3>Transactions</h3>
+                        <p>Fast and secure money transfers with real-time tracking.</p>
+                    </div>
                 </div>
-            {% else %}
-                <div class="empty-announcement">
-                    <i class="fas fa-info-circle" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
-                    <p>No announcements at this time. Check back soon for updates.</p>
+            </div>
+        </section>
+
+        <!-- Why Choose Us -->
+        <section class="features-section">
+            <div class="features-container">
+                <h2 class="section-title" style="color: var(--text-dark);">
+                    <i class="fas fa-heart"></i> Why Choose Us?
+                </h2>
+                <div class="features">
+                    <div>
+                        <ul class="features-list">
+                            <li><i class="fas fa-check-circle"></i> <strong>Community Focused:</strong> Designed for university members</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Secure & Transparent:</strong> Complete data protection</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Low Fees:</strong> Competitive rates and minimal charges</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>24/7 Support:</strong> Always here to help you</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Fast Processing:</strong> Quick approvals and transactions</li>
+                        </ul>
+                    </div>
+                    <div class="features-right">
+                        <i class="fas fa-university"></i>
+                        <h3>Join Our Community</h3>
+                        <p>Be part of a trusted financial network serving university members since many years.</p>
+                        <a href="/register" class="btn btn-secondary"><i class="fas fa-user-plus"></i> Start Today</a>
+                    </div>
                 </div>
-            {% endif %}
+            </div>
+        </section>
+
+        <!-- Statistics -->
+        <section class="stats-section">
+            <div class="stats-container">
+                <h2 class="section-title">
+                    <i class="fas fa-chart-line"></i> Our Impact
+                </h2>
+                <div class="stats">
+                    <div class="stat-box">
+                        <div class="stat-number">500+</div>
+                        <div class="stat-label">Active Members</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">₹50Cr+</div>
+                        <div class="stat-label">Total Assets</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">1000+</div>
+                        <div class="stat-label">Successful Loans</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Customer Support</div>
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
 
@@ -481,6 +829,24 @@
         }
         updateDateTime();
         setInterval(updateDateTime, 60000);
+
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const navContainer = document.getElementById('navContainer');
+
+        menuToggle.addEventListener('click', () => {
+            navContainer.classList.toggle('active');
+        });
+
+        // Close menu when link is clicked
+        const navLinks = navContainer.querySelectorAll('a:not(.dropdown > a)');
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                if (e.target.tagName === 'A') {
+                    navContainer.classList.remove('active');
+                }
+            });
+        });
     </script>
 </body>
 </html>
