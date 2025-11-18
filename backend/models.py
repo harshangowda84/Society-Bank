@@ -60,6 +60,7 @@ class Loan(Base):
     __tablename__ = "loan"
     id = Column(Integer, primary_key=True, index=True)
     member_id = Column(Integer, ForeignKey('member.id'), nullable=False)
+    loan_type = Column(String(50), default='personal')  # personal, education, home, vehicle, business, emergency
     amount = Column(Float, nullable=False)
     interest_rate = Column(Float, nullable=False)
     tenure_months = Column(Integer, nullable=False)
@@ -133,3 +134,16 @@ class LoanRepayment(Base):
     is_prepayment = Column(Boolean, default=False)
 
     loan = relationship("Loan", back_populates="repayments")
+
+
+class LoanInterestRate(Base):
+    __tablename__ = "loan_interest_rate"
+    id = Column(Integer, primary_key=True, index=True)
+    loan_type = Column(String(50), unique=True, nullable=False, index=True)  # e.g., personal, education, home, vehicle, business, emergency
+    interest_rate = Column(Float, nullable=False)  # Interest rate in percentage
+    min_amount = Column(Float, nullable=False, default=10000)
+    max_amount = Column(Float, nullable=False, default=50000000)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    def __repr__(self) -> str:
+        return f"<LoanInterestRate type={self.loan_type} rate={self.interest_rate}%>"

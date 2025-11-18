@@ -490,14 +490,30 @@ def gallery(request: Request):
 
 # Member loan application
 @app.post("/member/apply-loan")
-def apply_loan(request: Request, amount: float = Form(...), interest_rate: float = Form(...), tenure_months: int = Form(...), db: Session = Depends(get_db)):
+def apply_loan(request: Request, loan_type: str = Form(...), amount: float = Form(...), tenure_months: int = Form(...), purpose: str = Form(default=''), db: Session = Depends(get_db)):
     member_id = request.cookies.get("member_id")
     if not member_id:
         return JSONResponse({'ok': False, 'error': 'Not authenticated'}, status_code=401)
+    
     member = db.query(models.Member).get(member_id)
     if not member:
         return JSONResponse({'ok': False, 'error': 'Member not found'}, status_code=404)
-    loan = models.Loan(member_id=member_id, amount=amount, interest_rate=interest_rate, tenure_months=tenure_months, status='Pending')
+    
+    # Get interest rate from LoanInterestRate table
+    rate_config = db.query(models.LoanInterestRate).filter_by(loan_type=loan_type).first()
+    if not rate_config:
+        return JSONResponse({'ok': False, 'error': 'Invalid loan type'}, status_code=400)
+    
+    # Create loan with automatic interest rate
+    loan = models.Loan(
+        member_id=member_id,
+        loan_type=loan_type,
+        amount=amount,
+        interest_rate=rate_config.interest_rate,
+        tenure_months=tenure_months,
+        status='Pending',
+        office_note=purpose
+    )
     db.add(loan)
     db.commit()
     db.refresh(loan)
@@ -877,3 +893,117 @@ def export_bank_report_csv(is_admin: str = Cookie(default=None), db: Session = D
         media_type="text/csv",
         headers={"Content-Disposition": "attachment; filename=bank_report.csv"}
     )
+
+
+# Admin Loan Management Routes
+@app.get("/admin/loan-management", response_class=HTMLResponse)
+def loan_management(request: Request, is_admin: str = Cookie(default=None), db: Session = Depends(get_db)):
+    if is_admin != "true":
+        return RedirectResponse(url="/admin-login", status_code=status.HTTP_303_SEE_OTHER)
+    
+    loan_rates = db.query(models.LoanInterestRate).all()
+    loans = db.query(models.Loan).order_by(models.Loan.created_at.desc()).all()
+    
+    return templates.TemplateResponse("admin_loan_management.html", {
+        "request": request,
+        "loan_rates": loan_rates,
+        "loans": loans
+    })
+
+
+@app.post("/admin/update-loan-rate")
+async def update_loan_rate(request: Request, is_admin: str = Cookie(default=None), db: Session = Depends(get_db)):
+    if is_admin != "true":
+        return JSONResponse({'ok': False, 'error': 'Unauthorized'}, status_code=403)
+    
+    try:
+        data = await request.json()
+        rate_id = data.get('id')
+        interest_rate = data.get('interest_rate')
+        min_amount = data.get('min_amount')
+        max_amount = data.get('max_amount')
+        
+        rate = db.query(models.LoanInterestRate).filter_by(id=rate_id).first()
+        if not rate:
+            return JSONResponse({'ok': False, 'error': 'Loan rate not found'})
+        
+        rate.interest_rate = interest_rate
+        rate.min_amount = min_amount
+        rate.max_amount = max_amount
+        db.commit()
+        
+        return JSONResponse({'ok': True, 'message': 'Interest rate updated successfully'})
+    except Exception as e:
+        db.rollback()
+        return JSONResponse({'ok': False, 'error': str(e)}, status_code=500)
+
+
+@app.post("/admin/approve-loan")
+async def approve_loan(request: Request, is_admin: str = Cookie(default=None), db: Session = Depends(get_db)):
+    if is_admin != "true":
+        return JSONResponse({'ok': False, 'error': 'Unauthorized'}, status_code=403)
+    
+    try:
+        data = await request.json()
+        loan_id = data.get('loan_id')
+        
+        loan = db.query(models.Loan).filter_by(id=loan_id).first()
+        if not loan:
+            return JSONResponse({'ok': False, 'error': 'Loan not found'})
+        
+        loan.status = 'Approved'
+        loan.office_approved = True
+        loan.approved_at = datetime.utcnow()
+        db.commit()
+        
+        return JSONResponse({'ok': True, 'message': 'Loan approved successfully'})
+    except Exception as e:
+        db.rollback()
+        return JSONResponse({'ok': False, 'error': str(e)}, status_code=500)
+
+
+@app.post("/admin/reject-loan")
+async def reject_loan(request: Request, is_admin: str = Cookie(default=None), db: Session = Depends(get_db)):
+    if is_admin != "true":
+        return JSONResponse({'ok': False, 'error': 'Unauthorized'}, status_code=403)
+    
+    try:
+        data = await request.json()
+        loan_id = data.get('loan_id')
+        reason = data.get('reason', '')
+        
+        loan = db.query(models.Loan).filter_by(id=loan_id).first()
+        if not loan:
+            return JSONResponse({'ok': False, 'error': 'Loan not found'})
+        
+        loan.status = 'Rejected'
+        loan.office_note = reason
+        db.commit()
+        
+        return JSONResponse({'ok': True, 'message': 'Loan rejected successfully'})
+    except Exception as e:
+        db.rollback()
+        return JSONResponse({'ok': False, 'error': str(e)}, status_code=500)
+
+
+@app.get("/admin/loan-details/{loan_id}")
+def loan_details(loan_id: int, is_admin: str = Cookie(default=None), db: Session = Depends(get_db)):
+    if is_admin != "true":
+        return JSONResponse({'ok': False, 'error': 'Unauthorized'}, status_code=403)
+    
+    loan = db.query(models.Loan).filter_by(id=loan_id).first()
+    if not loan:
+        return JSONResponse({'ok': False, 'error': 'Loan not found'})
+    
+    return JSONResponse({
+        'ok': True,
+        'loan': {
+            'id': loan.id,
+            'member_name': loan.member.name,
+            'amount': loan.amount,
+            'interest_rate': loan.interest_rate,
+            'tenure_months': loan.tenure_months,
+            'status': loan.status,
+            'created_at': loan.created_at.strftime('%Y-%m-%d %H:%M') if loan.created_at else ''
+        }
+    })

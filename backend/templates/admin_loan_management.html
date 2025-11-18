@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Loan Interest Rates - Admin</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #0f52ba;
+            --primary-dark: #063fa3;
+            --secondary: #9b59b6;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --bg-light: #f5f7fa;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-content h1 {
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-right a, .back-btn {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.8rem 1.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-right a:hover, .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .logout-btn {
+            background: var(--accent);
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-light);
+            font-weight: 600;
+            padding: 1rem 2rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary);
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Card */
+        .card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--bg-light);
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--text-dark);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 0.5rem;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(15, 82, 186, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Table */
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        tbody tr:hover {
+            background: var(--bg-light);
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #22863a;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-edit {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #e67e22;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal-header {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-btn {
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-light);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: #ccc;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        /* Success/Error Messages */
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .form-row { grid-template-columns: 1fr; }
+            .header-content { flex-direction: column; gap: 1rem; text-align: center; }
+            .nav-right { flex-wrap: wrap; }
+            th, td { padding: 0.7rem 0.5rem; font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>
+                <i class="fas fa-cog"></i>
+                Loan Management
+            </h1>
+            <div class="nav-right">
+                <a href="/admin"><i class="fas fa-arrow-left"></i> Back to Admin</a>
+                <form action="/admin-logout" method="get" style="margin: 0;">
+                    <button type="submit" class="btn logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Alert Messages -->
+        <div class="alert alert-success" id="successAlert">
+            <i class="fas fa-check-circle"></i> <span id="successMsg"></span>
+        </div>
+        <div class="alert alert-error" id="errorAlert">
+            <i class="fas fa-exclamation-circle"></i> <span id="errorMsg"></span>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab(event, 'interest-rates')">
+                <i class="fas fa-percentage"></i> Interest Rates
+            </button>
+            <button class="tab-btn" onclick="switchTab(event, 'loan-applications')">
+                <i class="fas fa-file-invoice"></i> Loan Applications
+            </button>
+        </div>
+
+        <!-- Tab 1: Interest Rates Management -->
+        <div id="interest-rates" class="tab-content active">
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-percentage"></i>
+                    Manage Loan Interest Rates
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Loan Type</th>
+                                <th>Interest Rate (%)</th>
+                                <th>Min Amount</th>
+                                <th>Max Amount</th>
+                                <th>Last Updated</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ratesTableBody">
+                            {% for rate in loan_rates %}
+                            <tr data-id="{{ rate.id }}">
+                                <td><strong>{{ rate.loan_type.replace('_', ' ').title() }}</strong></td>
+                                <td><strong>{{ rate.interest_rate }}%</strong></td>
+                                <td>₹{{ "{:.0f}".format(rate.min_amount) }}</td>
+                                <td>₹{{ "{:.0f}".format(rate.max_amount) }}</td>
+                                <td>{{ rate.updated_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td>
+                                    <button class="btn btn-edit" onclick="editRate({{ rate.id }}, '{{ rate.loan_type }}', {{ rate.interest_rate }}, {{ rate.min_amount }}, {{ rate.max_amount }})">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="6" class="empty-state">
+                                    <i class="fas fa-inbox"></i>
+                                    <p>No loan types configured yet</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Edit Rate Modal -->
+            <div id="editRateModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span>Edit Interest Rate</span>
+                        <button class="close-btn" onclick="closeModal('editRateModal')">&times;</button>
+                    </div>
+                    <form onsubmit="submitRate(event)">
+                        <input type="hidden" id="rateId">
+                        
+                        <div class="form-group">
+                            <label>Loan Type</label>
+                            <input type="text" id="rateType" disabled style="background: var(--bg-light);">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Interest Rate (%) *</label>
+                            <input type="number" id="rateValue" step="0.1" min="1" max="25" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Minimum Amount (₹) *</label>
+                            <input type="number" id="rateMin" step="1000" min="1000" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Maximum Amount (₹) *</label>
+                            <input type="number" id="rateMax" step="1000" required>
+                        </div>
+
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-danger" onclick="closeModal('editRateModal')">Cancel</button>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save"></i> Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 2: Loan Applications -->
+        <div id="loan-applications" class="tab-content">
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-file-invoice"></i>
+                    Loan Applications
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Loan ID</th>
+                                <th>Member Name</th>
+                                <th>Loan Amount</th>
+                                <th>Interest Rate</th>
+                                <th>Tenure</th>
+                                <th>Status</th>
+                                <th>Applied On</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for loan in loans %}
+                            <tr>
+                                <td><strong>#{{ loan.id }}</strong></td>
+                                <td>{{ loan.member.name }}</td>
+                                <td>₹{{ "{:.2f}".format(loan.amount) }}</td>
+                                <td>{{ loan.interest_rate }}%</td>
+                                <td>{{ loan.tenure_months }} months</td>
+                                <td>
+                                    <span class="badge badge-{{ loan.status.lower() }}">
+                                        {{ loan.status }}
+                                    </span>
+                                </td>
+                                <td>{{ loan.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td>
+                                    {% if loan.status == 'Pending' %}
+                                    <div class="btn-group">
+                                        <button class="btn btn-success" onclick="approveLoan({{ loan.id }})">
+                                            <i class="fas fa-check"></i> Approve
+                                        </button>
+                                        <button class="btn btn-danger" onclick="rejectLoan({{ loan.id }})">
+                                            <i class="fas fa-times"></i> Reject
+                                        </button>
+                                    </div>
+                                    {% else %}
+                                    <button class="btn btn-edit" onclick="viewLoanDetails({{ loan.id }})">
+                                        <i class="fas fa-eye"></i> View
+                                    </button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="8" class="empty-state">
+                                    <i class="fas fa-inbox"></i>
+                                    <p>No loan applications</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Loan Details Modal -->
+            <div id="loanDetailsModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span>Loan Application Details</span>
+                        <button class="close-btn" onclick="closeModal('loanDetailsModal')">&times;</button>
+                    </div>
+                    <div id="loanDetailsContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching
+        function switchTab(event, tabName) {
+            const tabs = document.querySelectorAll('.tab-content');
+            const buttons = document.querySelectorAll('.tab-btn');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.closest('.tab-btn').classList.add('active');
+        }
+
+        // Modal functions
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        function showAlert(type, message) {
+            const alertEl = document.getElementById(type === 'success' ? 'successAlert' : 'errorAlert');
+            const msgEl = document.getElementById(type === 'success' ? 'successMsg' : 'errorMsg');
+            msgEl.textContent = message;
+            alertEl.classList.add('show');
+            setTimeout(() => alertEl.classList.remove('show'), 4000);
+        }
+
+        // Edit interest rate
+        function editRate(id, type, rate, min, max) {
+            document.getElementById('rateId').value = id;
+            document.getElementById('rateType').value = type.replace('_', ' ').toUpperCase();
+            document.getElementById('rateValue').value = rate;
+            document.getElementById('rateMin').value = min;
+            document.getElementById('rateMax').value = max;
+            document.getElementById('editRateModal').classList.add('show');
+        }
+
+        // Submit rate changes
+        function submitRate(event) {
+            event.preventDefault();
+            const id = document.getElementById('rateId').value;
+            const rate = parseFloat(document.getElementById('rateValue').value);
+            const min = parseFloat(document.getElementById('rateMin').value);
+            const max = parseFloat(document.getElementById('rateMax').value);
+
+            if (rate <= 0 || rate > 25) {
+                showAlert('error', 'Interest rate must be between 1% and 25%');
+                return;
+            }
+
+            if (min >= max) {
+                showAlert('error', 'Minimum amount must be less than maximum amount');
+                return;
+            }
+
+            fetch('/admin/update-loan-rate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, interest_rate: rate, min_amount: min, max_amount: max })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.ok) {
+                    showAlert('success', 'Interest rate updated successfully');
+                    closeModal('editRateModal');
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    showAlert('error', data.error || 'Error updating rate');
+                }
+            })
+            .catch(err => showAlert('error', 'Network error'));
+        }
+
+        // Approve loan
+        function approveLoan(loanId) {
+            if (!confirm('Approve this loan application?')) return;
+            
+            fetch('/admin/approve-loan', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ loan_id: loanId })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.ok) {
+                    showAlert('success', 'Loan approved successfully');
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    showAlert('error', data.error || 'Error approving loan');
+                }
+            })
+            .catch(err => showAlert('error', 'Network error'));
+        }
+
+        // Reject loan
+        function rejectLoan(loanId) {
+            const reason = prompt('Enter reason for rejection:');
+            if (!reason) return;
+
+            fetch('/admin/reject-loan', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ loan_id: loanId, reason })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.ok) {
+                    showAlert('success', 'Loan rejected');
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    showAlert('error', data.error || 'Error rejecting loan');
+                }
+            })
+            .catch(err => showAlert('error', 'Network error'));
+        }
+
+        // View loan details
+        function viewLoanDetails(loanId) {
+            fetch(`/admin/loan-details/${loanId}`)
+            .then(r => r.json())
+            .then(data => {
+                if (data.ok) {
+                    const loan = data.loan;
+                    document.getElementById('loanDetailsContent').innerHTML = `
+                        <div class="form-group">
+                            <label>Member</label>
+                            <input type="text" value="${loan.member_name}" disabled style="background: var(--bg-light);">
+                        </div>
+                        <div class="form-group">
+                            <label>Loan Amount</label>
+                            <input type="text" value="₹${loan.amount.toLocaleString()}" disabled style="background: var(--bg-light);">
+                        </div>
+                        <div class="form-group">
+                            <label>Interest Rate</label>
+                            <input type="text" value="${loan.interest_rate}%" disabled style="background: var(--bg-light);">
+                        </div>
+                        <div class="form-group">
+                            <label>Tenure</label>
+                            <input type="text" value="${loan.tenure_months} months" disabled style="background: var(--bg-light);">
+                        </div>
+                        <div class="form-group">
+                            <label>Status</label>
+                            <input type="text" value="${loan.status}" disabled style="background: var(--bg-light);">
+                        </div>
+                        <button type="button" class="btn btn-danger" onclick="closeModal('loanDetailsModal')">Close</button>
+                    `;
+                    document.getElementById('loanDetailsModal').classList.add('show');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

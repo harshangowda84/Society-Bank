@@ -3,321 +3,812 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loan Application - Society Bank</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Apply for Loan - Society Bank</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+
+        :root {
+            --primary: #0f52ba;
+            --primary-dark: #063fa3;
+            --secondary: #9b59b6;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --bg-light: #f5f7fa;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        html { scroll-behavior: smooth; }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--text-dark);
             min-height: 100vh;
-            padding: 40px 20px;
+            padding: 2rem 1rem;
         }
 
-        .container {
-            max-width: 700px;
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 2rem;
+            border-radius: 0.8rem;
+        }
+
+        .header-content {
+            max-width: 1200px;
             margin: 0 auto;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            padding: 40px;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #f0f0f0;
-        }
-
-        .header h1 {
-            color: #0f52ba;
-            font-size: 26px;
-            margin-bottom: 8px;
-        }
-
-        .header .subtitle {
-            color: #666;
-            font-size: 14px;
-        }
-
-        .fee-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-weight: 600;
-            margin-top: 10px;
-            font-size: 14px;
-        }
-
-        .section-title {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            margin: 30px 0 20px 0;
-            font-size: 16px;
-            font-weight: 600;
+        .header-content h1 {
+            font-size: 1.8rem;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 1rem;
         }
 
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Form Sections */
+        .form-card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--bg-light);
+        }
+
+        .card-title i {
+            color: var(--secondary);
+            font-size: 1.8rem;
+        }
+
+        /* Loan Type Selection */
+        .loan-types-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .loan-type-card {
+            background: var(--bg-light);
+            border: 2px solid #e0e0e0;
+            border-radius: 0.8rem;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            position: relative;
+        }
+
+        .loan-type-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+        }
+
+        .loan-type-card input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .loan-type-card input[type="radio"]:checked + .type-content {
+            color: white;
+        }
+
+        .loan-type-card input[type="radio"]:checked ~ .type-content {
+            color: white;
+        }
+
+        .loan-type-card input[type="radio"]:checked {
+            border-color: var(--primary);
+        }
+
+        .loan-type-card.selected {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .loan-type-card.selected .type-content,
+        .loan-type-card.selected .type-icon {
+            color: white;
+        }
+
+        .loan-type-card.selected .rate-info {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .type-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+            transition: all 0.3s;
+        }
+
+        .type-content h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .rate-info {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+        }
+
+        /* Form Groups */
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 1.8rem;
         }
 
         .form-group label {
             display: block;
-            color: #333;
+            color: var(--text-dark);
             font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 14px;
+            margin-bottom: 0.8rem;
+            font-size: 0.95rem;
         }
 
-        .form-group label .required {
-            color: #e53e3e;
-            margin-left: 3px;
+        .required {
+            color: var(--accent);
+            margin-left: 0.3rem;
         }
 
         .form-group input,
-        .form-group textarea,
-        .form-group select {
+        .form-group select,
+        .form-group textarea {
             width: 100%;
-            padding: 12px;
+            padding: 0.95rem;
             border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
+            border-radius: 0.6rem;
+            font-size: 0.95rem;
             font-family: inherit;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
         }
 
         .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
+        .form-group select:focus,
+        .form-group textarea:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-        }
-
-        .form-group textarea {
-            min-height: 80px;
-            resize: vertical;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(15, 82, 186, 0.1);
         }
 
         .form-row {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
         }
 
-        @media (max-width: 600px) {
-            .form-row {
+        /* Info Box */
+        .info-box {
+            background: linear-gradient(135deg, #e8f4f8 0%, #f0f9ff 100%);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: 0.6rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-box h4 {
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-box p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .info-box ul {
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .info-box li {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Loan Calculator Display */
+        .calculator-box {
+            background: linear-gradient(135deg, #f0fdf4 0%, #f0fff4 100%);
+            border: 2px solid #86efac;
+            border-radius: 0.8rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .calculator-title {
+            color: var(--success);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .calculator-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #d4d4d8;
+        }
+
+        .calculator-row:last-child {
+            border-bottom: none;
+        }
+
+        .calculator-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .calculator-value {
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .emi-highlight {
+            background: rgba(39, 174, 96, 0.1);
+            padding: 0.8rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .emi-amount {
+            font-size: 1.8rem;
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        .emi-label {
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+
+        /* Form Row */
+        .form-row-single {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .form-row, .form-row-single {
                 grid-template-columns: 1fr;
+            }
+            .loan-types-grid {
+                grid-template-columns: 1fr;
+            }
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            .form-card {
+                padding: 1.5rem;
             }
         }
 
-        .error-message {
-            color: #e53e3e;
-            font-size: 12px;
-            margin-top: 5px;
-            display: none;
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
         }
 
-        .form-group input.error,
-        .form-group textarea.error,
-        .form-group select.error {
-            border-color: #e53e3e;
-        }
-
-        .submit-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 14px 30px;
+        .submit-btn, .cancel-btn {
+            flex: 1;
+            padding: 1rem;
             border: none;
-            border-radius: 8px;
-            font-size: 16px;
+            border-radius: 0.6rem;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            width: 100%;
-            margin-top: 20px;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 0.5rem;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
         }
 
         .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 4px 12px rgba(15, 82, 186, 0.3);
         }
 
-        .submit-btn:active {
-            transform: translateY(0);
+        .cancel-btn {
+            background: var(--bg-light);
+            color: var(--text-dark);
+            border: 2px solid #e0e0e0;
         }
 
-        .back-link {
-            text-align: center;
-            margin-top: 20px;
+        .cancel-btn:hover {
+            background: #e0e0e0;
         }
 
-        .back-link a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .back-link a:hover {
-            text-decoration: underline;
-        }
-
-        .note {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 15px;
-            border-radius: 6px;
-            margin: 20px 0;
-            font-size: 13px;
-            color: #856404;
-            line-height: 1.6;
-        }
-
-        .note strong {
-            display: block;
-            margin-bottom: 5px;
-        }
-
+        /* Success Message */
         .success-message {
             background: #d4edda;
+            border: 2px solid #c3e6cb;
             color: #155724;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            padding: 1.5rem;
+            border-radius: 0.8rem;
+            margin-bottom: 2rem;
             display: none;
-            border-left: 4px solid #28a745;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .success-message i {
+            font-size: 1.5rem;
+        }
+
+        /* Error Styling */
+        .error-input {
+            border-color: var(--accent) !important;
+        }
+
+        .error-message {
+            color: var(--accent);
+            font-size: 0.85rem;
+            margin-top: 0.4rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        /* Loading State */
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1><i class="fas fa-hand-holding-usd"></i> Loan Application</h1>
-            <p class="subtitle">Bengaluru University Employees' Loan Cooperative Society (Niyamita)</p>
-            <p class="subtitle">Jnanabharathi, Bengaluru - 560 056</p>
-            <span class="fee-badge"><i class="fas fa-receipt"></i> Application Fee: ₹50/-</span>
-        </div>
-
-        <div class="success-message" id="successMessage"></div>
-
-        <form id="loanForm">
-            <!-- Loan Details -->
-            <div class="section-title">
-                <i class="fas fa-money-bill-wave"></i>
-                Loan Details
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="amount">Loan Amount (₹) <span class="required">*</span></label>
-                    <input type="number" id="amount" name="amount" min="5000" max="10000000" step="1000" required>
-                    <span class="error-message">Amount must be between ₹5,000 and ₹1,00,00,000</span>
-                </div>
-
-                <div class="form-group">
-                    <label for="interest_rate">Interest Rate (% per annum) <span class="required">*</span></label>
-                    <input type="number" id="interest_rate" name="interest_rate" min="1" max="20" step="0.1" required value="10">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="tenure_months">Tenure (months) <span class="required">*</span></label>
-                <input type="number" id="tenure_months" name="tenure_months" min="6" max="360" required>
-                <span class="error-message">Tenure must be 6-360 months</span>
-            </div>
-
-            <div class="note">
-                <strong><i class="fas fa-info-circle"></i> Important:</strong>
-                All fields marked with <span class="required">*</span> are mandatory. Please ensure all information is accurate before submission.
-            </div>
-
-            <button type="submit" class="submit-btn">
-                <i class="fas fa-paper-plane"></i>
-                Submit Loan Application
-            </button>
-        </form>
-
-        <div class="back-link">
-            <a href="/member-dashboard">
+    <header>
+        <div class="header-content">
+            <h1>
+                <i class="fas fa-file-invoice-dollar"></i>
+                Apply for Loan
+            </h1>
+            <a href="/member-dashboard" class="back-btn">
                 <i class="fas fa-arrow-left"></i>
                 Back to Dashboard
             </a>
         </div>
+    </header>
+
+    <div class="container">
+        <div class="success-message" id="successMessage">
+            <i class="fas fa-check-circle"></i>
+            <span>Loan application submitted successfully! Redirecting...</span>
+        </div>
+
+        <form id="loanForm">
+            <!-- Loan Type Selection -->
+            <div class="form-card">
+                <div class="card-title">
+                    <i class="fas fa-list"></i>
+                    Select Loan Type
+                </div>
+                
+                <div class="loan-types-grid" id="loanTypesContainer">
+                    <!-- Loan types will be dynamically generated -->
+                </div>
+
+                <input type="hidden" id="loanTypeInput" name="loan_type" required>
+                <div class="error-message" id="loanTypeError">Please select a loan type</div>
+            </div>
+
+            <!-- Loan Amount -->
+            <div class="form-card">
+                <div class="card-title">
+                    <i class="fas fa-money-bill-wave"></i>
+                    Loan Amount
+                </div>
+
+                <div class="form-group">
+                    <label for="amount">Desired Loan Amount (₹) <span class="required">*</span></label>
+                    <input type="number" id="amount" name="amount" min="10000" max="50000000" step="1000" placeholder="Enter loan amount" required>
+                    <div class="error-message" id="amountError">Please enter a valid loan amount</div>
+                </div>
+
+                <div class="info-box">
+                    <h4><i class="fas fa-info-circle"></i> Loan Amount Guidelines</h4>
+                    <p>Minimum loan amount: <strong>₹10,000</strong></p>
+                    <p>Maximum loan amount: <strong>₹50,00,000</strong> (varies by loan type and eligibility)</p>
+                    <p style="margin-top: 0.8rem; font-size: 0.85rem;">Amount is subject to member's eligibility, account balance, and existing liabilities.</p>
+                </div>
+            </div>
+
+            <!-- Loan Tenure -->
+            <div class="form-card">
+                <div class="card-title">
+                    <i class="fas fa-hourglass-end"></i>
+                    Repayment Tenure
+                </div>
+
+                <div class="form-group">
+                    <label for="tenure_months">Repayment Period (Months) <span class="required">*</span></label>
+                    <select id="tenure_months" name="tenure_months" required>
+                        <option value="">-- Select Tenure --</option>
+                        <option value="6">6 Months</option>
+                        <option value="12">12 Months (1 Year)</option>
+                        <option value="24">24 Months (2 Years)</option>
+                        <option value="36">36 Months (3 Years)</option>
+                        <option value="48">48 Months (4 Years)</option>
+                        <option value="60">60 Months (5 Years)</option>
+                        <option value="84">84 Months (7 Years)</option>
+                        <option value="120">120 Months (10 Years)</option>
+                    </select>
+                    <div class="error-message" id="tenureError">Please select a tenure</div>
+                </div>
+
+                <div class="info-box">
+                    <h4><i class="fas fa-calendar-alt"></i> Tenure Information</h4>
+                    <ul>
+                        <li>Shorter tenure: Lower total interest but higher EMI</li>
+                        <li>Longer tenure: Lower EMI but higher total interest</li>
+                        <li>Standard tenure range: 6 months to 10 years</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Loan Calculator -->
+            <div class="form-card">
+                <div class="card-title">
+                    <i class="fas fa-calculator"></i>
+                    Loan Summary
+                </div>
+
+                <div class="calculator-box">
+                    <div class="calculator-title">
+                        <i class="fas fa-chart-pie"></i>
+                        Estimated EMI & Interest
+                    </div>
+
+                    <div class="calculator-row">
+                        <span class="calculator-label">Loan Amount:</span>
+                        <span class="calculator-value" id="calcAmount">₹0</span>
+                    </div>
+
+                    <div class="calculator-row">
+                        <span class="calculator-label">Interest Rate (p.a.):</span>
+                        <span class="calculator-value" id="calcRate">0%</span>
+                    </div>
+
+                    <div class="calculator-row">
+                        <span class="calculator-label">Tenure:</span>
+                        <span class="calculator-value" id="calcTenure">0 months</span>
+                    </div>
+
+                    <div class="calculator-row">
+                        <span class="calculator-label">Total Interest Payable:</span>
+                        <span class="calculator-value" id="calcInterest">₹0</span>
+                    </div>
+
+                    <div class="calculator-row">
+                        <span class="calculator-label">Total Amount Payable:</span>
+                        <span class="calculator-value" id="calcTotal">₹0</span>
+                    </div>
+
+                    <div class="emi-highlight">
+                        <div class="emi-label">Monthly EMI</div>
+                        <div class="emi-amount" id="calcEMI">₹0</div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <h4><i class="fas fa-lightbulb"></i> Note</h4>
+                    <p>Interest rate is <strong>automatically set</strong> based on the selected loan type. This is an <strong>estimated calculation</strong> and the final amount may vary slightly based on processing fees and applicable charges.</p>
+                </div>
+            </div>
+
+            <!-- Loan Purpose (Optional) -->
+            <div class="form-card">
+                <div class="card-title">
+                    <i class="fas fa-pen-fancy"></i>
+                    Additional Details
+                </div>
+
+                <div class="form-group">
+                    <label for="purpose">Loan Purpose / Description</label>
+                    <textarea id="purpose" name="purpose" placeholder="(Optional) Please briefly describe the purpose of this loan..." rows="4"></textarea>
+                </div>
+            </div>
+
+            <!-- Submit Section -->
+            <div class="form-card">
+                <div class="info-box">
+                    <h4><i class="fas fa-shield-alt"></i> Important Information</h4>
+                    <ul>
+                        <li>All information provided must be accurate and truthful</li>
+                        <li>Processing fee of ₹500 will be deducted if approved</li>
+                        <li>Approval is subject to member's eligibility and credit assessment</li>
+                        <li>You will receive approval notification within 3-5 working days</li>
+                        <li>By submitting, you agree to the Society's loan terms and conditions</li>
+                    </ul>
+                </div>
+
+                <div class="button-group">
+                    <button type="reset" class="cancel-btn">
+                        <i class="fas fa-redo"></i>
+                        Clear Form
+                    </button>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i>
+                        Submit Loan Application
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
 
     <script>
-        const form = document.getElementById('loanForm');
-        
-        // Form validation
-        form.addEventListener('submit', async function(e) {
+        // Loan type definitions with default interest rates
+        const loanTypes = [
+            {
+                id: 'personal',
+                name: 'Personal Loan',
+                icon: 'fas fa-user',
+                rate: 12.5,
+                minAmount: 10000,
+                maxAmount: 5000000
+            },
+            {
+                id: 'education',
+                name: 'Education Loan',
+                icon: 'fas fa-graduation-cap',
+                rate: 9.5,
+                minAmount: 50000,
+                maxAmount: 25000000
+            },
+            {
+                id: 'home',
+                name: 'Home Loan',
+                icon: 'fas fa-home',
+                rate: 8.5,
+                minAmount: 500000,
+                maxAmount: 50000000
+            },
+            {
+                id: 'vehicle',
+                name: 'Vehicle Loan',
+                icon: 'fas fa-car',
+                rate: 10.5,
+                minAmount: 50000,
+                maxAmount: 10000000
+            },
+            {
+                id: 'business',
+                name: 'Business Loan',
+                icon: 'fas fa-briefcase',
+                rate: 11.5,
+                minAmount: 100000,
+                maxAmount: 50000000
+            },
+            {
+                id: 'emergency',
+                name: 'Emergency Loan',
+                icon: 'fas fa-exclamation-circle',
+                rate: 14.5,
+                minAmount: 10000,
+                maxAmount: 500000
+            }
+        ];
+
+        let selectedLoanType = null;
+
+        // Initialize loan type cards
+        function initializeLoanTypes() {
+            const container = document.getElementById('loanTypesContainer');
+            container.innerHTML = '';
+
+            loanTypes.forEach(type => {
+                const card = document.createElement('div');
+                card.className = 'loan-type-card';
+                card.innerHTML = `
+                    <input type="radio" name="loan_type" value="${type.id}" id="type_${type.id}">
+                    <div class="type-content">
+                        <div class="type-icon"><i class="${type.icon}"></i></div>
+                        <h3>${type.name}</h3>
+                        <div class="rate-info">Interest: ${type.rate}% p.a.</div>
+                    </div>
+                `;
+
+                card.addEventListener('click', () => {
+                    document.getElementById(`type_${type.id}`).checked = true;
+                    selectLoanType(type);
+                });
+
+                container.appendChild(card);
+            });
+        }
+
+        // Select loan type
+        function selectLoanType(type) {
+            selectedLoanType = type;
+            document.getElementById('loanTypeInput').value = type.id;
+
+            // Update UI
+            document.querySelectorAll('.loan-type-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.target.closest('.loan-type-card')?.classList.add('selected');
+
+            // Update amount limits
+            const amountInput = document.getElementById('amount');
+            amountInput.min = type.minAmount;
+            amountInput.max = type.maxAmount;
+
+            // Calculate and update loan summary
+            calculateLoan();
+        }
+
+        // Calculate loan summary
+        function calculateLoan() {
+            if (!selectedLoanType) return;
+
+            const amount = parseFloat(document.getElementById('amount').value) || 0;
+            const tenure = parseInt(document.getElementById('tenure_months').value) || 0;
+            const rate = selectedLoanType.rate;
+
+            if (amount > 0 && tenure > 0) {
+                // EMI Calculation: EMI = P * R * (1+R)^n / [(1+R)^n - 1]
+                const monthlyRate = rate / 12 / 100;
+                const n = tenure;
+                const emi = amount * monthlyRate * Math.pow(1 + monthlyRate, n) / (Math.pow(1 + monthlyRate, n) - 1);
+                const totalAmount = emi * n;
+                const totalInterest = totalAmount - amount;
+
+                // Update display
+                document.getElementById('calcAmount').textContent = '₹' + amount.toLocaleString('en-IN');
+                document.getElementById('calcRate').textContent = rate + '%';
+                document.getElementById('calcTenure').textContent = tenure + ' months';
+                document.getElementById('calcInterest').textContent = '₹' + Math.round(totalInterest).toLocaleString('en-IN');
+                document.getElementById('calcTotal').textContent = '₹' + Math.round(totalAmount).toLocaleString('en-IN');
+                document.getElementById('calcEMI').textContent = '₹' + Math.round(emi).toLocaleString('en-IN');
+            }
+        }
+
+        // Event listeners
+        document.getElementById('amount').addEventListener('input', calculateLoan);
+        document.getElementById('tenure_months').addEventListener('change', calculateLoan);
+
+        // Form submission
+        document.getElementById('loanForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
-            // Validate loan amount
-            const amount = parseFloat(document.getElementById('amount').value);
-            if (amount < 5000 || amount > 10000000) {
-                document.getElementById('amount').classList.add('error');
-                alert('Loan amount must be between ₹5,000 and ₹1,00,00,000');
-                return;
+
+            // Validation
+            let isValid = true;
+
+            if (!selectedLoanType) {
+                document.getElementById('loanTypeError').classList.add('show');
+                isValid = false;
             }
 
-            // Validate tenure
-            const tenure = parseInt(document.getElementById('tenure_months').value);
-            if (tenure < 6 || tenure > 360) {
-                document.getElementById('tenure_months').classList.add('error');
-                alert('Tenure must be between 6 and 360 months');
-                return;
+            const amount = parseFloat(document.getElementById('amount').value);
+            if (!amount || amount < 10000 || amount > 50000000) {
+                document.getElementById('amountError').classList.add('show');
+                isValid = false;
             }
+
+            const tenure = document.getElementById('tenure_months').value;
+            if (!tenure) {
+                document.getElementById('tenureError').classList.add('show');
+                isValid = false;
+            }
+
+            if (!isValid) return;
 
             // Submit form
-            const formData = new FormData(form);
+            const formData = new FormData(this);
             
             try {
+                const submitBtn = document.querySelector('.submit-btn');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
                 const response = await fetch('/member/apply-loan', {
                     method: 'POST',
                     body: formData
                 });
 
                 const result = await response.json();
-                
+
                 if (result.ok) {
                     const successMsg = document.getElementById('successMessage');
-                    successMsg.textContent = 'Loan application submitted successfully! Redirecting to dashboard...';
-                    successMsg.style.display = 'block';
-                    form.reset();
+                    successMsg.style.display = 'flex';
+                    document.getElementById('loanForm').style.display = 'none';
+
                     setTimeout(() => {
                         window.location.href = '/member-dashboard';
-                    }, 2000);
+                    }, 2500);
                 } else {
                     alert(result.error || 'Error submitting application. Please try again.');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Loan Application';
                 }
             } catch (error) {
                 console.error('Error:', error);
                 alert('Network error. Please check your connection and try again.');
+                const submitBtn = document.querySelector('.submit-btn');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Loan Application';
             }
         });
 
-        // Real-time validation
-        form.querySelectorAll('input').forEach(input => {
-            input.addEventListener('focus', function() {
-                this.classList.remove('error');
-            });
+        // Clear error messages on input
+        document.getElementById('amount').addEventListener('focus', () => {
+            document.getElementById('amountError').classList.remove('show');
         });
+
+        // Initialize
+        initializeLoanTypes();
     </script>
 </body>
 </html>
