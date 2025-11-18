@@ -2,168 +2,662 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Member Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Dashboard - Society Bank</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family:'Poppins',sans-serif; background:#f0f2f5; }
-        header { background:linear-gradient(135deg,#0f52ba 0%,#9b59b6 100%); color:white; padding:1rem; }
-        header h1 { font-size:1.5rem; }
-        .navbar { display:flex; justify-content:space-between; align-items:center; max-width:1200px; margin:0 auto; padding:0 2rem; }
-        .nav-links { display:flex; gap:2rem; align-items:center; }
-        .nav-links a { color:white; text-decoration:none; font-weight:600; }
-        .nav-links a:hover { opacity:0.8; }
-        .logout-btn { background:#ef4444; color:white; border:none; padding:0.8rem 1.5rem; border-radius:0.5rem; cursor:pointer; font-weight:600; }
-        .logout-btn:hover { background:#dc2626; }
-        .container { max-width:1200px; margin:2rem auto; padding:0 1rem; }
-        h2 { color:#0f52ba; margin:2rem 0 1rem; font-size:1.3rem; }
-        .cards-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; margin:1rem 0; }
-        .card { background:white; padding:1.5rem; border-radius:0.8rem; box-shadow:0 4px 12px rgba(0,0,0,0.1); text-align:center; cursor:pointer; transition:all 0.3s; }
-        .card:hover { transform:translateY(-5px); box-shadow:0 8px 20px rgba(0,0,0,0.15); }
-        .card i { font-size:2.5rem; color:#0f52ba; margin-bottom:0.5rem; }
-        .card h3 { color:#333; margin-bottom:0.5rem; }
-        .card p { color:#666; font-size:0.9rem; }
-        .card a { color:#0f52ba; text-decoration:none; font-weight:600; margin-top:1rem; display:block; }
-        table { width:100%; background:white; border-collapse:collapse; border-radius:0.8rem; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.1); margin:1rem 0; }
-        thead { background:#0f52ba; color:white; }
-        th, td { padding:1rem; text-align:left; border-bottom:1px solid #eee; }
-        th { font-weight:600; }
-        tr:hover { background:#f9f9f9; }
-        .empty { text-align:center; color:#666; padding:2rem; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #0f52ba;
+            --primary-dark: #063fa3;
+            --secondary: #9b59b6;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --bg-light: #f5f7fa;
+            --bg-white: #ffffff;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: var(--shadow-lg);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-section i { font-size: 2.5rem; }
+
+        .logo-section h1 { font-size: 1.8rem; font-weight: 700; }
+
+        .nav-right {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-right a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-right a:hover { opacity: 0.8; }
+
+        .logout-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logout-btn:hover { 
+            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .welcome-text h2 { 
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-text p {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            margin-bottom: 0.3rem;
+        }
+
+        .account-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Quick Actions */
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin: 2.5rem 0 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .section-title i { color: var(--secondary); }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .action-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: all 0.3s;
+            border-top: 4px solid var(--primary);
+            cursor: pointer;
+        }
+
+        .action-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-top-color: var(--secondary);
+        }
+
+        .action-card i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .action-card:hover i {
+            color: var(--secondary);
+            transform: scale(1.1);
+        }
+
+        .action-card h3 {
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .action-card p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .action-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(15, 82, 186, 0.3);
+        }
+
+        /* Stats Section */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+            border-left: 4px solid var(--primary);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Data Sections */
+        .data-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .data-section h3 {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        /* Table Styling */
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        tbody tr {
+            transition: all 0.3s;
+        }
+
+        tbody tr:hover {
+            background: #f9f9f9;
+            transform: scale(1.01);
+        }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-inactive {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-light);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: #ccc;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .empty-state p {
+            margin-bottom: 1rem;
+        }
+
+        .empty-state a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-dark);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; gap: 1rem; }
+            .nav-right { flex-wrap: wrap; }
+            .welcome-section { flex-direction: column; text-align: center; }
+            .actions-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .table-wrapper { overflow-x: auto; }
+            th, td { padding: 0.8rem 0.5rem; font-size: 0.85rem; }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .action-card, .data-section {
+            animation: fadeIn 0.5s ease-out;
+        }
     </style>
 </head>
 <body>
-<header>
-    <div class="navbar">
-        <h1><i class="fas fa-university"></i> Member Dashboard</h1>
-        <div style="display:flex; gap:1rem;">
-            <a href="/" style="color:white; text-decoration:none;">Home</a>
-            <form action="/logout" method="get" style="margin:0;">
-                <button type="submit" class="logout-btn">Log Out</button>
-            </form>
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <i class="fas fa-user-circle"></i>
+                <h1>Member Dashboard</h1>
+            </div>
+            <div class="nav-right">
+                <a href="/"><i class="fas fa-home"></i> Home</a>
+                <form action="/logout" method="get" style="margin: 0;">
+                    <button type="submit" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Log Out
+                    </button>
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <div class="welcome-text">
+                <h2>Welcome, {{ member.name }}! 👋</h2>
+                <p>Manage your banking needs with ease</p>
+                <p style="font-size: 0.85rem; color: #999;">Last login: Today</p>
+            </div>
+            <div class="account-badge">
+                <i class="fas fa-hashtag" style="margin-right: 0.5rem;"></i>
+                Account: {{ member.account_no }}
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <h2 class="section-title">
+            <i class="fas fa-bolt"></i> Quick Actions
+        </h2>
+        <div class="actions-grid">
+            <div class="action-card">
+                <i class="fas fa-file-invoice-dollar"></i>
+                <h3>Apply for Loan</h3>
+                <p>Get quick loans with competitive rates and easy EMIs</p>
+                <a href="/loan-application" class="action-btn">Apply Now</a>
+            </div>
+            <div class="action-card">
+                <i class="fas fa-piggy-bank"></i>
+                <h3>Fixed Deposit</h3>
+                <p>Earn guaranteed returns with attractive interest rates</p>
+                <a href="/fd-application" class="action-btn">Invest Now</a>
+            </div>
+            <div class="action-card">
+                <i class="fas fa-handshake"></i>
+                <h3>Buy Shares</h3>
+                <p>Invest in society shares and earn dividends</p>
+                <a href="/share-investment" class="action-btn">Invest Now</a>
+            </div>
+            <div class="action-card">
+                <i class="fas fa-money-check-alt"></i>
+                <h3>Loan Repayment</h3>
+                <p>Pay your loans and apply for pre-closure</p>
+                <a href="/loan-repayment" class="action-btn">Pay Now</a>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <i class="fas fa-wallet" style="color: var(--primary); font-size: 2rem; margin-bottom: 0.5rem;"></i>
+                <div class="stat-number">{{ loans|length }}</div>
+                <div class="stat-label">Active Loans</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-piggy-bank" style="color: var(--success); font-size: 2rem; margin-bottom: 0.5rem;"></i>
+                <div class="stat-number">{{ deposits|length }}</div>
+                <div class="stat-label">Fixed Deposits</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-certificate" style="color: var(--warning); font-size: 2rem; margin-bottom: 0.5rem;"></i>
+                <div class="stat-number">{{ shares|length }}</div>
+                <div class="stat-label">Shares Owned</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-exchange-alt" style="color: var(--secondary); font-size: 2rem; margin-bottom: 0.5rem;"></i>
+                <div class="stat-number">{{ transactions|length }}</div>
+                <div class="stat-label">Transactions</div>
+            </div>
+        </div>
+
+        <!-- Your Loans -->
+        <div class="data-section">
+            <h3>
+                <i class="fas fa-file-invoice-dollar"></i> Your Loans
+            </h3>
+            {% if loans %}
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Loan ID</th>
+                            <th>Amount</th>
+                            <th>Interest Rate</th>
+                            <th>Tenure</th>
+                            <th>Status</th>
+                            <th>Repayment</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for loan in loans %}
+                        <tr>
+                            <td><strong>#{{ loan.id }}</strong></td>
+                            <td>₹{{ "{:.2f}".format(loan.amount) }}</td>
+                            <td>{{ loan.interest_rate }}%</td>
+                            <td>{{ loan.tenure_months }} months</td>
+                            <td>
+                                <span class="status-badge status-{% if loan.status == 'Approved' %}approved{% elif loan.status == 'Pending' %}pending{% else %}rejected{% endif %}">
+                                    {{ loan.status }}
+                                </span>
+                            </td>
+                            <td>{{ loan.repayment_status or '-' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <p>No loans yet</p>
+                <a href="/loan-application">Apply for a loan →</a>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Your Fixed Deposits -->
+        <div class="data-section">
+            <h3>
+                <i class="fas fa-piggy-bank"></i> Your Fixed Deposits
+            </h3>
+            {% if deposits %}
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>FD ID</th>
+                            <th>Amount</th>
+                            <th>Type</th>
+                            <th>Maturity Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for deposit in deposits %}
+                        <tr>
+                            <td><strong>#{{ deposit.id }}</strong></td>
+                            <td>₹{{ "{:.2f}".format(deposit.amount) }}</td>
+                            <td>{{ deposit.type }}</td>
+                            <td>{{ deposit.maturity_date or '-' }}</td>
+                            <td>
+                                <span class="status-badge status-{% if deposit.status == 'Approved' %}approved{% elif deposit.status == 'Pending' %}pending{% else %}inactive{% endif %}">
+                                    {{ deposit.status }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <p>No fixed deposits yet</p>
+                <a href="/fd-application">Open a Fixed Deposit →</a>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Your Share Holdings -->
+        <div class="data-section">
+            <h3>
+                <i class="fas fa-certificate"></i> Your Share Holdings
+            </h3>
+            {% if shares %}
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Share ID</th>
+                            <th>Quantity</th>
+                            <th>Price/Share</th>
+                            <th>Total Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for share in shares %}
+                        <tr>
+                            <td><strong>#{{ share.id }}</strong></td>
+                            <td>{{ share.quantity }}</td>
+                            <td>₹{{ "{:.2f}".format(share.amount_per_share) }}</td>
+                            <td>₹{{ "{:.2f}".format(share.total_amount) }}</td>
+                            <td>
+                                <span class="status-badge status-{% if share.status == 'Approved' %}approved{% elif share.status == 'Pending' %}pending{% else %}inactive{% endif %}">
+                                    {{ share.status }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <p>No shares invested yet</p>
+                <a href="/share-investment">Invest in shares →</a>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="data-section">
+            <h3>
+                <i class="fas fa-exchange-alt"></i> Recent Transactions
+            </h3>
+            {% if transactions %}
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Description</th>
+                            <th>Date & Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for txn in transactions|slice(":10") %}
+                        <tr>
+                            <td><strong>#{{ txn.id }}</strong></td>
+                            <td>
+                                <span style="display: inline-block; padding: 0.3rem 0.6rem; border-radius: 0.3rem; background: {% if txn.type == 'Credit' %}#d4edda{% else %}#f8d7da{% endif %}; color: {% if txn.type == 'Credit' %}#155724{% else %}#721c24{% endif %}; font-size: 0.85rem; font-weight: 600;">
+                                    {{ txn.type }}
+                                </span>
+                            </td>
+                            <td>₹{{ "{:.2f}".format(txn.amount) }}</td>
+                            <td>{{ txn.description or '-' }}</td>
+                            <td>{{ txn.created_at.strftime('%Y-%m-%d %H:%M') if txn.created_at else '-' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <p>No transactions yet</p>
+            </div>
+            {% endif %}
         </div>
     </div>
-</header>
 
-<div class="container">
-    <h2>Welcome, {{ member.name }}!</h2>
-    <p style="color:#666; margin-bottom:2rem;">Account No: <strong>{{ member.account_no }}</strong></p>
-    
-    <h2>Quick Actions</h2>
-    <div class="cards-grid">
-        <div class="card">
-            <i class="fas fa-file-invoice-dollar"></i>
-            <h3>Apply for Loan</h3>
-            <p>Get quick loans with easy EMIs</p>
-            <a href="/loan-application">Apply Now</a>
-        </div>
-        <div class="card">
-            <i class="fas fa-piggy-bank"></i>
-            <h3>Fixed Deposit</h3>
-            <p>Earn guaranteed returns</p>
-            <a href="/fd-application">Invest Now</a>
-        </div>
-        <div class="card">
-            <i class="fas fa-handshake"></i>
-            <h3>Buy Shares</h3>
-            <p>Invest in society shares</p>
-            <a href="/share-investment">Invest Now</a>
-        </div>
-        <div class="card">
-            <i class="fas fa-money-check-alt"></i>
-            <h3>Loan Repayment</h3>
-            <p>Pay loans and pre-closure</p>
-            <a href="/loan-repayment">Pay Now</a>
-        </div>
-    </div>
-
-    <h2>Your Loans</h2>
-    {% if loans %}
-    <table>
-        <thead>
-            <tr><th>Loan ID</th><th>Amount (₹)</th><th>Interest Rate</th><th>Tenure (months)</th><th>Status</th></tr>
-        </thead>
-        <tbody>
-            {% for loan in loans %}
-            <tr>
-                <td>#{{ loan.id }}</td>
-                <td>₹{{ "{:.2f}".format(loan.amount) }}</td>
-                <td>{{ loan.interest_rate }}%</td>
-                <td>{{ loan.tenure_months }}</td>
-                <td><span style="background:#{{ 'c3e6cb' if loan.status == 'Approved' else 'ffeaa7' if loan.status == 'Pending' else 'f8d7da' }}; padding:0.3rem 0.8rem; border-radius:0.3rem;">{{ loan.status }}</span></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-    <div class="empty">No loans yet. <a href="/loan-application" style="color:#0f52ba; text-decoration:underline;">Apply for a loan</a></div>
-    {% endif %}
-
-    <h2>Your Fixed Deposits</h2>
-    {% if deposits %}
-    <table>
-        <thead>
-            <tr><th>FD ID</th><th>Amount (₹)</th><th>Type</th><th>Maturity Date</th><th>Status</th></tr>
-        </thead>
-        <tbody>
-            {% for deposit in deposits %}
-            <tr>
-                <td>#{{ deposit.id }}</td>
-                <td>₹{{ "{:.2f}".format(deposit.amount) }}</td>
-                <td>{{ deposit.type }}</td>
-                <td>{{ deposit.maturity_date }}</td>
-                <td><span style="background:#{{ 'c3e6cb' if deposit.status == 'Active' else 'ffeaa7' if deposit.status == 'Pending' else 'f8d7da' }}; padding:0.3rem 0.8rem; border-radius:0.3rem;">{{ deposit.status }}</span></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-    <div class="empty">No FDs yet. <a href="/fd-application" style="color:#0f52ba; text-decoration:underline;">Open a Fixed Deposit</a></div>
-    {% endif %}
-
-    <h2>Your Share Holdings</h2>
-    {% if shares %}
-    <table>
-        <thead>
-            <tr><th>Share ID</th><th>Quantity</th><th>Per Share (₹)</th><th>Total Amount (₹)</th><th>Status</th></tr>
-        </thead>
-        <tbody>
-            {% for share in shares %}
-            <tr>
-                <td>#{{ share.id }}</td>
-                <td>{{ share.quantity }}</td>
-                <td>₹{{ "{:.2f}".format(share.amount_per_share) }}</td>
-                <td>₹{{ "{:.2f}".format(share.total_amount) }}</td>
-                <td><span style="background:#{{ 'c3e6cb' if share.status == 'Active' else 'ffeaa7' if share.status == 'Pending' else 'f8d7da' }}; padding:0.3rem 0.8rem; border-radius:0.3rem;">{{ share.status }}</span></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-    <div class="empty">No shares yet. <a href="/share-investment" style="color:#0f52ba; text-decoration:underline;">Invest in shares</a></div>
-    {% endif %}
-
-    <h2>Recent Transactions</h2>
-    {% if transactions %}
-    <table>
-        <thead>
-            <tr><th>Transaction ID</th><th>Type</th><th>Amount (₹)</th><th>Description</th><th>Date</th></tr>
-        </thead>
-        <tbody>
-            {% for txn in transactions|slice(":10") %}
-            <tr>
-                <td>#{{ txn.id }}</td>
-                <td>{{ txn.type }}</td>
-                <td>₹{{ "{:.2f}".format(txn.amount) }}</td>
-                <td>{{ txn.description or '-' }}</td>
-                <td>{{ txn.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-    <div class="empty">No transactions yet.</div>
-    {% endif %}
-</div>
+    <footer>
+        <p>&copy; 2025 Bangalore University Society Bank. All rights reserved. | Secure • Transparent • Trustworthy</p>
+    </footer>
 </body>
 </html>
