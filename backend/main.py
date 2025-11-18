@@ -404,16 +404,25 @@ def list_transactions(request: Request, db: Session = Depends(get_db)):
 # Loan application form
 @app.get("/loan-application", response_class=HTMLResponse)
 def loan_application_form(request: Request):
+    member_id = request.cookies.get("member_id")
+    if not member_id:
+        return RedirectResponse(url="/login", status_code=status.HTTP_303_SEE_OTHER)
     return templates.TemplateResponse("loan_application_form.html", {"request": request})
 
 
 @app.get("/fd-application", response_class=HTMLResponse)
 def fd_application_form(request: Request):
+    member_id = request.cookies.get("member_id")
+    if not member_id:
+        return RedirectResponse(url="/login", status_code=status.HTTP_303_SEE_OTHER)
     return templates.TemplateResponse("fd_application_form.html", {"request": request})
 
 
 @app.get("/share-investment", response_class=HTMLResponse)
 def share_investment_form(request: Request):
+    member_id = request.cookies.get("member_id")
+    if not member_id:
+        return RedirectResponse(url="/login", status_code=status.HTTP_303_SEE_OTHER)
     return templates.TemplateResponse("share_investment_form.html", {"request": request})
 
 
