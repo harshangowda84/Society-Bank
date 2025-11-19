@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixed Deposit Application - Society Bank</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        
+        body { 
+            font-family:'Poppins',sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding:1rem; 
+            min-height: 100vh;
+        }
+        
+        .main-container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 1.5rem;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .container { 
+            background:white; 
+            padding:2.5rem; 
+            border-radius:1rem; 
+            box-shadow:0 8px 24px rgba(0,0,0,0.15);
+            height: 100%;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .calculator-panel {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            height: 100%;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f2f5;
+        }
+        
+        h1 { 
+            color:#0f52ba; 
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        h2 {
+            color: #0f52ba;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .back-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .back-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        
+        .form-group { 
+            margin:1.5rem 0; 
+        }
+        
+        label { 
+            display:block; 
+            margin-bottom:0.6rem; 
+            font-weight:600; 
+            color:#333;
+            font-size: 0.95rem;
+        }
+        
+        input, select, textarea { 
+            width:100%; 
+            padding:0.9rem; 
+            border:2px solid #ddd; 
+            border-radius:0.5rem; 
+            font-size:1rem;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus { 
+            outline:none; 
+            border-color:#0f52ba;
+            box-shadow: 0 0 8px rgba(15, 82, 186, 0.1);
+        }
+        
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        button { 
+            background:#0f52ba; 
+            color:white; 
+            padding:1rem; 
+            border:none; 
+            border-radius:0.5rem; 
+            cursor:pointer; 
+            font-weight:600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover { 
+            background:#063fa3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(15, 82, 186, 0.2);
+        }
+        
+        .btn-reset {
+            background: #f0f0f0;
+            color: #333;
+            border: 2px solid #ddd;
+        }
+        
+        .btn-reset:hover {
+            background: #e0e0e0;
+            border-color: #999;
+        }
+        
+        .alert { 
+            padding:1rem; 
+            border-radius:0.5rem; 
+            margin-bottom:1rem;
+            display: none;
+        }
+        
+        .alert-success { 
+            background:#d4edda; 
+            color:#155724; 
+            border:1px solid #c3e6cb;
+            display: block;
+        }
+        
+        .alert-error { 
+            background:#f8d7da; 
+            color:#721c24; 
+            border:1px solid #f5c6cb;
+            display: block;
+        }
+        
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+            display: block;
+        }
+        
+        .help-text {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 0.3rem;
+        }
+        
+        /* Calculator Styles */
+        .calc-item {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #0f52ba;
+        }
+        
+        .calc-label {
+            font-size: 0.85rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.3rem;
+        }
+        
+        .calc-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #0f52ba;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .interest-rate {
+            background: #e3f2fd;
+            padding: 0.8rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            text-align: center;
+        }
+        
+        .interest-rate .label {
+            font-size: 0.85rem;
+            color: #0d47a1;
+        }
+        
+        .interest-rate .rate {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0f52ba;
+        }
+        
+        .duration-breakdown {
+            background: #f0f2f5;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+            line-height: 1.6;
+        }
+        
+        .duration-breakdown div {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.3rem 0;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 0.8rem;
+            height: 0.8rem;
+            border: 2px solid #f0f0f0;
+            border-top: 2px solid #0f52ba;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .feature-badge {
+            display: inline-block;
+            background: #0f52ba;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            margin-right: 0.5rem;
+        }
+        
+        .features-list {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .features-list ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .features-list li {
+            padding: 0.4rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: #555;
+            font-size: 0.9rem;
+        }
+        
+        .features-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #0f52ba;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 1200px) {
+            .main-container {
+                grid-template-columns: 1.1fr 0.9fr;
+                gap: 1rem;
+                padding: 0.5rem;
+            }
+            
+            .container, .calculator-panel {
+                padding: 2rem;
+            }
+        }
+        
+        @media (max-width: 1000px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                height: auto;
+                overflow-y: visible;
+            }
+            
+            .container, .calculator-panel {
+                height: auto;
+                overflow-y: visible;
+            }
+            
+            .calculator-panel {
+                order: -1;
+                margin-bottom: 1rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 0.5rem;
+            }
+            
+            .main-container {
+                gap: 1rem;
+            }
+            
+            .container, .calculator-panel {
+                padding: 1.5rem;
+                border-radius: 0.8rem;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+            
+            h1 {
+                font-size: 1.3rem;
+            }
+            
+            h2 {
+                font-size: 1.1rem;
+            }
+            
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+            
+            .calc-item {
+                margin-bottom: 0.8rem;
+            }
+            
+            .form-group {
+                margin: 1rem 0;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+            }
+            
+            .container, .calculator-panel {
+                padding: 1rem;
+                border-radius: 0.5rem;
+            }
+            
+            h1 {
+                font-size: 1.1rem;
+            }
+            
+            h2 {
+                font-size: 1rem;
+            }
+            
+            .back-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.8rem;
+            }
+            
+            label {
+                font-size: 0.9rem;
+            }
+            
+            input, select, textarea {
+                padding: 0.7rem;
+                font-size: 0.95rem;
+            }
+            
+            button {
+                padding: 0.8rem;
+                font-size: 0.9rem;
+            }
+            
+            .calc-value {
+                font-size: 1.2rem;
+            }
+            
+            .calc-item {
+                padding: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <!-- Form Section -->
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-piggy-bank"></i> Fixed Deposit</h1>
+            <button class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+        </div>
+        
+        <div id="message"></div>
+        
+        <div class="alert alert-info" id="infoAlert">
+            <i class="fas fa-info-circle"></i> Fill in the details below to apply for a Fixed Deposit
+        </div>
+        
+        <form id="fdForm">
+            <div class="form-group">
+                <label>Deposit Amount (₹) *</label>
+                <input type="number" name="amount" min="5000" step="100" required placeholder="Minimum ₹5,000" oninput="updateCalculator()">
+                <div class="help-text">Enter the amount you want to deposit (minimum ₹5,000)</div>
+            </div>
+            
+            <div class="form-group">
+                <label>Deposit Type *</label>
+                <select name="fd_type" required onchange="updateCalculator()">
+                    <option value="">-- Select Deposit Type --</option>
+                    <option value="Fixed">Fixed Deposit</option>
+                    <option value="Recurring">Recurring Deposit</option>
+                    <option value="Senior Citizen">Senior Citizen FD</option>
+                </select>
+                <div class="help-text">Select the type of deposit that suits you best</div>
+            </div>
+            
+            <div class="form-group">
+                <label>Tenure (Duration) *</label>
+                <select name="tenure" required onchange="updateCalculator()">
+                    <option value="">-- Select Tenure --</option>
+                    <option value="3m">3 Months</option>
+                    <option value="6m">6 Months</option>
+                    <option value="1y">1 Year</option>
+                    <option value="2y">2 Years</option>
+                    <option value="3y">3 Years</option>
+                    <option value="5y">5 Years</option>
+                    <option value="7y">7 Years</option>
+                    <option value="10y">10 Years</option>
+                </select>
+                <div class="help-text">Longer tenures usually offer higher interest rates</div>
+            </div>
+            
+            <div class="form-group">
+                <label>Maturity Date *</label>
+                <input type="date" name="maturity_date" required readonly>
+                <div class="help-text">Automatically calculated based on your tenure selection</div>
+            </div>
+            
+            <div class="form-group">
+                <label>Nominee Name (Optional)</label>
+                <input type="text" name="nominee_name" placeholder="Name of nominee">
+                <div class="help-text">In case of emergency, this person will be notified</div>
+            </div>
+            
+            <div class="form-group">
+                <label>Additional Notes (Optional)</label>
+                <textarea name="notes" rows="3" placeholder="Any special requests or additional information..."></textarea>
+            </div>
+            
+            <div class="button-group">
+                <button type="reset" class="btn-reset" onclick="clearCalculator()">
+                    <i class="fas fa-redo"></i> Clear Form
+                </button>
+                <button type="submit">
+                    <i class="fas fa-check-circle"></i> Submit Application
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Calculator Panel -->
+    <div class="calculator-panel">
+        <h2><i class="fas fa-calculator"></i> FD Calculator</h2>
+        
+        <div class="calc-item">
+            <div class="calc-label">Deposit Amount</div>
+            <div class="calc-value">₹<span id="calcAmount">0</span></div>
+        </div>
+        
+        <div class="calc-item">
+            <div class="calc-label">Interest Rate (p.a.)</div>
+            <div class="calc-value"><span id="calcRate">0</span>%</div>
+        </div>
+        
+        <div class="calc-item">
+            <div class="calc-label">Tenure</div>
+            <div class="calc-value"><span id="calcTenure">-</span></div>
+        </div>
+        
+        <div class="calc-item">
+            <div class="calc-label">Interest Amount</div>
+            <div class="calc-value">
+                <i class="fas fa-plus"></i> ₹<span id="calcInterest">0</span>
+            </div>
+        </div>
+        
+        <div style="background: #e8f5e9; padding: 1rem; border-radius: 0.5rem; margin: 1rem 0;">
+            <div class="calc-label" style="color: #2e7d32;">Total Maturity Amount</div>
+            <div style="font-size: 2.8rem; font-weight: 900; color: #1b5e20; letter-spacing: 0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                ₹<span id="calcTotal">0</span>
+            </div>
+        </div>
+        
+        <div class="duration-breakdown" id="durationBreakdown" style="display: none;">
+            <div style="font-weight: 600; margin-bottom: 0.5rem; color: #0f52ba;">Duration Breakdown</div>
+            <div><span>Years:</span> <span id="breakdownYears">0</span></div>
+            <div><span>Months:</span> <span id="breakdownMonths">0</span></div>
+            <div><span>Days:</span> <span id="breakdownDays">0</span></div>
+        </div>
+        
+        <div class="features-list">
+            <div style="font-weight: 600; margin-bottom: 0.5rem; color: #0f52ba;">
+                <i class="fas fa-star"></i> Key Benefits
+            </div>
+            <ul>
+                <li>Guaranteed returns</li>
+                <li>Safe & secure</li>
+                <li>Flexible tenure options</li>
+                <li>Tax benefits eligible</li>
+                <li>Early withdrawal allowed*</li>
+            </ul>
+            <div style="font-size: 0.75rem; color: #999; margin-top: 0.5rem;">
+                *Subject to terms and conditions
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+    
+    function updateCalculator() {
+        const amount = parseFloat(document.querySelector('input[name="amount"]').value) || 0;
+        const fdType = document.querySelector('select[name="fd_type"]').value;
+        const tenure = document.querySelector('select[name="tenure"]').value;
+        const maturityInput = document.querySelector('input[name="maturity_date"]');
+        
+        // Update display values
+        document.getElementById('calcAmount').textContent = amount.toLocaleString('en-IN', {maximumFractionDigits: 0});
+        
+        // Calculate maturity date
+        if(tenure && amount > 0) {
+            const today = new Date();
+            let months = 0;
+            
+            if(tenure.endsWith('m')) {
+                months = parseInt(tenure);
+            } else if(tenure.endsWith('y')) {
+                months = parseInt(tenure) * 12;
+            }
+            
+            const maturityDate = new Date(today);
+            maturityDate.setMonth(maturityDate.getMonth() + months);
+            
+            const year = maturityDate.getFullYear();
+            const month = String(maturityDate.getMonth() + 1).padStart(2, '0');
+            const day = String(maturityDate.getDate()).padStart(2, '0');
+            
+            maturityInput.value = `${year}-${month}-${day}`;
+            
+            // Update tenure display
+            let tenureDisplay = '';
+            if(tenure.endsWith('m')) {
+                tenureDisplay = parseInt(tenure) + ' Months';
+            } else {
+                tenureDisplay = parseInt(tenure) + ' Year' + (parseInt(tenure) > 1 ? 's' : '');
+            }
+            document.getElementById('calcTenure').textContent = tenureDisplay;
+            
+            // Calculate interest (using simplified rate - 6% for demo)
+            // In real scenario, fetch from database
+            const annualRate = 6.5;
+            const years = months / 12;
+            const interest = (amount * annualRate * years) / 100;
+            const total = amount + interest;
+            
+            document.getElementById('calcRate').textContent = annualRate.toFixed(2);
+            document.getElementById('calcInterest').textContent = Math.round(interest).toLocaleString('en-IN', {maximumFractionDigits: 0});
+            document.getElementById('calcTotal').textContent = Math.round(total).toLocaleString('en-IN', {maximumFractionDigits: 0});
+            
+            // Show duration breakdown
+            const years_full = Math.floor(months / 12);
+            const remaining_months = months % 12;
+            const days = 0;
+            
+            document.getElementById('breakdownYears').textContent = years_full;
+            document.getElementById('breakdownMonths').textContent = remaining_months;
+            document.getElementById('breakdownDays').textContent = days;
+            document.getElementById('durationBreakdown').style.display = 'block';
+        } else {
+            document.getElementById('calcRate').textContent = '0';
+            document.getElementById('calcInterest').textContent = '0';
+            document.getElementById('calcTotal').textContent = '0';
+            document.getElementById('calcTenure').textContent = '-';
+            document.getElementById('durationBreakdown').style.display = 'none';
+        }
+    }
+    
+    function clearCalculator() {
+        document.getElementById('calcAmount').textContent = '0';
+        document.getElementById('calcRate').textContent = '0';
+        document.getElementById('calcTenure').textContent = '-';
+        document.getElementById('calcInterest').textContent = '0';
+        document.getElementById('calcTotal').textContent = '0';
+        document.getElementById('durationBreakdown').style.display = 'none';
+    }
+    
+    document.getElementById('fdForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = new FormData(e.target);
+        const messageDiv = document.getElementById('message');
+        const infoAlert = document.getElementById('infoAlert');
+        
+        // Hide info alert
+        infoAlert.style.display = 'none';
+        
+        try {
+            // Add loading state
+            messageDiv.innerHTML = '<div class="alert alert-info"><i class="fas fa-spinner loading"></i> Processing your application...</div>';
+            
+            const response = await fetch('/member/apply-fd', { 
+                method: 'POST', 
+                body: formData 
+            });
+            
+            const data = await response.json();
+            
+            if(data.ok) {
+                messageDiv.innerHTML = '<div class="alert alert-success"><i class="fas fa-check-circle"></i> <strong>Success!</strong> Your FD application has been submitted. Redirecting to dashboard...</div>';
+                setTimeout(() => window.location.href = '/member-dashboard', 2500);
+            } else {
+                messageDiv.innerHTML = `<div class="alert alert-error"><i class="fas fa-exclamation-circle"></i> <strong>Error:</strong> ${data.error || 'Failed to submit application'}</div>`;
+                infoAlert.style.display = 'block';
+            }
+        } catch(error) {
+            messageDiv.innerHTML = `<div class="alert alert-error"><i class="fas fa-exclamation-circle"></i> <strong>Error:</strong> ${error.message}</div>`;
+            infoAlert.style.display = 'block';
+        }
+    });
+    
+    // Initialize calculator on page load
+    window.addEventListener('load', () => {
+        updateCalculator();
+    });
+</script>
+
+</body>
+</html>

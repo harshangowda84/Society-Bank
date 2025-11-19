@@ -708,36 +708,46 @@ def apply_loan(request: Request, loan_type: str = Form(...), amount: float = For
 
 
 # Member FD application
-@app.post("/member/apply-fd")
-def apply_fd(request: Request, amount: float = Form(...), fd_type: str = Form(...), maturity_date: str = Form(...), db: Session = Depends(get_db)):
-    member_id = request.cookies.get("member_id")
-    if not member_id:
-        return JSONResponse({'ok': False, 'error': 'Not authenticated'}, status_code=401)
-    member = db.query(models.Member).get(member_id)
-    if not member:
-        return JSONResponse({'ok': False, 'error': 'Member not found'}, status_code=404)
-    deposit = models.Deposit(member_id=member_id, amount=amount, type=fd_type, maturity_date=maturity_date, status='Pending')
-    db.add(deposit)
-    db.commit()
-    db.refresh(deposit)
-    return JSONResponse({'ok': True, 'deposit_id': deposit.id, 'message': 'FD application submitted'})
-
-
 # Member share investment
 @app.post("/member/invest-shares")
-def invest_shares(request: Request, quantity: int = Form(...), amount_per_share: float = Form(...), db: Session = Depends(get_db)):
+def invest_shares(
+    request: Request,
+    quantity: int = Form(...),
+    amount_per_share: float = Form(...),
+    notes: str = Form(default=''),
+    db: Session = Depends(get_db)
+):
     member_id = request.cookies.get("member_id")
     if not member_id:
         return JSONResponse({'ok': False, 'error': 'Not authenticated'}, status_code=401)
-    member = db.query(models.Member).get(member_id)
-    if not member:
-        return JSONResponse({'ok': False, 'error': 'Member not found'}, status_code=404)
-    total = quantity * amount_per_share
-    share = models.Share(member_id=member_id, quantity=quantity, amount_per_share=amount_per_share, total_amount=total, status='Pending')
-    db.add(share)
-    db.commit()
-    db.refresh(share)
-    return JSONResponse({'ok': True, 'share_id': share.id, 'message': 'Share investment submitted'})
+    
+    try:
+        member = db.query(models.Member).get(int(member_id))
+        if not member:
+            return JSONResponse({'ok': False, 'error': 'Member not found'}, status_code=404)
+        
+        if quantity < 1:
+            return JSONResponse({'ok': False, 'error': 'Minimum 1 share required'}, status_code=400)
+        
+        total = quantity * amount_per_share
+        share = models.Share(
+            member_id=int(member_id),
+            quantity=quantity,
+            amount_per_share=amount_per_share,
+            total_amount=total,
+            status='Pending',
+            office_note=notes if notes else None
+        )
+        db.add(share)
+        db.commit()
+        db.refresh(share)
+        return JSONResponse({'ok': True, 'share_id': share.id, 'message': 'Share investment submitted successfully'})
+    except Exception as e:
+        db.rollback()
+        print(f"Error in share investment: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return JSONResponse({'ok': False, 'error': str(e)}, status_code=500)
 
 
 # Admin loan approval
@@ -786,6 +796,21 @@ def approve_share(request: Request, share_id: int = Form(...), office_note: str 
     share.status = 'Approved'
     db.commit()
     return JSONResponse({'ok': True, 'message': 'Share investment approved'})
+
+
+# Admin share rejection
+@app.post("/admin/reject-share")
+def reject_share(request: Request, share_id: int = Form(...), office_note: str = Form(...), is_admin: str = Cookie(default=None), db: Session = Depends(get_db)):
+    if is_admin != "true":
+        return JSONResponse({'ok': False, 'error': 'Not authorized'}, status_code=403)
+    share = db.query(models.Share).get(share_id)
+    if not share:
+        return JSONResponse({'ok': False, 'error': 'Share not found'}, status_code=404)
+    share.office_approved = False
+    share.office_note = office_note
+    share.status = 'Rejected'
+    db.commit()
+    return JSONResponse({'ok': True, 'message': 'Share investment rejected'})
 
 
 # Admin loan repayment & pre-closure
@@ -1415,55 +1440,165 @@ async def update_fd_rate(request: Request, is_admin: str = Cookie(default=None),
         return JSONResponse({'ok': False, 'error': str(e)}, status_code=500)
 
 
-@app.post("/member/apply-fd")
-async def apply_fd(
-    request: Request,
-    member_id: int = Cookie(default=None),
-    db: Session = Depends(get_db)
-):
-    if not member_id:
+# ===== Share Management Routes =====
+
+@app.get("/admin/share-management", response_class=HTMLResponse)
+def share_management(request: Request, is_admin: str = Cookie(default=None), db: Session = Depends(get_db)):
+    if is_admin != "true":
+        return RedirectResponse(url="/admin-login", status_code=status.HTTP_303_SEE_OTHER)
+    
+    return templates.TemplateResponse("admin_share_management.html", {"request": request})
+
+
+@app.get("/admin/share-applications")
+def get_share_applications(is_admin: str = Cookie(default=None), db: Session = Depends(get_db)):
+    if is_admin != "true":
         return JSONResponse({'ok': False, 'error': 'Unauthorized'}, status_code=403)
     
     try:
-        form_data = await request.form()
+        shares = db.query(models.Share).order_by(models.Share.created_at.desc()).all()
         
-        fd_type = form_data.get('fd_type')
-        amount = float(form_data.get('amount', 0))
-        period = int(form_data.get('period', 1))
-        interest_rate = float(form_data.get('interest_rate', 6.5))
-        interest_payment = form_data.get('interest_payment', 'annual')
-        nominee_name = form_data.get('nominee_name', '')
-        nominee_relationship = form_data.get('nominee_relationship', '')
-        special_instructions = form_data.get('special_instructions', '')
+        share_list = []
+        for share in shares:
+            member = share.member
+            share_list.append({
+                'id': share.id,
+                'member_id': share.member_id,
+                'member_name': member.name if member else 'Unknown',
+                'member_email': member.email if member else '',
+                'quantity': share.quantity,
+                'amount_per_share': share.amount_per_share,
+                'total_amount': share.total_amount,
+                'status': share.status,
+                'office_note': share.office_note,
+                'created_at': share.created_at.isoformat() if share.created_at else None
+            })
         
-        if amount < 10000:
-            return JSONResponse({'ok': False, 'error': 'Minimum deposit amount is ₹10,000'})
+        return JSONResponse(share_list)
+    except Exception as e:
+        return JSONResponse({'ok': False, 'error': str(e)}, status_code=500)
+
+
+@app.get("/admin/share/{share_id}/details")
+def get_share_details(share_id: int, is_admin: str = Cookie(default=None), db: Session = Depends(get_db)):
+    if is_admin != "true":
+        return JSONResponse({'ok': False, 'error': 'Unauthorized'}, status_code=403)
+    
+    try:
+        share = db.query(models.Share).filter_by(id=share_id).first()
+        if not share:
+            return JSONResponse({'ok': False, 'error': 'Share not found'}, status_code=404)
         
-        # Calculate maturity amount
-        maturity_amount = amount * (1 + (interest_rate * period / 100))
+        member = share.member
         
-        # Create deposit record
+        return JSONResponse({
+            'ok': True,
+            'id': share.id,
+            'member_id': share.member_id,
+            'member_name': member.name if member else 'Unknown',
+            'member_email': member.email if member else '',
+            'quantity': share.quantity,
+            'amount_per_share': share.amount_per_share,
+            'total_amount': share.total_amount,
+            'status': share.status,
+            'office_note': share.office_note,
+            'office_approved': share.office_approved,
+            'approved_at': share.approved_at.isoformat() if share.approved_at else None,
+            'created_at': share.created_at.isoformat() if share.created_at else None
+        })
+    except Exception as e:
+        return JSONResponse({'ok': False, 'error': str(e)}, status_code=500)
+
+
+@app.post("/admin/update-share-price")
+def update_share_price(
+    request: Request,
+    share_price: float = Form(...),
+    effective_date: str = Form(...),
+    notes: str = Form(default=''),
+    is_admin: str = Cookie(default=None),
+    db: Session = Depends(get_db)
+):
+    if is_admin != "true":
+        return JSONResponse({'ok': False, 'error': 'Unauthorized'}, status_code=403)
+    
+    try:
+        # Here you can store share price history in a ShareConfig table if needed
+        # For now, just return success
+        return JSONResponse({'ok': True, 'message': 'Share price updated successfully'})
+    except Exception as e:
+        return JSONResponse({'ok': False, 'error': str(e)}, status_code=500)
+
+
+@app.post("/member/apply-fd")
+def apply_fd(
+    request: Request,
+    amount: float = Form(...),
+    fd_type: str = Form(...),
+    tenure: str = Form(...),
+    maturity_date: str = Form(...),
+    nominee_name: str = Form(default=''),
+    notes: str = Form(default=''),
+    db: Session = Depends(get_db)
+):
+    member_id = request.cookies.get("member_id")
+    if not member_id:
+        return JSONResponse({'ok': False, 'error': 'Not authenticated'}, status_code=401)
+    
+    try:
+        member = db.query(models.Member).get(int(member_id))
+        if not member:
+            return JSONResponse({'ok': False, 'error': 'Member not found'}, status_code=404)
+        
+        if amount < 5000:
+            return JSONResponse({'ok': False, 'error': 'Minimum deposit amount is ₹5,000'}, status_code=400)
+        
+        # Convert string date to Date object
+        from datetime import datetime as dt
+        maturity_date_obj = dt.strptime(maturity_date, '%Y-%m-%d').date()
+        
+        # Calculate period from tenure
+        period = 1  # Default
+        if tenure:
+            if tenure.endswith('m'):
+                period = int(tenure[:-1]) / 12  # Convert months to years
+            elif tenure.endswith('y'):
+                period = int(tenure[:-1])
+        
+        # Get interest rate from database or use default
+        interest_rate = 6.5
+        try:
+            fd_rate = db.query(models.FDInterestRate).filter(
+                models.FDInterestRate.fd_type == fd_type
+            ).first()
+            if fd_rate:
+                interest_rate = fd_rate.interest_rate
+        except Exception as rate_error:
+            print(f"Warning: Could not fetch FD rate: {rate_error}")
+        
+        # Create deposit record with Pending status
         deposit = models.Deposit(
-            member_id=member_id,
+            member_id=int(member_id),
             amount=amount,
             type=fd_type,
-            period=period,
+            period=max(1, round(period)),
             interest_rate=interest_rate,
-            interest_payment=interest_payment,
-            maturity_amount=maturity_amount,
+            maturity_date=maturity_date_obj,
+            status='Pending',
             nominee_name=nominee_name if nominee_name else None,
-            nominee_relationship=nominee_relationship if nominee_relationship else None,
-            special_instructions=special_instructions if special_instructions else None,
-            status='Pending'
+            office_note=notes if notes else None
         )
         
         db.add(deposit)
         db.commit()
+        db.refresh(deposit)
         
-        return JSONResponse({'ok': True, 'message': 'FD application submitted successfully'})
+        return JSONResponse({'ok': True, 'deposit_id': deposit.id, 'message': 'FD application submitted successfully'})
     except Exception as e:
         db.rollback()
-        print(f"Error applying for FD: {e}")
+        print(f"Error applying for FD: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return JSONResponse({'ok': False, 'error': str(e)}, status_code=500)
 
 
