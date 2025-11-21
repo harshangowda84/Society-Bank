@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Vision - Bangalore University Society Bank</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary: #0f52ba;
+            --primary-dark: #063fa3;
+            --secondary: #9b59b6;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --bg-light: #f0f2f5;
+            --bg-white: #ffffff;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.15);
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0f2f5 0%, #e8eaed 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            box-shadow: var(--shadow-lg);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 2rem;
+            transition: opacity 0.3s;
+            font-weight: 500;
+        }
+        
+        nav a:hover { opacity: 0.8; }
+        
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+        
+        .page-hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 1.2rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .page-hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+        
+        .page-hero p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+        
+        .content-section {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 1.2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+        
+        .content-section h2 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        
+        .content-section h2 i {
+            font-size: 1.5rem;
+        }
+        
+        .content-section p {
+            font-size: 1.05rem;
+            color: var(--text-light);
+            margin-bottom: 1.2rem;
+            line-height: 1.8;
+        }
+        
+        .vision-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .vision-point {
+            background: var(--bg-light);
+            padding: 2rem;
+            border-radius: 1rem;
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+        
+        .vision-point:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            background: white;
+        }
+        
+        .vision-point i {
+            font-size: 2.5rem;
+            color: var(--success);
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .vision-point h3 {
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        .vision-point p {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            margin: 0;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 0.8rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 1.5rem;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(15, 82, 186, 0.3);
+        }
+        
+        footer {
+            background: var(--text-dark);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+        
+        @media (max-width: 768px) {
+            header { padding: 1rem; }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav {
+                width: 100%;
+                display: flex;
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+            
+            nav a { margin-left: 0; }
+            
+            main { padding: 1.5rem; }
+            
+            .page-hero {
+                padding: 1.5rem;
+            }
+            
+            .page-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .content-section {
+                padding: 1.5rem;
+            }
+            
+            .vision-points {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-university"></i>
+                <span>Society Bank</span>
+            </div>
+            <nav>
+                <a href="/"><i class="fas fa-home"></i> Home</a>
+                <a href="/services"><i class="fas fa-cogs"></i> Services</a>
+                <a href="/login"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a href="/help"><i class="fas fa-question-circle"></i> Help</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="page-hero">
+            <h1><i class="fas fa-eye"></i> Our Vision</h1>
+            <p>Empowering our community through innovative financial solutions</p>
+        </section>
+
+        <section class="content-section">
+            <h2><i class="fas fa-lightbulb"></i> Vision Statement</h2>
+            <p>
+                At Bangalore University Society Bank, our vision is to be a trusted financial partner that 
+                empowers every member of our university community to achieve financial freedom and security. 
+                We strive to create a culture of financial literacy, responsible borrowing, and smart investing 
+                while maintaining the highest standards of integrity and transparency.
+            </p>
+            <p>
+                We believe that banking should be accessible, affordable, and centered around the needs of our 
+                community. Through cutting-edge technology, personalized service, and competitive rates, we aim to 
+                make quality financial services available to every student, faculty, and staff member.
+            </p>
+        </section>
+
+        <section class="content-section">
+            <h2><i class="fas fa-bullseye"></i> Our Core Values</h2>
+            <div class="vision-points">
+                <div class="vision-point">
+                    <i class="fas fa-heart"></i>
+                    <h3>Community First</h3>
+                    <p>Every decision we make prioritizes the well-being of our members and the university community.</p>
+                </div>
+                <div class="vision-point">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Trust & Security</h3>
+                    <p>We maintain the highest security standards to protect member data and financial information.</p>
+                </div>
+                <div class="vision-point">
+                    <i class="fas fa-handshake"></i>
+                    <h3>Transparency</h3>
+                    <p>Clear communication and honest dealings form the foundation of our relationships with members.</p>
+                </div>
+                <div class="vision-point">
+                    <i class="fas fa-rocket"></i>
+                    <h3>Innovation</h3>
+                    <p>We continuously adopt new technologies to improve member experience and service delivery.</p>
+                </div>
+                <div class="vision-point">
+                    <i class="fas fa-book"></i>
+                    <h3>Financial Literacy</h3>
+                    <p>We are committed to educating our members about smart financial planning and investment.</p>
+                </div>
+                <div class="vision-point">
+                    <i class="fas fa-leaf"></i>
+                    <h3>Sustainability</h3>
+                    <p>We promote responsible and sustainable financial practices for long-term prosperity.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2><i class="fas fa-star"></i> Our Mission</h2>
+            <p>
+                Our mission is to deliver exceptional financial services that enable our community members to:
+            </p>
+            <div class="vision-points">
+                <div class="vision-point">
+                    <i class="fas fa-piggy-bank"></i>
+                    <h3>Save Wisely</h3>
+                    <p>Build wealth through competitive savings and investment products tailored to individual goals.</p>
+                </div>
+                <div class="vision-point">
+                    <i class="fas fa-hand-holding-usd"></i>
+                    <h3>Borrow Responsibly</h3>
+                    <p>Access affordable credit with transparent terms and supportive guidance for major life events.</p>
+                </div>
+                <div class="vision-point">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Grow Financially</h3>
+                    <p>Achieve financial goals through expert advice and diverse investment opportunities.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2><i class="fas fa-arrow-right"></i> Looking Forward</h2>
+            <p>
+                As we continue to grow, we remain committed to our core mission of serving the university community. 
+                We plan to expand our services, reach more members, and introduce innovative financial products that 
+                address evolving needs. Our goal is to be not just a bank, but a true partner in our members' financial 
+                journey.
+            </p>
+            <p>
+                We invite you to join us in building a stronger, more inclusive financial community. Whether you're 
+                looking to save, invest, or borrow, we're here to support your financial aspirations with integrity, 
+                expertise, and genuine care.
+            </p>
+            <a href="/register" class="btn"><i class="fas fa-user-plus"></i> Become a Member</a>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Bangalore University Society Bank. All rights reserved. | Secure • Transparent • Trustworthy</p>
+    </footer>
+</body>
+</html>

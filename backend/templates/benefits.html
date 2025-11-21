@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benefits - Bangalore University Society Bank</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary: #0f52ba;
+            --primary-dark: #063fa3;
+            --secondary: #9b59b6;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --bg-light: #f0f2f5;
+            --bg-white: #ffffff;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.15);
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0f2f5 0%, #e8eaed 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            box-shadow: var(--shadow-lg);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 2rem;
+            transition: opacity 0.3s;
+            font-weight: 500;
+        }
+        
+        nav a:hover { opacity: 0.8; }
+        
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+        
+        .page-hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 1.2rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .page-hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+        
+        .page-hero p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .benefit-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 1.2rem;
+            box-shadow: var(--shadow);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .benefit-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        
+        .benefit-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(15, 82, 186, 0.2);
+        }
+        
+        .benefit-card i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .benefit-card h3 {
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .benefit-card p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        .content-section {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 1.2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+        
+        .content-section h2 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        
+        .content-section h2 i {
+            font-size: 1.5rem;
+        }
+        
+        .content-section p {
+            font-size: 1.05rem;
+            color: var(--text-light);
+            margin-bottom: 1.2rem;
+            line-height: 1.8;
+        }
+        
+        .benefits-list {
+            list-style: none;
+        }
+        
+        .benefits-list li {
+            padding: 1.2rem;
+            margin: 0.8rem 0;
+            background: var(--bg-light);
+            border-left: 4px solid var(--primary);
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .benefits-list li:hover {
+            background: white;
+            box-shadow: var(--shadow);
+            transform: translateX(10px);
+        }
+        
+        .benefits-list i {
+            color: var(--success);
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            margin-top: 0.2rem;
+        }
+        
+        .benefits-list strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+            background: white;
+            border-radius: 0.8rem;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        .comparison-table th {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1.5rem;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .comparison-table td {
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background: var(--bg-light);
+        }
+        
+        .comparison-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 0.8rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 1.5rem;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(15, 82, 186, 0.3);
+        }
+        
+        footer {
+            background: var(--text-dark);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+        
+        @media (max-width: 768px) {
+            header { padding: 1rem; }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav {
+                width: 100%;
+                display: flex;
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+            
+            nav a { margin-left: 0; }
+            
+            main { padding: 1.5rem; }
+            
+            .page-hero {
+                padding: 1.5rem;
+            }
+            
+            .page-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .content-section {
+                padding: 1.5rem;
+                overflow-x: auto;
+            }
+            
+            .comparison-table {
+                font-size: 0.85rem;
+            }
+            
+            .comparison-table th,
+            .comparison-table td {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-university"></i>
+                <span>Society Bank</span>
+            </div>
+            <nav>
+                <a href="/"><i class="fas fa-home"></i> Home</a>
+                <a href="/vision"><i class="fas fa-eye"></i> Vision</a>
+                <a href="/services"><i class="fas fa-cogs"></i> Services</a>
+                <a href="/login"><i class="fas fa-sign-in-alt"></i> Login</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="page-hero">
+            <h1><i class="fas fa-gift"></i> Member Benefits</h1>
+            <p>Exclusive advantages for our valued members</p>
+        </section>
+
+        <section>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <i class="fas fa-star"></i>
+                    <h3>Premium Interest Rates</h3>
+                    <p>Enjoy higher interest rates on savings, FDs, and investments compared to market averages.</p>
+                </div>
+
+                <div class="benefit-card">
+                    <i class="fas fa-lock"></i>
+                    <h3>Enhanced Security</h3>
+                    <p>Advanced encryption and fraud protection ensures your funds and data are always secure.</p>
+                </div>
+
+                <div class="benefit-card">
+                    <i class="fas fa-bolt"></i>
+                    <h3>Quick Processing</h3>
+                    <p>Instant loan approvals and same-day processing for routine transactions and applications.</p>
+                </div>
+
+                <div class="benefit-card">
+                    <i class="fas fa-headset"></i>
+                    <h3>Dedicated Support</h3>
+                    <p>24/7 customer support with dedicated relationship managers for personalized assistance.</p>
+                </div>
+
+                <div class="benefit-card">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h3>Digital Banking</h3>
+                    <p>Convenient online and mobile banking to manage your accounts anytime, anywhere.</p>
+                </div>
+
+                <div class="benefit-card">
+                    <i class="fas fa-handshake"></i>
+                    <h3>Flexible Terms</h3>
+                    <p>Customized loan terms and repayment options tailored to your financial situation.</p>
+                </div>
+
+                <div class="benefit-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Financial Planning</h3>
+                    <p>Free financial advisory and investment planning services from expert consultants.</p>
+                </div>
+
+                <div class="benefit-card">
+                    <i class="fas fa-percentage"></i>
+                    <h3>Lower Charges</h3>
+                    <p>Minimal fees and charges compared to traditional banks and financial institutions.</p>
+                </div>
+
+                <div class="benefit-card">
+                    <i class="fas fa-credit-card"></i>
+                    <h3>Exclusive Offers</h3>
+                    <p>Special discounts, cashback offers, and reward programs for active members.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2><i class="fas fa-check-circle"></i> Key Member Privileges</h2>
+            <ul class="benefits-list">
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <div>
+                        <strong>Zero Minimum Balance</strong>
+                        <p style="margin: 0; color: var(--text-light); font-size: 0.9rem;">No minimum balance requirements on savings accounts</p>
+                    </div>
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <div>
+                        <strong>Free Fund Transfers</strong>
+                        <p style="margin: 0; color: var(--text-light); font-size: 0.9rem;">Unlimited inter-bank transfers with no additional charges</p>
+                    </div>
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <div>
+                        <strong>Priority Processing</strong>
+                        <p style="margin: 0; color: var(--text-light); font-size: 0.9rem;">Fast-track processing for loans and other applications</p>
+                    </div>
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <div>
+                        <strong>Free Insurance Coverage</strong>
+                        <p style="margin: 0; color: var(--text-light); font-size: 0.9rem;">Complimentary deposit insurance up to ₹5 lakhs</p>
+                    </div>
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <div>
+                        <strong>Investment Guidance</strong>
+                        <p style="margin: 0; color: var(--text-light); font-size: 0.9rem;">Expert advice on portfolio management and investments</p>
+                    </div>
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <div>
+                        <strong>Emergency Support</strong>
+                        <p style="margin: 0; color: var(--text-light); font-size: 0.9rem;">Quick personal loans in case of financial emergencies</p>
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+        <section class="content-section">
+            <h2><i class="fas fa-table"></i> Membership Comparison</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Society Bank</th>
+                        <th>Traditional Banks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Interest Rates</strong></td>
+                        <td>Up to 7% (FD) / 5% (Savings)</td>
+                        <td>3-4% (FD) / 2-3% (Savings)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Loan Processing</strong></td>
+                        <td>Same day to 48 hours</td>
+                        <td>7-10 business days</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Documentation</strong></td>
+                        <td>Minimal (2-3 documents)</td>
+                        <td>Extensive (8-10 documents)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Loan Interest Rate</strong></td>
+                        <td>8-12% p.a.</td>
+                        <td>12-18% p.a.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Membership Fee</strong></td>
+                        <td>₹100 (one-time)</td>
+                        <td>₹500-2000 (annual)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Transfer Charges</strong></td>
+                        <td>Free to ₹50</td>
+                        <td>₹100-200 per transfer</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Personalized Service</strong></td>
+                        <td>Dedicated relationship manager</td>
+                        <td>Limited support</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Community Focus</strong></td>
+                        <td>University members only</td>
+                        <td>General public</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="content-section">
+            <h2><i class="fas fa-rocket"></i> Ready to Join Us?</h2>
+            <p>
+                Experience the difference of banking with a community-focused institution. Our members enjoy 
+                better rates, faster service, and genuine care for their financial well-being. Join thousands of 
+                satisfied members who have chosen Society Bank as their trusted financial partner.
+            </p>
+            <a href="/register" class="btn"><i class="fas fa-user-plus"></i> Become a Member Today</a>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Bangalore University Society Bank. All rights reserved. | Secure • Transparent • Trustworthy</p>
+    </footer>
+</body>
+</html>

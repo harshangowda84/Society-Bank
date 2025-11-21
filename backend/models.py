@@ -26,6 +26,8 @@ class Member(Base):
     balance = Column(Float, default=0.0)
     address = Column(String, nullable=True)
     gender = Column(String, nullable=True)
+    nominee_name = Column(String, nullable=True)
+    nominee_relationship = Column(String, nullable=True)
 
     accounts = relationship("Account", back_populates="member", cascade="all, delete-orphan")
     loans = relationship("Loan", back_populates="member", cascade="all, delete-orphan")

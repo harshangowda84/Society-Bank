@@ -413,6 +413,9 @@ async def register_member(request: Request, db: Session = Depends(get_db)):
     mobile = form.get("mobile_number")
     aadhaar = form.get("aadhaar_number")
     pan = form.get("pan_number")
+    home_address = form.get("home_address")
+    nominee_name = form.get("nominee_name")
+    nominee_relationship = form.get("nominee_relationship")
 
     # Check if username already exists
     existing_user = db.query(models.Member).filter(models.Member.username == username).first()
@@ -440,6 +443,9 @@ async def register_member(request: Request, db: Session = Depends(get_db)):
         bank_account=account_no,  # Use system-generated account number
         aadhaar=aadhaar,
         pan=pan,
+        address=home_address,
+        nominee_name=nominee_name,
+        nominee_relationship=nominee_relationship,
         application_date=today_str,  # System-generated application date
         is_approved=False,
         account_no=account_no,
@@ -510,6 +516,7 @@ def member_dashboard(request: Request, db: Session = Depends(get_db)):
     return templates.TemplateResponse("member_dashboard.html", {
         "request": request,
         "member": member,
+        "account": account,
         "transactions": transactions,
         "loans": loans,
         "deposits": deposits,
@@ -879,6 +886,134 @@ def transfer_funds(request: Request, recipient_account_no: str = Form(...), amou
     except Exception as e:
         db.rollback()
         return JSONResponse({'ok': False, 'error': str(e)}, status_code=500)
+
+
+# Member withdrawal
+@app.post("/member/withdraw")
+def withdraw_funds(
+    request: Request,
+    amount: float = Form(...),
+    description: str = Form(default="Withdrawal"),
+    db: Session = Depends(get_db)
+):
+    member_id = request.cookies.get("member_id")
+    if not member_id:
+        return JSONResponse({'ok': False, 'error': 'Not authenticated'}, status_code=401)
+    
+    try:
+        member = db.query(models.Member).get(int(member_id))
+        if not member:
+            return JSONResponse({'ok': False, 'error': 'Member not found'}, status_code=404)
+        
+        account = db.query(models.Account).filter_by(member_id=int(member_id)).first()
+        if not account:
+            return JSONResponse({'ok': False, 'error': 'Account not found'}, status_code=404)
+        
+        if amount <= 0:
+            return JSONResponse({'ok': False, 'error': 'Amount must be positive'}, status_code=400)
+        
+        if amount < 100:
+            return JSONResponse({'ok': False, 'error': 'Minimum withdrawal amount is ₹100'}, status_code=400)
+        
+        if account.balance < amount:
+            return JSONResponse({'ok': False, 'error': f'Insufficient balance. Available: ₹{account.balance:.2f}'}, status_code=400)
+        
+        # Process withdrawal
+        account.balance -= amount
+        
+        # Create transaction record
+        withdrawal_txn = models.Transaction(
+            account_id=account.id,
+            type='Debit',
+            amount=amount,
+            description=description or 'Withdrawal'
+        )
+        
+        db.add(withdrawal_txn)
+        db.commit()
+        
+        return JSONResponse({
+            'ok': True,
+            'message': f'₹{amount:.2f} withdrawn successfully',
+            'new_balance': account.balance
+        })
+    except Exception as e:
+        db.rollback()
+        print(f"Error processing withdrawal: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return JSONResponse({'ok': False, 'error': str(e)}, status_code=500)
+
+
+# Member deposit
+@app.post("/member/deposit")
+def deposit_funds(
+    request: Request,
+    amount: float = Form(...),
+    payment_method: str = Form(...),
+    description: str = Form(default=""),
+    db: Session = Depends(get_db)
+):
+    member_id = request.cookies.get("member_id")
+    if not member_id:
+        return JSONResponse({'ok': False, 'error': 'Not authenticated'}, status_code=401)
+    
+    try:
+        member = db.query(models.Member).get(int(member_id))
+        if not member:
+            return JSONResponse({'ok': False, 'error': 'Member not found'}, status_code=404)
+        
+        account = db.query(models.Account).filter_by(member_id=int(member_id)).first()
+        
+        # Create account if it doesn't exist
+        if not account:
+            account = models.Account(
+                member_id=int(member_id),
+                type='Savings',
+                balance=0.0,
+                status='Active'
+            )
+            db.add(account)
+            db.flush()  # Get the account ID
+        
+        if amount <= 0:
+            return JSONResponse({'ok': False, 'error': 'Amount must be positive'}, status_code=400)
+        
+        if amount < 100:
+            return JSONResponse({'ok': False, 'error': 'Minimum deposit amount is ₹100'}, status_code=400)
+        
+        if not payment_method:
+            return JSONResponse({'ok': False, 'error': 'Payment method is required'}, status_code=400)
+        
+        # Process deposit
+        account.balance += amount
+        
+        # Create transaction record with safe description
+        desc_text = description.strip() if description else "Deposit"
+        if not desc_text:
+            desc_text = "Deposit"
+            
+        deposit_txn = models.Transaction(
+            account_id=account.id,
+            type='Credit',
+            amount=amount,
+            description=f'{desc_text} via {payment_method}'
+        )
+        
+        db.add(deposit_txn)
+        db.commit()
+        
+        return JSONResponse({
+            'ok': True,
+            'message': f'₹{amount:.2f} deposited successfully',
+            'new_balance': account.balance
+        })
+    except Exception as e:
+        db.rollback()
+        print(f"Error processing deposit: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return JSONResponse({'ok': False, 'error': f'Server error: {str(e)}'}, status_code=500)
 
 
 # Bank reports: P&L and transaction history

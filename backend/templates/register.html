@@ -310,6 +310,31 @@
             border: 1px solid #bee5eb;
         }
 
+        /* Inline Error Message */
+        .field-error {
+            display: none;
+            color: #e74c3c;
+            font-size: 0.85rem;
+            margin-top: 0.4rem;
+            animation: shake 0.3s ease-in-out;
+        }
+
+        .field-error.show {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .field-error i {
+            font-size: 0.9rem;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             main { padding: 0 1rem 3rem; }
@@ -375,7 +400,7 @@
                 </div>
                 <div class="form-group">
                     <label for="dob">Date of Birth <span class="required">*</span></label>
-                    <input type="date" id="dob" name="date_of_birth" required>
+                    <input type="date" id="dob" name="date_of_birth" max="" required>
                 </div>
             </div>
 
@@ -396,7 +421,11 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="mobile">Mobile Number <span class="required">*</span></label>
-                    <input type="tel" id="mobile" name="mobile_number" placeholder="Enter 10-digit mobile number" required>
+                    <input type="tel" id="mobile" name="mobile_number" placeholder="Enter 10-digit mobile number" pattern="[0-9]{10}" maxlength="10" title="Please enter exactly 10 digits" required>
+                    <div class="field-error" id="mobile-error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>Please enter digits only (0-9)</span>
+                    </div>
                 </div>
             </div>
 
@@ -408,11 +437,19 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="aadhaar">Aadhaar Number <span class="required">*</span></label>
-                    <input type="text" id="aadhaar" name="aadhaar_number" placeholder="12-digit Aadhaar number" required>
+                    <input type="text" id="aadhaar" name="aadhaar_number" placeholder="12-digit Aadhaar number" pattern="[0-9]{12}" maxlength="12" title="Please enter exactly 12 digits" required>
+                    <div class="field-error" id="aadhaar-error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>Please enter digits only (0-9)</span>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="pan">PAN Number <span class="required">*</span></label>
-                    <input type="text" id="pan" name="pan_number" placeholder="PAN (10 characters)" required>
+                    <input type="text" id="pan" name="pan_number" placeholder="PAN (10 characters)" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" maxlength="10" title="PAN format: 5 letters, 4 digits, 1 letter (e.g., ABCDE1234F)" style="text-transform: uppercase;" required>
+                    <div class="field-error" id="pan-error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>PAN format: 5 letters, 4 digits, 1 letter (e.g., ABCDE1234F)</span>
+                    </div>
                 </div>
             </div>
 
@@ -484,7 +521,22 @@
     </footer>
 
     <script>
-        // Auto-fill application date with today's date
+        // Show inline error message function
+        function showFieldError(fieldId, show = true) {
+            const errorElement = document.getElementById(fieldId + '-error');
+            if (errorElement) {
+                if (show) {
+                    errorElement.classList.add('show');
+                    setTimeout(() => {
+                        errorElement.classList.remove('show');
+                    }, 2000);
+                } else {
+                    errorElement.classList.remove('show');
+                }
+            }
+        }
+
+        // Auto-fill application date with today's date and set DOB max date
         document.addEventListener('DOMContentLoaded', function() {
             const today = new Date();
             const year = today.getFullYear();
@@ -492,7 +544,72 @@
             const day = String(today.getDate()).padStart(2, '0');
             const dateString = `${year}-${month}-${day}`;
             
+            // Set application date
             document.getElementById('app_date').value = dateString;
+            
+            // Set max date for DOB to today (no future dates)
+            document.getElementById('dob').max = dateString;
+        });
+        
+        // Allow only numbers for mobile number (exactly 10 digits)
+        document.getElementById('mobile').addEventListener('input', function(e) {
+            const oldValue = e.target.value;
+            const newValue = oldValue.replace(/[^0-9]/g, '').slice(0, 10);
+            
+            if (oldValue !== newValue && oldValue.length > 0) {
+                showFieldError('mobile');
+            }
+            
+            e.target.value = newValue;
+        });
+        
+        // Allow only numbers for Aadhaar (exactly 12 digits)
+        document.getElementById('aadhaar').addEventListener('input', function(e) {
+            const oldValue = e.target.value;
+            const newValue = oldValue.replace(/[^0-9]/g, '').slice(0, 12);
+            
+            if (oldValue !== newValue && oldValue.length > 0) {
+                showFieldError('aadhaar');
+            }
+            
+            e.target.value = newValue;
+        });
+        
+        // Auto-uppercase PAN input and enforce format
+        document.getElementById('pan').addEventListener('input', function(e) {
+            const oldValue = e.target.value;
+            const upperValue = oldValue.toUpperCase();
+            let validValue = '';
+            
+            // Build valid PAN character by character
+            for (let i = 0; i < Math.min(upperValue.length, 10); i++) {
+                const char = upperValue[i];
+                
+                if (i < 5) {
+                    // First 5 positions: only letters (A-Z)
+                    if (/[A-Z]/.test(char)) {
+                        validValue += char;
+                    } else {
+                        showFieldError('pan');
+                    }
+                } else if (i < 9) {
+                    // Positions 6-9: only digits (0-9)
+                    if (/[0-9]/.test(char)) {
+                        validValue += char;
+                    } else {
+                        showFieldError('pan');
+                    }
+                } else {
+                    // Position 10: only letter (A-Z)
+                    if (/[A-Z]/.test(char)) {
+                        validValue += char;
+                    } else {
+                        showFieldError('pan');
+                    }
+                }
+            }
+            
+            e.target.value = validValue;
         });
     </script>
 </body>
